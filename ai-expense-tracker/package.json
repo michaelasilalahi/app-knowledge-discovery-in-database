@@ -11,7 +11,9 @@
     "lint:fix": "expo lint --fix"
   },
   "dependencies": {
+    "@react-native-google-signin/google-signin": "^16.1.1",
     "expo": "~54.0.30",
+    "expo-dev-client": "^6.0.20",
     "expo-status-bar": "~3.0.9",
     "nativewind": "^4.2.1",
     "react": "19.1.0",

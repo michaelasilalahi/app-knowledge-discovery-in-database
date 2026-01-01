@@ -1,3 +1,4 @@
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
@@ -5,13 +6,13 @@ import { StyleSheet, Text, View } from 'react-native';
 import './global.css';
 
 export default function App() {
-  const [data, setData] = useState<any>(null);
+  // const [data, setData] = useState<any>(null);
 
-  useEffect(() => {
-    fetch('http://192.168.18.16:8000/')
-      .then(response => response.json())
-      .then(json => setData(json));
-  }, []);
+  // useEffect(() => {
+  //   fetch('http://192.168.18.16:8000/')
+  //     .then(response => response.json())
+  //     .then(json => setData(json));
+  // }, []);
 
   return (
     <View style={styles.container}>
