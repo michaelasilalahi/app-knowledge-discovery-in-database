@@ -7,8 +7,9 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "hermesEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/splash_icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -18,7 +19,7 @@
     "android": {
       "package": "com.kdd.aiexpensetracker",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive_icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
@@ -33,7 +34,49 @@
       }
     },
     "plugins": [
-      "@react-native-google-signin/google-signin"
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "newArchEnabled": true,
+            "abiFilters": [
+              "arm64-v8a",
+              "x86_64"
+            ]
+          }
+        }
+      ],
+      "@react-native-google-signin/google-signin",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/new_astro/new_astro_medium.otf",
+            "./assets/fonts/neue_haas_grotesk/neue_haas_grotesk_medium.ttf"
+          ],
+          "android": {
+            "fonts": [
+              {
+                "fontFamily": "new_astro",
+                "fontDefinitions": [
+                  {
+                    "path": "./assets/fonts/new_astro/new_astro_medium.otf",
+                    "weight": 400
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      [
+        "expo-asset",
+        {
+          "assets": [
+            "./assets/icons/google.png"
+          ]
+        }
+      ]
     ]
   }
 }
