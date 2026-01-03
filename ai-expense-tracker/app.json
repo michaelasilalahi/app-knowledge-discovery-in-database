@@ -2,6 +2,7 @@
   "expo": {
     "name": "ai-expense-tracker",
     "slug": "ai-expense-tracker",
+    "scheme": "ai-expense-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -51,32 +52,30 @@
         "expo-font",
         {
           "fonts": [
+            "./assets/fonts/new_astro/new_astro_light.otf",
             "./assets/fonts/new_astro/new_astro_medium.otf",
-            "./assets/fonts/neue_haas_grotesk/neue_haas_grotesk_medium.ttf"
-          ],
-          "android": {
-            "fonts": [
-              {
-                "fontFamily": "new_astro",
-                "fontDefinitions": [
-                  {
-                    "path": "./assets/fonts/new_astro/new_astro_medium.otf",
-                    "weight": 400
-                  }
-                ]
-              }
-            ]
-          }
+            "./assets/fonts/new_astro/new_astro_bold.otf",
+            "./assets/fonts/neue_haas_grotesk/neue_haas_grotesk_reguler.ttf",
+            "./assets/fonts/neue_haas_grotesk/neue_haas_grotesk_medium.ttf",
+            "./assets/fonts/neue_haas_grotesk/neue_haas_grotesk_bold.ttf"
+          ]
         }
       ],
       [
         "expo-asset",
         {
           "assets": [
-            "./assets/icons/google.png"
+            "./assets/icons/goole.svg",
+            "./assets/icons/house.svg",
+            "./assets/icons/plus.svg",
+            "./assets/icons/archive.svg",
+            "./assets/icons/house_fill.svg",
+            "./assets/icons/plus_fill.svg",
+            "./assets/icons/archive_fill.svg"
           ]
         }
-      ]
+      ],
+      "expo-router"
     ]
   }
 }
