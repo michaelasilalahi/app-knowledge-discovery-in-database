@@ -3,70 +3,78 @@ import { Image } from 'expo-image';
 
 export default function TabsLayout() {
   return (
-    <Tabs screenOptions={{ 
-      headerShown: false,
-      tabBarShowLabel: false,
-      tabBarIconStyle: {
-        flex: 1,
-        alignItems: 'center',
-      },
-      tabBarStyle: {
-        height: 60,
-      } 
-      }}>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarIconStyle: {
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+        tabBarStyle: {
+          height: 60,
+        },
+      }}
+    >
       <Tabs.Screen
         name='index'
-        options={{ 
+        options={{
           tabBarIcon: ({ focused }) => (
             <Image
               source={
-                focused ? require('../../assets/icons/house_fill.svg') : require('../../assets/icons/house.svg')
+                focused
+                  ? require('../../assets/icons/house_fill.svg')
+                  : require('../../assets/icons/house.svg')
               }
               style={{
                 width: 30,
                 height: 30,
-                tintColor: focused ? '#000000' : '#aaaaaa'
+                tintColor: focused ? '#000000' : '#aaaaaa',
               }}
-              contentFit='contain'
             />
           ),
-        }} 
+        }}
       />
       <Tabs.Screen
         name='plus'
-        options={{ 
+        options={{
           tabBarIcon: ({ focused }) => (
             <Image
               source={
-                focused ? require('../../assets/icons/plus_fill.svg') : require('../../assets/icons/plus.svg')
+                focused
+                  ? require('../../assets/icons/plus_fill.svg')
+                  : require('../../assets/icons/plus.svg')
               }
-              style={{ 
+              style={{
                 width: 30,
                 height: 30,
-                tintColor: focused ? '#000000' : '#aaaaaa'
+                tintColor: focused ? '#000000' : '#aaaaaa',
               }}
               contentFit='contain'
             />
           ),
-        }} 
+        }}
       />
       <Tabs.Screen
         name='archive'
-        options={{ 
+        options={{
           tabBarIcon: ({ focused }) => (
             <Image
               source={
-                focused ? require('../../assets/icons/archive_fill.svg') : require('../../assets/icons/archive.svg')
+                focused
+                  ? require('../../assets/icons/archive_fill.svg')
+                  : require('../../assets/icons/archive.svg')
               }
-              style={{ 
+              style={{
                 width: 30,
                 height: 30,
-                tintColor: focused ? '#000000' : '#aaaaaa'
+                tintColor: focused ? '#000000' : '#aaaaaa',
               }}
-              contentFit="contain"
+              contentFit='contain'
             />
           ),
-        }} 
+        }}
       />
     </Tabs>
   );

@@ -1,18 +1,18 @@
-import { Stack } from 'expo-router';
+import '../ReactotronConfig';
+import { useEffect } from 'react';
+import { Stack, useRouter, useSegments } from 'expo-router';
 import { useFonts } from 'expo-font';
 import { useAssets } from 'expo-asset';
-import { useEffect } from 'react';
-import { LogBox } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { useAuthStore } from '../store/useAuthStore';
+import * as SplashScreen from 'expo-splash-screen';
 // @ts-expect-error global.css is handled by the bundler; no types needed
 import '../global.css';
 
-import * as SplashScreen from 'expo-splash-screen';
+// insialisasi auth context
 
 SplashScreen.preventAutoHideAsync();
-
-LogBox.ignoreLogs(['SafeAreaView has been deprecated']);
 
 export default function RootLayout() {
   // load font assets
@@ -34,9 +34,39 @@ export default function RootLayout() {
     require('../assets/icons/house_fill.svg'),
     require('../assets/icons/plus_fill.svg'),
     require('../assets/icons/archive_fill.svg'),
+    require('../assets/icons/notification.svg'),
   ]);
 
-  const isFinishedLoading = (fontLoaded || fontError) && (assets || assetsError);
+  // ambil state login dari zustand
+  const { isLoggedIn } = useAuthStore();
+
+  // hooks untuk navigasi
+  const router = useRouter();
+  const segments = useSegments();
+
+  const isFinishedLoading =
+    (fontLoaded || fontError) && (assets || assetsError);
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '208194412142-bjorfp866lddjmqhlf6skdcndjifbk7v.apps.googleusercontent.com',
+      offlineAccess: true,
+    });
+  }, []);
+
+  // auto redirect
+  useEffect(() => {
+    if (!isFinishedLoading) return;
+
+    const inAuthGroup = segments[0] === '(auth)';
+
+    if (isLoggedIn && inAuthGroup) {
+      router.replace('/(tabs)');
+    } else if (!isLoggedIn && !inAuthGroup) {
+      router.replace('/(auth)/login');
+    }
+  }, [isLoggedIn, segments, isFinishedLoading, router]);
 
   useEffect(() => {
     if (isFinishedLoading) {
@@ -59,6 +89,16 @@ export default function RootLayout() {
         <Stack.Screen name='index' />
         <Stack.Screen name='(auth)/login' />
         <Stack.Screen name='(tabs)' />
+        <Stack.Screen
+          name='profil'
+          options={{
+            headerShown: true,
+            title: 'Profil',
+            headerShadowVisible: false,
+            headerStyle: { backgroundColor: 'white' },
+            contentStyle: { backgroundColor: 'white' },
+          }}
+        />
       </Stack>
     </SafeAreaProvider>
   );

@@ -40,10 +40,7 @@
         {
           "android": {
             "newArchEnabled": true,
-            "abiFilters": [
-              "arm64-v8a",
-              "x86_64"
-            ]
+            "abiFilters": ["arm64-v8a", "x86_64"]
           }
         }
       ],
@@ -71,7 +68,8 @@
             "./assets/icons/archive.svg",
             "./assets/icons/house_fill.svg",
             "./assets/icons/plus_fill.svg",
-            "./assets/icons/archive_fill.svg"
+            "./assets/icons/archive_fill.svg",
+            "./assets/icons/notification.svg"
           ]
         }
       ],

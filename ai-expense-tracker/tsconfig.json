@@ -1,19 +1,19 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
+    "strict": true,
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true
   },
-
-  // clean code
-  "noUnusedLocals": true,
-  "noImplicitReturns": true, 
-
-  // performance
-  "skipLibCheck": true, // build lebih cepat
-  "forceConsistentCasingInFileNames": true, // aman saat pindah antar OS
-  "moduleResolution": "node", // cara cari file standar Node.js.
-  "resolveJsonModule": true, // memungkinkan import file json
-  "isolatedModules": true, // alat build React Native (Babel).
-  "noFallthroughCasesInSwitch": true, // mencegah salah logika di fungsi switch case
-  "noExplicitAny": true, // mencegah penggunaan tipe any
+  "include": ["**/*.ts", "**/*.tsx", "nativewind-env.d.ts"]
 }

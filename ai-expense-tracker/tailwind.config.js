@@ -1,8 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   // NOTE: Update this to include the paths to all files that contain Nativewind classes.
-  content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
-  presets: [require("nativewind/preset")],
+  content: ['./app/**/*.{js,jsx,ts,tsx}', './components/**/*.{js,jsx,ts,tsx}'],
+  presets: [require('nativewind/preset')],
   theme: {
     extend: {
       fontFamily: {
@@ -15,12 +15,12 @@ module.exports = {
         'neue-haas-grotesk-bold': ['neue_haas_grotesk_bold'],
       },
       width: {
-        'width-side': '90%'
+        'width-side': '90%',
       },
       colors: {
         'gray-999999': '#999999',
-      }
+      },
     },
   },
   plugins: [],
-}
+};
