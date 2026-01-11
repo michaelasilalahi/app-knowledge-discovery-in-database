@@ -5,12 +5,12 @@
     "scheme": "ai-expense-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/app/icon.svg",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "hermesEnabled": true,
     "splash": {
-      "image": "./assets/splash_icon.png",
+      "image": "./assets/app/icon.svg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -20,7 +20,7 @@
     "android": {
       "package": "com.kdd.aiexpensetracker",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive_icon.png",
+        "foregroundImage": "./assets/app/icon.svg",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
@@ -40,7 +40,10 @@
         {
           "android": {
             "newArchEnabled": true,
-            "abiFilters": ["arm64-v8a", "x86_64"]
+            "abiFilters": [
+              "arm64-v8a",
+              "x86_64"
+            ]
           }
         }
       ],
@@ -52,9 +55,15 @@
             "./assets/fonts/new_astro/new_astro_light.otf",
             "./assets/fonts/new_astro/new_astro_medium.otf",
             "./assets/fonts/new_astro/new_astro_bold.otf",
-            "./assets/fonts/neue_haas_grotesk/neue_haas_grotesk_reguler.ttf",
-            "./assets/fonts/neue_haas_grotesk/neue_haas_grotesk_medium.ttf",
-            "./assets/fonts/neue_haas_grotesk/neue_haas_grotesk_bold.ttf"
+            "./assets/fonts/montserrat/montserrat_thin.ttf",
+            "./assets/fonts/montserrat/montserrat_semibold.ttf",
+            "./assets/fonts/montserrat/montserrat_regular.ttf",
+            "./assets/fonts/montserrat/montserrat_medium.ttf",
+            "./assets/fonts/montserrat/montserrat_light.ttf",
+            "./assets/fonts/montserrat/montserrat_extralight.ttf",
+            "./assets/fonts/montserrat/montserrat_extrabold.ttf",
+            "./assets/fonts/montserrat/montserrat_bold.ttf",
+            "./assets/fonts/montserrat/montserrat_black.ttf"
           ]
         }
       ],
@@ -69,11 +78,13 @@
             "./assets/icons/house_fill.svg",
             "./assets/icons/plus_fill.svg",
             "./assets/icons/archive_fill.svg",
-            "./assets/icons/notification.svg"
+            "./assets/icons/notification.svg",
+            "./assets/icons/close.svg"
           ]
         }
       ],
-      "expo-router"
+      "expo-router",
+      "@react-native-community/datetimepicker"
     ]
   }
 }

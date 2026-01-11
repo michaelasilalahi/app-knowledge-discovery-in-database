@@ -1,7 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   // NOTE: Update this to include the paths to all files that contain Nativewind classes.
-  content: ['./app/**/*.{js,jsx,ts,tsx}', './components/**/*.{js,jsx,ts,tsx}'],
+  content: [
+    './app/**/*.{js,jsx,ts,tsx}',
+    './src/features/**/*.{js,jsx,ts,tsx}',
+  ],
   presets: [require('nativewind/preset')],
   theme: {
     extend: {
@@ -9,10 +12,15 @@ module.exports = {
         'new-astro-light': ['new_astro_light'],
         'new-astro-medium': ['new_astro_medium'],
         'new-astro-bold': ['new_astro_bold'],
-
-        'neue-haas-grotesk-regular': ['neue_haas_grotesk_reguler'],
-        'neue-haas-grotesk-medium': ['neue_haas_grotesk_medium'],
-        'neue-haas-grotesk-bold': ['neue_haas_grotesk_bold'],
+        'montserrat-thin': ['montserrat_thin'],
+        'montserrat-semibold': ['montserrat_semibold'],
+        'montserrat-regular': ['montserrat_regular'],
+        'montserrat-medium': ['montserrat_medium'],
+        'montserrat-light': ['montserrat_light'],
+        'montserrat-extralight': ['montserrat_extralight'],
+        'montserrat-extrabold': ['montserrat_extrabold'],
+        'montserrat-bold': ['montserrat_bold'],
+        'montserrat-black': ['montserrat_black'],
       },
       width: {
         'width-side': '90%',

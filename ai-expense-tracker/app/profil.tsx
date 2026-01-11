@@ -1,6 +1,6 @@
 import { View, Text, Pressable, Alert } from 'react-native';
 import { Image } from 'expo-image';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useAuthStore } from '@/features/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export default function ProfilScreen() {

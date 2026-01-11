@@ -2,12 +2,12 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-interface UserData {
+export interface UserData {
   id: string;
   email: string;
   name: string | null;
   photo: string | null;
-  idToken: string | null; // token untuk dikirim ke fast api
+  idToken: string | null;
 }
 
 interface AuthState {
@@ -22,20 +22,8 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       user: null,
       isLoggedIn: false,
-
-      // fungsi login: simpan data user & ubah status state true
-      login: (userData) =>
-        set({
-          user: userData,
-          isLoggedIn: true,
-        }),
-
-      // fungsi logout: hapus data user & ubah status state false
-      logout: () =>
-        set({
-          user: null,
-          isLoggedIn: false,
-        }),
+      login: (userData) => set({ user: userData, isLoggedIn: true }),
+      logout: () => set({ user: null, isLoggedIn: false }),
     }),
     {
       name: 'auth-storage',

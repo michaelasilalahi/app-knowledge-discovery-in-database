@@ -1,7 +1,7 @@
 import { Pressable, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useAuthStore } from '@/features/auth';
 import { useRouter } from 'expo-router';
 
 export default function TabHome() {
@@ -9,7 +9,7 @@ export default function TabHome() {
   const router = useRouter();
 
   return (
-    <SafeAreaView className='flex-1'>
+    <SafeAreaView className='flex-1 bg-white'>
       <View className='flex-1 w-[90%] mx-auto'>
         <Pressable
           className='flex flex-row items-center gap-x-3'

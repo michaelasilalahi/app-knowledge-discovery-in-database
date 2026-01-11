@@ -5,7 +5,7 @@ import { useFonts } from 'expo-font';
 import { useAssets } from 'expo-asset';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { useAuthStore } from '../store/useAuthStore';
+import { useAuthStore } from '@/features/auth';
 import * as SplashScreen from 'expo-splash-screen';
 // @ts-expect-error global.css is handled by the bundler; no types needed
 import '../global.css';
@@ -20,9 +20,15 @@ export default function RootLayout() {
     new_astro_light: require('../assets/fonts/new_astro/new_astro_light.otf'),
     new_astro_medium: require('../assets/fonts/new_astro/new_astro_medium.otf'),
     new_astro_bold: require('../assets/fonts/new_astro/new_astro_bold.otf'),
-    neue_haas_grotesk_reguler: require('../assets/fonts/neue_haas_grotesk/neue_haas_grotesk_reguler.ttf'),
-    neue_haas_grotesk_medium: require('../assets/fonts/neue_haas_grotesk/neue_haas_grotesk_medium.ttf'),
-    neue_haas_grotesk_bold: require('../assets/fonts/neue_haas_grotesk/neue_haas_grotesk_bold.ttf'),
+    montserrat_thin: require('../assets/fonts/montserrat/montserrat_thin.ttf'),
+    montserrat_semibold: require('../assets/fonts/montserrat/montserrat_semibold.ttf'),
+    montserrat_regular: require('../assets/fonts/montserrat/montserrat_regular.ttf'),
+    montserrat_medium: require('../assets/fonts/montserrat/montserrat_medium.ttf'),
+    montserrat_light: require('../assets/fonts/montserrat/montserrat_light.ttf'),
+    montserrat_extralight: require('../assets/fonts/montserrat/montserrat_extralight.ttf'),
+    montserrat_extrabold: require('../assets/fonts/montserrat/montserrat_extrabold.ttf'),
+    montserrat_bold: require('../assets/fonts/montserrat/montserrat_bold.ttf'),
+    montserrat_black: require('../assets/fonts/montserrat/montserrat_black.ttf'),
   });
 
   // load image assets
@@ -35,6 +41,7 @@ export default function RootLayout() {
     require('../assets/icons/plus_fill.svg'),
     require('../assets/icons/archive_fill.svg'),
     require('../assets/icons/notification.svg'),
+    require('../assets/icons/close.svg'),
   ]);
 
   // ambil state login dari zustand

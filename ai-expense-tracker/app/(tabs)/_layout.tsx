@@ -14,6 +14,8 @@ export default function TabsLayout() {
         },
         tabBarStyle: {
           height: 60,
+          elevation: 0,
+          borderTopColor: 'transparent',
         },
       }}
     >
