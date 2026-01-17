@@ -5,7 +5,7 @@ import { useFonts } from 'expo-font';
 import { useAssets } from 'expo-asset';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { useAuthStore } from '@/features/auth';
+import { useGoogleStore } from '@/auth/google/store/useGoogleStore';
 import * as SplashScreen from 'expo-splash-screen';
 // @ts-expect-error global.css is handled by the bundler; no types needed
 import '../global.css';
@@ -42,10 +42,11 @@ export default function RootLayout() {
     require('../assets/icons/archive_fill.svg'),
     require('../assets/icons/notification.svg'),
     require('../assets/icons/close.svg'),
+    require('../assets/icons/switch_analysis.svg'),
   ]);
 
   // ambil state login dari zustand
-  const { isLoggedIn } = useAuthStore();
+  const { isLoggedIn } = useGoogleStore();
 
   // hooks untuk navigasi
   const router = useRouter();
@@ -97,10 +98,10 @@ export default function RootLayout() {
         <Stack.Screen name='(auth)/login' />
         <Stack.Screen name='(tabs)' />
         <Stack.Screen
-          name='profil'
+          name='(setting)/setting'
           options={{
             headerShown: true,
-            title: 'Profil',
+            title: 'Pengaturan',
             headerShadowVisible: false,
             headerStyle: { backgroundColor: 'white' },
             contentStyle: { backgroundColor: 'white' },

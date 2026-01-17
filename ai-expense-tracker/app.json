@@ -79,7 +79,8 @@
             "./assets/icons/plus_fill.svg",
             "./assets/icons/archive_fill.svg",
             "./assets/icons/notification.svg",
-            "./assets/icons/close.svg"
+            "./assets/icons/close.svg",
+            "./assets/icons/switch_analysis.svg"
           ]
         }
       ],

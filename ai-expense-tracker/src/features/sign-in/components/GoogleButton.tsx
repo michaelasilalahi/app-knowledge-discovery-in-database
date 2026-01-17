@@ -1,15 +1,11 @@
 import { Pressable, Text, ActivityIndicator } from 'react-native';
 import { Image } from 'expo-image';
-
-interface Props {
-  onPress: () => void;
-  isLoading: boolean;
-}
+import { Props } from '../types';
 
 export const GoogleButton = ({ onPress, isLoading }: Props) => {
   return (
     <Pressable
-      className='w-full py-4 border border-gray-300 rounded-[12px] flex-row justify-center items-center gap-x-3 active:bg-gray-300'
+      className='w-full py-4 border border-gray-300 rounded-full flex-row justify-center items-center gap-x-3 active:bg-gray-300'
       onPress={onPress}
       disabled={isLoading}
     >

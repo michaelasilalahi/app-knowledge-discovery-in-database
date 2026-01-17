@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native';
-import { useExpenseInput } from '../hooks/useExpenseInput';
+import { useExpenseInput } from '../hooks/useExpense';
 import CurrencyInput from 'react-native-currency-input';
 
 export const Expense = () => {

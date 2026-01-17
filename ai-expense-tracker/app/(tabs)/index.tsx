@@ -1,11 +1,11 @@
 import { Pressable, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useAuthStore } from '@/features/auth';
+import { useGoogleStore } from '@/auth/google/store/useGoogleStore';
 import { useRouter } from 'expo-router';
 
 export default function TabHome() {
-  const user = useAuthStore((state) => state.user);
+  const user = useGoogleStore((state) => state.user);
   const router = useRouter();
 
   return (
@@ -13,7 +13,7 @@ export default function TabHome() {
       <View className='flex-1 w-[90%] mx-auto'>
         <Pressable
           className='flex flex-row items-center gap-x-3'
-          onPress={() => router.push('/profil')}
+          onPress={() => router.push('(setting)/setting')}
         >
           <View>
             <Image

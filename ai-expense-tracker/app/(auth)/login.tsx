@@ -1,7 +1,8 @@
 import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LoginHeader, GoogleButton, useGoogleAuth } from '@/features/auth';
+import { LoginHeader, GoogleButton } from '@/features/sign-in';
+import { useGoogleAuth } from '@/auth/google/hooks/useGoogleAuth';
 
 export default function LoginScreen() {
   const { handleGoogleLogin, isLoading } = useGoogleAuth();

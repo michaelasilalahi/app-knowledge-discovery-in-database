@@ -4,10 +4,11 @@ import {
   GoogleSignin,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import { useAuthStore } from '../store/useAuthStore';
+import { useGoogleStore } from '../store/useGoogleStore';
 
 export const useGoogleAuth = () => {
-  const login = useAuthStore((state) => state.login);
+  const login = useGoogleStore((state) => state.login);
+  // const logout = useGoogleStore((state) => state.logout);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleGoogleLogin = async () => {

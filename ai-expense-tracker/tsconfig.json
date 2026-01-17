@@ -4,7 +4,10 @@
     "strict": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@assets/*": ["./assets/*"]
+      "@assets/*": ["./assets/*"],
+      "@config/*": ["./config/*"],
+      "@auth/*": ["./auth/*"],
+      "@features/*": ["./features/*"],
     },
     "noUnusedLocals": true,
     "noImplicitReturns": true,
@@ -14,6 +17,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    "declaration": false,
+    "emitDeclarationOnly": false,
     "noFallthroughCasesInSwitch": true
   },
   "include": ["**/*.ts", "**/*.tsx", "nativewind-env.d.ts"]
