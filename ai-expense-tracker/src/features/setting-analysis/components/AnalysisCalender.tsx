@@ -84,9 +84,7 @@ export const AnalysisCalender = () => {
             </View>
 
             <View className='flex flex-row justify-between items-center'>
-              <Text className='font-montserrat-semibold'>
-                Analisis Setiap Bulan ?
-              </Text>
+              <Text className='font-montserrat-semibold'>Analisis rutin ?</Text>
               <ToggleSwitch
                 isOn={isRecurring}
                 onColor='#16DB00'

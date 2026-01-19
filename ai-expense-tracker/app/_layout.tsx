@@ -43,6 +43,7 @@ export default function RootLayout() {
     require('../assets/icons/notification.svg'),
     require('../assets/icons/close.svg'),
     require('../assets/icons/switch_analysis.svg'),
+    require('../assets/icons/arrow_right.svg'),
   ]);
 
   // ambil state login dari zustand
@@ -92,6 +93,7 @@ export default function RootLayout() {
         screenOptions={{
           headerShown: false,
           animation: 'fade',
+          gestureDirection: 'horizontal',
         }}
       >
         <Stack.Screen name='index' />

@@ -12,5 +12,6 @@ export * from './hooks/useExpenseDate';
 export * from './hooks/useExpenseLabel';
 export * from './hooks/useExpenseCategory';
 
-// utility
-export * from './types';
+// types
+export * from './types/saveExpenseType';
+export * from './types/saveExpenseArchive';

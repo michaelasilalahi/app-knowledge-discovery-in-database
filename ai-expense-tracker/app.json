@@ -80,7 +80,8 @@
             "./assets/icons/archive_fill.svg",
             "./assets/icons/notification.svg",
             "./assets/icons/close.svg",
-            "./assets/icons/switch_analysis.svg"
+            "./assets/icons/switch_analysis.svg",
+            "./assets/icons/arrow_right.svg"
           ]
         }
       ],

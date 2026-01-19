@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { UseExpenseLabelReturn } from '../types';
+import { UseExpenseLabelReturn } from '../types/saveExpenseType';
 import { useExpenseStore } from '../store/expenseStore';
 
 export const useExpenseLabel = (): UseExpenseLabelReturn => {

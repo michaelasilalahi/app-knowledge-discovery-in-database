@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
-import { UseExpenseDateInputReturn } from '../types';
+import { UseExpenseDateInputReturn } from '../types/saveExpenseType';
 
 export const useExpenseDate = (): UseExpenseDateInputReturn => {
   const [date, setDate] = useState<Date | null>(null);

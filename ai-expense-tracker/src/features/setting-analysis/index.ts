@@ -7,6 +7,12 @@ export * from './components/AnalysisHeader';
 export * from './hooks/useAnalysisCalender';
 export * from './hooks/useAnalysisCustom';
 
-// utility
+// utils
 export * from './utils/selectedMonth';
 export * from './utils/analysisConfirmationStatus';
+
+// store
+export * from './store/settingAnalysisStore';
+
+// types
+export * from './types/settingAnalysisTypes';

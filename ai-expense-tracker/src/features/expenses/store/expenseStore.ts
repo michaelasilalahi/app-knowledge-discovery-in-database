@@ -2,46 +2,26 @@ import { create } from 'zustand';
 import { Alert } from 'react-native';
 import { expenseApi } from '../api/expenseApi';
 import { router } from 'expo-router';
+import { ExpenseState } from '../types/saveExpenseArchive';
 
-interface ExpenseState {
-  // State Data
-  name: string;
-  amount: number | null;
-  date: Date;
-  category: string;
-  label: string;
-  isLoading: boolean;
-
-  // Actions (Setter untuk mengubah data)
-  setName: (name: string) => void;
-  setAmount: (amount: number | null) => void;
-  setDate: (date: Date) => void;
-  setCategory: (category: string) => void;
-  setLabel: (label: string) => void;
-
-  // Action Utama (Simpan ke Server)
-  submitExpense: () => Promise<void>;
-  resetForm: () => void;
-}
-
-// 2. Buat Store
 export const useExpenseStore = create<ExpenseState>((set, get) => ({
-  // Initial Values
+  // initial Values
   name: '',
   amount: null,
   date: new Date(),
   category: '',
   label: '',
   isLoading: false,
+  expenses: [],
 
-  // Setters implementation
+  // setters implementation
   setName: (name) => set({ name }),
   setAmount: (amount) => set({ amount }),
   setDate: (date) => set({ date }),
   setCategory: (category) => set({ category }),
   setLabel: (label) => set({ label }),
 
-  // Reset Form setelah simpan
+  // reset form setelah simpan
   resetForm: () =>
     set({
       name: '',
@@ -56,7 +36,7 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
     // Ambil data terbaru dari state menggunakan get()
     const { name, amount, date, category, label } = get();
 
-    // Validasi
+    // validasi
     if (!name || !amount || !category) {
       Alert.alert('Gagal', 'Mohon lengkapi Nama, Nominal, dan Kategori.');
       return;
@@ -65,23 +45,33 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
     set({ isLoading: true });
 
     try {
-      // Kirim ke API yang sudah Anda buat sebelumnya
+      // kirim ke API
       await expenseApi.create({
         jenis_pengeluaran: name,
         nominal: amount,
-        tanggal: date.toISOString().split('T')[0], // Format YYYY-MM-DD
+        tanggal: date.toISOString().split('T')[0],
         kategori: category,
         label: label || 'Umum',
       });
 
       Alert.alert('Sukses', 'Data berhasil disimpan!');
-      get().resetForm(); // Bersihkan form
-      router.back(); // Kembali ke halaman sebelumnya
+      get().resetForm();
+      get().fetchExpenses();
+      router.back();
     } catch (error) {
       console.error('Submit Error:', error);
       Alert.alert('Error', 'Gagal menyimpan data ke server.');
     } finally {
       set({ isLoading: false });
+    }
+  },
+
+  fetchExpenses: async () => {
+    try {
+      const response = await expenseApi.getAll();
+      set({ expenses: response });
+    } catch (error) {
+      console.log('Fetch error', error);
     }
   },
 }));
