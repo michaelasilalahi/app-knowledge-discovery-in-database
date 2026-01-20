@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, Text, Pressable, FlatList } from 'react-native';
+import { router } from 'expo-router';
 import { Image } from 'expo-image';
 import { SwitchScreenAnalysisProps } from '../types/switchScreenAnalysisPropsType';
 import { useCalendarAnalysisDataList } from '../utils/calendarAnalysisDataList';
 
-export const ArchiveAnalysisCalender = ({
+export const CalendarAnalysisExpenditureList = ({
   onSwitch,
 }: SwitchScreenAnalysisProps) => {
-  const listData = useCalendarAnalysisDataList();
-
+  const dataList = useCalendarAnalysisDataList();
   return (
     <View>
       <View className='flex-row justify-between items-center py-[15px] border-b-[0.5px] border-b-[#AAAAAA]'>
@@ -32,27 +32,37 @@ export const ArchiveAnalysisCalender = ({
           />
         </Pressable>
       </View>
-
       <View>
         <FlatList
-          data={listData}
+          data={dataList}
           keyExtractor={(item) => item.title}
-          contentContainerStyle={{ paddingBottom: 20 }}
           renderItem={({ item }) => (
-            <View className='flex-row justify-between items-center py-4 border-b-[0.5px] border-b-[#E0E0E0]'>
-              <View>
-                <Text className='font-montserrat-semibold text-[14px]'>
-                  {item.title}
-                </Text>
-                <Text className='font-montserrat-medium text-[#AAAAAA] text-[12px] mt-1'>
-                  Rp {item.totalExpense.toLocaleString('id-ID')}
-                </Text>
+            <Pressable
+              onPress={() => {
+                router.push({
+                  pathname: '/(archive_calender)/archive_calender',
+                  params: {
+                    title: item.title,
+                  },
+                });
+              }}
+            >
+              <View className='flex-row justify-between items-center py-[15px] border-b-[0.5px] border-b-[#AAAAAA]'>
+                <View>
+                  <Text className='font-montserrat-medium'>{item.title}</Text>
+                </View>
+                <View>
+                  <Image
+                    source={require('../../../../assets/icons/arrow_right.svg')}
+                    style={{
+                      width: 20,
+                      height: 20,
+                      tintColor: '#000000',
+                    }}
+                  />
+                </View>
               </View>
-              <Image
-                source={require('../../../../assets/icons/arrow_right.svg')}
-                style={{ width: 14, height: 14, tintColor: '#000' }}
-              />
-            </View>
+            </Pressable>
           )}
           ListEmptyComponent={
             <View className='flex items-center justify-center'>

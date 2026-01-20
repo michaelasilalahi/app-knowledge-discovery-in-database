@@ -10,8 +10,6 @@ import * as SplashScreen from 'expo-splash-screen';
 // @ts-expect-error global.css is handled by the bundler; no types needed
 import '../global.css';
 
-// insialisasi auth context
-
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -107,6 +105,17 @@ export default function RootLayout() {
             headerShadowVisible: false,
             headerStyle: { backgroundColor: 'white' },
             contentStyle: { backgroundColor: 'white' },
+          }}
+        />
+        <Stack.Screen
+          name='(archive_calender)/archive_calender'
+          options={{
+            headerShown: true,
+            title: 'Analisis Pengeluaran',
+            headerShadowVisible: false,
+            headerStyle: { backgroundColor: 'white' },
+            contentStyle: { backgroundColor: 'white' },
+            animation: 'slide_from_right',
           }}
         />
       </Stack>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArchiveViewMode } from '../types';
+import { ArchiveViewMode } from '../types/switchScreenAnalysisPropsType';
 
 export const useArchiveView = () => {
   const [viewMode, setViewMode] = useState<ArchiveViewMode>(

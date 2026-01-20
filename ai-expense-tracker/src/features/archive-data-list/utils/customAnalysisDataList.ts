@@ -1,20 +1,18 @@
 import { useEffect } from 'react';
-import {
-  useExpenseStore,
-  settingAnalysisDataList,
-} from '../../expense/store/expenseStore';
+import { useExpenseStore } from '@/features/expenses/store/expenseStore';
+import { settingAnalysisStore } from '@/features/setting-analysis';
 
 export const useCustomAnalysisDataList = () => {
   // ambil data pengeluaran
-  const { expense, fetchExpenses } = useExpenseStore();
+  const { expenses, fetchExpenses } = useExpenseStore();
 
   // ambil konfigurasi tanggal mulai dari setting store
-  const customConfig = settingAnalysisDataList(
-    (state) => state.customAnalysisConfig,
+  const customConfig = settingAnalysisStore(
+    (state) => state.analysisCustomConfig,
   );
 
   // default ke tanggal 1 jika user belum atur
-  const startDay = customConfig ? parseInt(customConfig.startDay) : 1;
+  const startDay = customConfig ? parseInt(customConfig.day) : 1;
 
   // fetch data saat hook dipanggil
   useEffect(() => {
@@ -22,7 +20,7 @@ export const useCustomAnalysisDataList = () => {
   }, []);
 
   // logic grouping: siklus kustom
-  const groupedData = expense.reduce(
+  const groupedData = expenses.reduce(
     (acc, curr) => {
       const date = new Date(curr.tanggal);
       const day = date.getDate();
@@ -54,8 +52,37 @@ export const useCustomAnalysisDataList = () => {
       );
 
       // format label: 25 jan - 24 feb 2026
-      const option;
+      const options: Intl.DateTimeFormatOptions = {
+        day: 'numeric',
+        month: 'short',
+      };
+
+      const startStr = startDate.toLocaleDateString('id-ID', options);
+      const endStr = endDate.toLocaleDateString('id-ID', {
+        ...options,
+        month: 'short',
+      });
+
+      const label = `${startStr} - ${endStr}`;
+
+      if (!acc[label]) {
+        acc[label] = 0;
+      }
+      acc[label] += curr.nominal;
+      return acc;
     },
-    {} as Record<string, Expense[]>,
+    {} as Record<string, number>,
   );
+
+  // mapping ke format list ui
+  const listData = Object.keys(groupedData).map((key) => ({
+    title: key,
+    total: groupedData[key],
+  }));
+
+  // kembalikan list dan startday (untuk judul di header ui)
+  return {
+    listData,
+    startDay,
+  };
 };

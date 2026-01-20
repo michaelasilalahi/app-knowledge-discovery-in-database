@@ -1,17 +1,28 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AnalysisState } from '../types/settingAnalysisTypes';
 
-export const settingAnalysisStore = create<AnalysisState>((set, get) => ({
-  analysisCalendarConfig: null,
-  analysisCustomConfig: null,
+export const settingAnalysisStore = create<AnalysisState>()(
+  persist(
+    (set, get) => ({
+      analysisCalendarConfig: null,
+      analysisCustomConfig: null,
 
-  setAnalysisCalenderConfig: (config) =>
-    set({ analysisCalendarConfig: config }),
-  setAnalysisCustomConfig: (config) => set({ analysisCustomConfig: config }),
+      setAnalysisCalenderConfig: (config) =>
+        set({ analysisCalendarConfig: config }),
 
-  isAnyAnalysisActive: () => {
-    const { analysisCalendarConfig, analysisCustomConfig } = get();
-    // analisis dianggap aktif jika salah satu konfigurasi tidak null
-    return analysisCalendarConfig !== null || analysisCustomConfig !== null;
-  },
-}));
+      setAnalysisCustomConfig: (config) =>
+        set({ analysisCustomConfig: config }),
+
+      isAnyAnalysisActive: () => {
+        const { analysisCalendarConfig, analysisCustomConfig } = get();
+        return analysisCalendarConfig !== null || analysisCustomConfig !== null;
+      },
+    }),
+    {
+      name: 'analysis-storage', // Nama unik untuk storage di HP
+      storage: createJSONStorage(() => AsyncStorage), // Menggunakan AsyncStorage
+    },
+  ),
+);
