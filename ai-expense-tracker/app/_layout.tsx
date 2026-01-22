@@ -107,17 +107,6 @@ export default function RootLayout() {
             contentStyle: { backgroundColor: 'white' },
           }}
         />
-        <Stack.Screen
-          name='(archive_calender)/archive_calender'
-          options={{
-            headerShown: true,
-            title: 'Analisis Pengeluaran',
-            headerShadowVisible: false,
-            headerStyle: { backgroundColor: 'white' },
-            contentStyle: { backgroundColor: 'white' },
-            animation: 'slide_from_right',
-          }}
-        />
       </Stack>
     </SafeAreaProvider>
   );

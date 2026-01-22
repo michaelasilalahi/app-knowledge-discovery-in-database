@@ -1,13 +1,18 @@
 import React from 'react';
 import { View, Text, Pressable, FlatList } from 'react-native';
 import { Image } from 'expo-image';
-import { SwitchScreenAnalysisProps } from '../types/switchScreenAnalysisPropsType';
+import { router } from 'expo-router';
+
+// hooks
 import { useCustomAnalysisDataList } from '../utils/customAnalysisDataList';
+
+// types
+import { SwitchScreenAnalysisProps } from '../types/switchScreenAnalysisPropsType';
 
 export const CustomAnalysisExpenditureList = ({
   onSwitch,
 }: SwitchScreenAnalysisProps) => {
-  const { listData, startDay } = useCustomAnalysisDataList();
+  const { listData } = useCustomAnalysisDataList();
   return (
     <View>
       <View className='flex-row justify-between items-center py-[15px] border-b-[0.5px] border-b-[#AAAAAA]'>
@@ -35,27 +40,38 @@ export const CustomAnalysisExpenditureList = ({
       <FlatList
         data={listData}
         keyExtractor={(item) => item.title}
-        contentContainerStyle={{ paddingBottom: 20 }}
         renderItem={({ item }) => (
-          <View className='flex-row justify-between items-center py-4 border-b-[0.5px] border-b-[#E0E0E0]'>
-            <View>
-              <Text className='font-montserrat-semibold text-[14px]'>
-                {item.title}
-              </Text>
-              <Text className='font-montserrat-medium text-[#AAAAAA] text-[12px] mt-1'>
-                Rp {item.total.toLocaleString('id-ID')}
-              </Text>
+          <Pressable
+            onPress={() => {
+              router.push({
+                pathname: '/(archive-custom)/archiveCustom',
+                params: {
+                  title: item.title,
+                },
+              });
+            }}
+          >
+            <View className='flex-row justify-between items-center py-[15px] border-b-[0.5px] border-b-[#AAAAAA]'>
+              <View>
+                <Text className='font-montserrat-medium'>{item.title}</Text>
+              </View>
+              <Image
+                source={require('../../../../assets/icons/arrow_right.svg')}
+                style={{
+                  width: 20,
+                  height: 20,
+                  tintColor: '#000000',
+                }}
+              />
             </View>
-            <Image
-              source={require('../../../../assets/icons/arrow_right.svg')}
-              style={{ width: 14, height: 14, tintColor: '#000' }}
-            />
-          </View>
+          </Pressable>
         )}
         ListEmptyComponent={
-          <Text className='text-center text-[#AAAAAA] mt-10 font-montserrat-medium'>
-            Belum ada data pengeluaran.
-          </Text>
+          <View className='flex items-center justify-center'>
+            <Text className='font-montserrat-medium text-[#AAAAAA]'>
+              Belum ada data pengeluaran.
+            </Text>
+          </View>
         }
       />
     </View>

@@ -40,7 +40,7 @@ export const CalendarAnalysisExpenditureList = ({
             <Pressable
               onPress={() => {
                 router.push({
-                  pathname: '/(archive_calender)/archive_calender',
+                  pathname: '/(archive-calender)/archive-calender',
                   params: {
                     title: item.title,
                   },
