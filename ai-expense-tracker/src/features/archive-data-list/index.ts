@@ -9,6 +9,7 @@ export * from './hooks/useArchiveView';
 
 // types
 export * from './types/switchScreenAnalysisPropsType';
+export * from './types/calenderAnalysisDataListType';
 
 // utils
 export * from './utils/calendarAnalysisDataList';

@@ -1,6 +1,7 @@
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Profil } from '@/features/profil/components/Profil';
+import { Logout } from '@/features/logout/components/Logout';
 import {
   AnalysisHeader,
   AnalysisCalender,
@@ -15,10 +16,14 @@ export default function Setting() {
           <Profil />
         </View>
 
-        <View className='w-[90%] mx-auto flex gap-y-[15px]'>
+        <View className='flex-1 w-[90%] mx-auto gap-y-[15px]'>
           <AnalysisHeader />
           <AnalysisCalender />
           <AnalysisCustom />
+        </View>
+
+        <View className='w-[90%] mx-auto mb-[30px]'>
+          <Logout />
         </View>
       </View>
     </SafeAreaView>

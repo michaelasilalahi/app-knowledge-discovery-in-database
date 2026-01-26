@@ -21,5 +21,6 @@
     "emitDeclarationOnly": false,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["**/*.ts", "**/*.tsx", "nativewind-env.d.ts"]
+  "include": ["**/*.ts", "**/*.tsx", "nativewind-env.d.ts"],
+  "exclude": ["node_modules"]
 }

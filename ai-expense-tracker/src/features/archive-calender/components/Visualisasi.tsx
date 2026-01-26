@@ -12,7 +12,6 @@ export const Visualisasi = ({ periodTitle }: VisualisasiProps) => {
       <Text className='font-montserrat-medium'>
         Menampilkan daftar pengeluaran untuk: {periodTitle}
       </Text>
-      {/* Logic pengambilan data berdasarkan periodTitle disini */}
     </View>
   );
 };

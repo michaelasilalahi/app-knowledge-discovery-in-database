@@ -17,7 +17,7 @@ export const useCustomAnalysisDataList = () => {
   // fetch data saat hook dipanggil
   useEffect(() => {
     fetchExpenses();
-  }, []);
+  }, [fetchExpenses]);
 
   // logic grouping: siklus kustom
   const groupedData = expenses.reduce(

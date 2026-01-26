@@ -16,3 +16,7 @@ export * from './store/settingAnalysisStore';
 
 // types
 export * from './types/settingAnalysisTypes';
+export * from './types/settingAnalysisApiType';
+
+// api
+export * from './api/settingAnalysisApi';

@@ -9,10 +9,7 @@ type InsightProps = {
 export const Insight = ({ periodTitle }: InsightProps) => {
   return (
     <View>
-      <Text className='font-montserrat-medium'>
-        Menampilkan daftar pengeluaran untuk: {periodTitle}
-      </Text>
-      {/* Logic pengambilan data berdasarkan periodTitle disini */}
+      <Text className='font-montserrat-medium'>Insight</Text>
     </View>
   );
 };

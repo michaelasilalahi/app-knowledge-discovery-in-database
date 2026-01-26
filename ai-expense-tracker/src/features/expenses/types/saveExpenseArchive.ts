@@ -1,10 +1,11 @@
 // tipe data untuk expense item
 export interface ExpenseItem {
   id: number;
-  jenis_pengeluaran: string;
-  nominal: number;
-  tanggal: string;
-  kategori: string;
+  user_id: string;
+  type_of_expenditure: string;
+  amount: number;
+  date: string;
+  category: string;
   label: string;
 }
 

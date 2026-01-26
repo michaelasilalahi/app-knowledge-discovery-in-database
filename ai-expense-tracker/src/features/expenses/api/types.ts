@@ -1,11 +1,12 @@
 // Tipe data untuk pengeluaran yang sudah tersimpan di Database (ada ID)
 export interface Expense {
   id: number;
-  tanggal: string; // Format: "YYYY-MM-DD"
-  jenis_pengeluaran: string;
+  user_id: string;
+  date: string;
+  type_of_expenditure: string;
   label: string;
-  kategori: string;
-  nominal: number;
+  category: string;
+  amount: number;
 }
 
 // Tipe data saat kita mau create baru (belum punya ID)

@@ -1,4 +1,10 @@
-import { View, Text, Modal, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  Modal,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import ToggleSwitch from 'toggle-switch-react-native';
 import { Picker } from 'react-native-wheel-pick';
 import { useAnalysisCalender } from '../hooks/useAnalysisCalender';
@@ -19,6 +25,7 @@ export const AnalysisCalender = () => {
     // Props Tampilan Utama
     isAnalysisActive,
     feedbackText,
+    isLoading,
   } = useAnalysisCalender();
 
   return (
@@ -97,6 +104,7 @@ export const AnalysisCalender = () => {
             <View className='flex gap-y-[10px]'>
               <TouchableOpacity
                 onPress={handleCancel}
+                disabled={isLoading}
                 className='border-[0.7px] border-[#AAAAAA] rounded-[10px] py-[10px]'
               >
                 <Text className='font-montserrat-semibold text-center'>
@@ -106,11 +114,16 @@ export const AnalysisCalender = () => {
 
               <TouchableOpacity
                 onPress={handleSubmit}
+                disabled={isLoading}
                 className='bg-black rounded-[10px] py-[10px]'
               >
-                <Text className='font-montserrat-semibold text-white text-center'>
-                  Submit
-                </Text>
+                {isLoading ? (
+                  <ActivityIndicator color='white' size='small' />
+                ) : (
+                  <Text className='font-montserrat-semibold text-white text-center'>
+                    Submit
+                  </Text>
+                )}
               </TouchableOpacity>
             </View>
           </View>

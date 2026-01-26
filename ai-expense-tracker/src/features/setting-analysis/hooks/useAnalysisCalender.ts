@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 import { months, getCurrentMonthIndex } from '../utils/selectedMonth';
 import { analysisConfirmationStatus } from '../utils/analysisConfirmationStatus';
 import { settingAnalysisStore } from '../store/settingAnalysisStore';
+import { useGoogleStore } from '@/auth/google';
+import { settingAnalysisApi } from '../api/settingAnalysisApi';
 
 export const useAnalysisCalender = () => {
   // ambil action dan data dari zustand
@@ -13,6 +16,9 @@ export const useAnalysisCalender = () => {
   const activeConfig = settingAnalysisStore(
     (state) => state.analysisCalendarConfig,
   );
+
+  // Ambil user_id dari google store
+  const userId = useGoogleStore((state) => state.user?.id);
 
   const isAnalysisActive = activeConfig !== null;
 
@@ -29,12 +35,16 @@ export const useAnalysisCalender = () => {
   const [selectedMonthIndex, setSelectedMonthIndex] = useState<number>(
     getCurrentMonthIndex(),
   );
+
+  // State baru untuk loading
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   // Menggabungkan index bulan dan status rutin ke dalam satu objek config
   useEffect(() => {
     setIsEnabled(isAnalysisActive);
   }, [isAnalysisActive]);
 
-  const toggleSwitch = (isOn: boolean) => {
+  const toggleSwitch = async (isOn: boolean) => {
     if (isOn) {
       // jika user menyalakan, nyalakan dulu toggle secara visual lalu buka modal
       setIsEnabled(true);
@@ -42,9 +52,29 @@ export const useAnalysisCalender = () => {
       setSelectedMonthIndex(getCurrentMonthIndex());
       setIsRecurring(false);
     } else {
-      // jika user mematikan, reset semua state
-      setIsEnabled(false);
-      setCalendarConfig(null);
+      // Matikan analysis dan kirim ke backend
+      if (!userId || !activeConfig) return;
+
+      setIsLoading(true);
+      try {
+        await settingAnalysisApi.save({
+          user_id: userId,
+          month_index: activeConfig.monthIndex,
+          year: new Date().getFullYear(),
+          is_active: false,
+          is_recurring: activeConfig.recurring,
+          analysis_type: 'calendar',
+        });
+
+        // Update UI lokal
+        setIsEnabled(false);
+        setCalendarConfig(null);
+      } catch (error) {
+        Alert.alert(`${error}: Gagal menyimpan pengaturan`);
+        setIsEnabled(true);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -55,13 +85,37 @@ export const useAnalysisCalender = () => {
     months,
   );
 
-  const handleSubmit = () => {
-    // pindahkan data dari state sementara ke state "terkonfirmasi"
-    setCalendarConfig({
-      monthIndex: selectedMonthIndex,
-      recurring: isRecurring,
-    });
-    setIsModalVisible(false);
+  // Fungsi submit ke backend
+  const handleSubmit = async () => {
+    if (!userId) {
+      Alert.alert('Error', 'User ID tidak ditemukan.');
+      return;
+    }
+
+    setIsRecurring(true);
+    try {
+      // Kirim ke backend
+      await settingAnalysisApi.save({
+        user_id: userId,
+        month_index: selectedMonthIndex,
+        year: new Date().getFullYear(),
+        is_active: true,
+        is_recurring: isRecurring,
+        analysis_type: 'calendar',
+      });
+
+      // Jika sukses, simpan ke store lokal Zustand
+      setCalendarConfig({
+        monthIndex: selectedMonthIndex,
+        recurring: isRecurring,
+      });
+
+      setIsModalVisible(false);
+    } catch (error) {
+      Alert.alert(`${error}: Gagal menyimpan pengaturan`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCancel = () => {
@@ -86,5 +140,6 @@ export const useAnalysisCalender = () => {
     // Props UI
     isAnalysisActive,
     feedbackText,
+    isLoading,
   };
 };

@@ -5,10 +5,10 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import { useGoogleStore } from '../store/useGoogleStore';
+import { apiClient } from '@/config/apiClient';
 
 export const useGoogleAuth = () => {
   const login = useGoogleStore((state) => state.login);
-  // const logout = useGoogleStore((state) => state.logout);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleGoogleLogin = async () => {
@@ -16,24 +16,49 @@ export const useGoogleAuth = () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
+
       if (userInfo.data) {
-        // simpan data ke zustand
+        const user = userInfo.data.user;
+
+        // 2. Persiapkan data untuk Backend
+        // Kuncinya (key) harus sama persis dengan schemas.py di Python
+        const backendPayload = {
+          google_id: user.id,
+          email: user.email,
+          full_name: user.name,
+          photo_url: user.photo,
+        };
+
+        // 3. Kirim ke Database
+        try {
+          console.log('Mengirim data ke backend...', backendPayload);
+          // Panggil endpoint yang sudah kita buat di auth/router.py
+          const response = await apiClient.post(
+            '/auth/google-login',
+            backendPayload,
+          );
+          console.log('Sukses tersimpan di DB:', response.data);
+        } catch (error) {
+          console.error('Gagal simpan ke database:', error);
+        }
+
+        // 4. Simpan ke State HP (Zustand)
         login({
-          id: userInfo.data.user.id,
-          name: userInfo.data.user.name,
-          email: userInfo.data.user.email,
-          photo: userInfo.data.user.photo,
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          photo: user.photo,
           idToken: userInfo.data.idToken,
         });
       }
     } catch (err) {
       const error = err as { code?: string; message?: string };
       if (error.code !== statusCodes.SIGN_IN_CANCELLED) {
-        console.log('login dibatalkan user');
+        Alert.alert('Login Gagal', error.message);
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log('login gagal sedang berlangsung');
+        console.log('Login sedang berlangsung');
       } else {
-        Alert.alert('Error', error.message);
+        console.log('Login dibatalkan user');
       }
     } finally {
       setIsLoading(false);

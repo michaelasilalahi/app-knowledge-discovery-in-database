@@ -1,12 +1,21 @@
-from fastapi import FastAPI, Depends # Import library utama FastAPI
-from fastapi.middleware.cors import CORSMiddleware # Import middleware agar bisa diakses dari domain lain (CORS)
-from sqlalchemy.orm import Session # Import Session untuk type hinting
-from typing import List # Import List untuk type hinting respon array
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-# Karena 'models' adalah folder, kita import spesifik file di dalamnya
-from models.expense import Expense # Kita butuh 'Base' dan 'engine' dari database.py untuk bikin tabel
-from database import engine, SessionLocal, Base # Import alat Database
-import schemas # Import Schema (Validasi Data)
+from expenses.expenses import Expenses
+from expenses.router import router as expenses_router
+
+
+from database import engine, SessionLocal, Base 
+from auth.googleAuth import Users
+from auth.router import router as auth_router
+
+# Kita butuh 'Base' dan 'engine' dari database.py untuk bikin tabel
+from models.expense import Expense 
+
+
+# Setting Analysis
+from setting_analysis.router import router as setting_analysis_router
+
 
 # Perintah ini mengecek database:
 # Kalau tabel 'expense' belum ada, tolong buatkan sekarang sesuai class Expense!"
@@ -33,46 +42,11 @@ def get_db():
     finally:
         db.close()
 
-# --- ROUTES (JALUR DATA) ---
-# 1. Cek Koneksi Sederhana
-@app.get("/")
-def read_root():
-    return {"status": "connected", "message": "Halo, Server Expense Tracker Aktif!"}
+# Expenses
+app.include_router(expenses_router)
 
-# 2. Jalur CREATE (Menambah Pengeluaran Baru)
-# Method: POST (karena mengirim data)
-# URL: /expense/ (Pastikan sama dengan url di React Native)
-# response_model: Bentuk balikan datanya harus sesuai schema ExpenseResponse
-@app.post("/expense/", response_model=schemas.ExpenseResponse)
-def create_expense(expense: schemas.ExpenseCreate, db: Session = Depends(get_db)):
-    # expense: Data mentah dari React Native (sudah divalidasi schemas.ExpenseCreate)
-    # db: Koneksi database aktif
+app.include_router(auth_router)
 
-    # Langkah A: Masukkan data schema ke dalam Model Database
-    db_expense = Expense( 
-        tanggal=expense.tanggal,
-        jenis_pengeluaran=expense.jenis_pengeluaran,
-        label=expense.label,
-        kategori=expense.kategori,
-        nominal=expense.nominal
-    )
-    # Langkah B: Taruh di antrian simpan (staging)
-    db.add(db_expense)
+app.include_router(setting_analysis_router)
 
-    # Langkah C: Simpan permanen ke harddisk (Commit)
-    db.commit()
 
-    # Langkah D: Ambil data barusan (Refresh) agar kita dapat ID yang baru digenerate otomatis
-    db.refresh(db_expense)
-
-    # Langkah E: Kembalikan data lengkap (+ID) ke React Native
-    return db_expense
-
-# 3. Jalur READ (Melihat Semua Pengeluaran)
-# Method: GET (karena mengambil data)
-# response_model: List[...] karena datanya lebih dari satu (Array)
-@app.get("/expense/", response_model=List[schemas.ExpenseResponse])
-def read_expenses(db: Session = Depends(get_db)):
-    # Query SQL: SELECT * FROM expense;
-    # .all() artinya ambil semua baris
-    return db.query(Expense).all()

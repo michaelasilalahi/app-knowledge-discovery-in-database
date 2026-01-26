@@ -6,7 +6,7 @@ import { ArchiveCalenderScreen } from '@/features/archive-calender';
 
 export default function ArchiveCalender() {
   return (
-    <SafeAreaView edges={['bottom']}>
+    <SafeAreaView className='flex-1' edges={['bottom']}>
       <ArchiveCalenderScreen />
     </SafeAreaView>
   );

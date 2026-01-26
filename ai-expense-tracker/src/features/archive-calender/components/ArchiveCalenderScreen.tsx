@@ -14,7 +14,7 @@ export const ArchiveCalenderScreen = () => {
   const { title, activeTab, setActiveTab, tabs } = useArchiveCalenderScreen();
 
   return (
-    <View>
+    <View className='flex-1'>
       <Stack.Screen
         options={{
           headerShown: true,

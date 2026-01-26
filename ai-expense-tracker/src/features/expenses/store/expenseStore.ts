@@ -3,6 +3,7 @@ import { Alert } from 'react-native';
 import { expenseApi } from '../api/expenseApi';
 import { router } from 'expo-router';
 import { ExpenseState } from '../types/saveExpenseArchive';
+import { useGoogleStore } from '@/auth/google';
 
 export const useExpenseStore = create<ExpenseState>((set, get) => ({
   // initial Values
@@ -33,12 +34,21 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
 
   // Logika Submit ke FastAPI
   submitExpense: async () => {
-    // Ambil data terbaru dari state menggunakan get()
+    // 1. Ambil data terbaru dari state menggunakan get()
     const { name, amount, date, category, label } = get();
 
-    // validasi
+    // 2. Ambil User ID dari Google Store (Zustand)
+    const userStore = useGoogleStore.getState();
+    const userId = userStore.user?.id;
+
+    if (!userId) {
+      Alert.alert('Error', 'Sesi login berakhir. Silakan login ulang.');
+      return;
+    }
+
+    // 3. Validasi form
     if (!name || !amount || !category) {
-      Alert.alert('Gagal', 'Mohon lengkapi Nama, Nominal, dan Kategori.');
+      Alert.alert('Error', 'Mohon lengkapi Nama, Nominal, dan Kategori.');
       return;
     }
 
@@ -47,11 +57,12 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
     try {
       // kirim ke API
       await expenseApi.create({
-        jenis_pengeluaran: name,
-        nominal: amount,
-        tanggal: date.toISOString().split('T')[0],
-        kategori: category,
-        label: label || 'Umum',
+        user_id: userId,
+        type_of_expenditure: name,
+        amount: Number(amount),
+        date: date.toISOString().split('T')[0],
+        category: category,
+        label: label || '-',
       });
 
       Alert.alert('Sukses', 'Data berhasil disimpan!');
@@ -67,8 +78,13 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
   },
 
   fetchExpenses: async () => {
+    const userStore = useGoogleStore.getState();
+    const userId = userStore.user?.id;
+
+    if (!userId) return;
+
     try {
-      const response = await expenseApi.getAll();
+      const response = await expenseApi.getAll(userId);
       set({ expenses: response });
     } catch (error) {
       console.log('Fetch error', error);

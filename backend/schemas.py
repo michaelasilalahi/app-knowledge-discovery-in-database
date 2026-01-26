@@ -12,7 +12,6 @@ class ExpenseCreate(BaseModel):
     kategori: str
     nominal: float # Python menggunakan float untuk angka desimal
 
-
 # --- SCHEMA OUTPUT (Data Keluar) ---
 # Schema untuk respon balik KE React Native
 # Class ini bertugas mengatur format data yang dikirim BALIK ke React Native
