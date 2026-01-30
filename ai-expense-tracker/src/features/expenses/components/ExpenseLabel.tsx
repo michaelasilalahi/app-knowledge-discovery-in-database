@@ -1,23 +1,19 @@
-import {
-  View,
-  Text,
-  Pressable,
-  Modal,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, Pressable, Modal, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
+import { Picker } from 'react-native-wheel-pick';
 import { useExpenseLabel } from '../hooks/useExpenseLabel';
 
 export const ExpenseLabel = () => {
   const {
     isModalVisible,
     label,
+    tempSelected,
+    labelOptions,
     openModal,
     closeModal,
     clearLabel,
-    handleSelectLabel,
-    labelOptions,
+    handleWheelChange,
+    confirmSelection,
   } = useExpenseLabel();
 
   return (
@@ -49,41 +45,55 @@ export const ExpenseLabel = () => {
         onRequestClose={closeModal}
       >
         <Pressable
-          onPress={closeModal}
-          className='flex-1 bg-black/50 justify-center items-center px-6'
+          onPress={(e) => e.stopPropagation()}
+          className='flex-1 justify-center items-center px-[30px] bg-black/50'
         >
-          <Pressable
-            onPress={(e) => e.stopPropagation()}
-            className='bg-white w-full rounded-2xl p-4 max-h-[50%]'
-          >
-            <Text className='font-montserrat-semibold text-lg text-center mb-4 text-black'>
-              Pilih Label
-            </Text>
-
-            <FlatList
-              data={labelOptions}
-              keyExtractor={(item) => item}
-              renderItem={({ item }) => (
-                <Pressable
-                  onPress={() => handleSelectLabel(item)}
-                  className='bg-[#F5F5F5] rounded-full px-4 py-2 mb-2'
-                >
-                  <Text className='font-montserrat-medium text-base text-black'>
-                    {item}
-                  </Text>
-                </Pressable>
-              )}
-            />
-
-            <TouchableOpacity
-              className='mt-4 py-3 bg-gray-100 rounded-xl items-center'
-              onPress={closeModal}
-            >
-              <Text className='font-montserrat-semibold text-gray-600'>
-                Tutup
+          <View className='bg-white w-full rounded-[10px] p-[30px] flex gap-y-[30px]'>
+            <View className='flex gap-y-[10px]'>
+              <Text className='font-montserrat-semibold text-center'>
+                Pilih Label
               </Text>
-            </TouchableOpacity>
-          </Pressable>
+              <Text className='font-montserrat-medium text-[#AAAAAA] text-center'>
+                Pilih label yang sesuai dengan pengeluaranmu
+              </Text>
+            </View>
+
+            <View className='w-full justify-center items-center'>
+              <Picker
+                textSize={15}
+                isCyclic={true}
+                selectLineColor='black'
+                selectLineSize={3}
+                pickerData={labelOptions}
+                selectedValue={tempSelected}
+                onValueChange={handleWheelChange}
+                style={{
+                  backgroundColor: 'white',
+                  width: '100%',
+                }}
+              />
+            </View>
+
+            <View className='flex gap-y-[10px]'>
+              <TouchableOpacity
+                onPress={closeModal}
+                className='border-[0.7px] border-[#AAAAAA] rounded-[10px] py-[10px]'
+              >
+                <Text className='font-montserrat-semibold text-center'>
+                  Tutup
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                className='bg-black rounded-[10px] py-[10px]'
+                onPress={confirmSelection}
+              >
+                <Text className='font-montserrat-semibold text-white text-center'>
+                  Submit
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </Pressable>
       </Modal>
     </View>

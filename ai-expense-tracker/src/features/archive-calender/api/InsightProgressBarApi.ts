@@ -1,5 +1,5 @@
 import { apiClient } from '@/config/apiClient';
-import { InsightProgressBar } from '@/features/archive-calender/types/insightProgressBarTypes';
+import { InsightProgressBar } from '@/features/archive-calender/types/progressBarTypes';
 
 export const insightProgressBarApi = {
   getProgress: async (
@@ -14,6 +14,8 @@ export const insightProgressBarApi = {
           year: year,
         },
       });
+      console.log('--- DEBUG BACKEND DATA ---');
+      console.log('Raw JSON Response:', JSON.stringify(response.data, null, 2));
       return response.data;
     } catch (error) {
       console.error('Error fetching progress bar:', error);

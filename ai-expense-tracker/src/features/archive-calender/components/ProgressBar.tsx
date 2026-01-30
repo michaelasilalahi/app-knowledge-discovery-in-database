@@ -1,22 +1,25 @@
 import React from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import { View, Text } from 'react-native';
 import * as Progress from 'react-native-progress';
 
-// Utils
-import { getProgressBarColor } from '../utils/insightProgressBarColorHelpers';
+// Hooks
+import { useProgressBarLogic } from '../hooks/useProgressBarLogic';
 
 // Types
-import { InsightProgressBar } from '../types/insightProgressBarTypes';
+import { ProgressBarProps } from '../types/progressBarTypes';
 
-interface Props {
-  progressBarData: InsightProgressBar | null;
-  isLoading: boolean;
-}
+export const ProgressBar = (props: ProgressBarProps) => {
+  const {
+    screenWidth,
+    progressValue,
+    barColor,
+    isHidden,
+    showLoading,
+    data,
+    status,
+  } = useProgressBarLogic(props);
 
-export const ProgressBar = ({ progressBarData, isLoading }: Props) => {
-  const screenWidth = Dimensions.get('window').width;
-
-  if (isLoading && !progressBarData) {
+  if (showLoading) {
     return (
       <View className='py-10 items-center'>
         <Text className='font-montserrat-medium text-gray-400'>
@@ -26,15 +29,7 @@ export const ProgressBar = ({ progressBarData, isLoading }: Props) => {
     );
   }
 
-  if (!progressBarData) return null;
-
-  const { percentage, isReady, message, currentCount, threshold, status } =
-    progressBarData;
-
-  const progressValue = percentage / 100;
-  const barColor = getProgressBarColor(isReady);
-
-  if (status === 'disabled') return null;
+  if (isHidden || !data) return null;
 
   return (
     <View className='flex items-center justify-center px-5 py-[50px]'>
@@ -42,17 +37,17 @@ export const ProgressBar = ({ progressBarData, isLoading }: Props) => {
         <View className='flex gap-y-[10px]'>
           <Text className='font-montserrat-semibold text-center'>
             {status === 'ready_to_mine'
-              ? 'Analisis Siap!'
-              : 'AI Sedang Belajar'}
+              ? 'Data Telah Terkumpul, Analisis Siap!'
+              : 'Sedang Mengumpulkan Data '}
           </Text>
 
-          <Text className='font-montserrat-medium text-center text-[12px] text-[#AAAAAA]'>
-            {message}
+          <Text className='font-montserrat-medium text-center text-[#AAAAAA] px-[50px]'>
+            {data.message}
           </Text>
         </View>
 
         <View className='flex-row gap-x-[15px] justify-center items-center'>
-          <Text className='font-montserrat-medium'>{currentCount}</Text>
+          <Text className='font-montserrat-medium'>{data.currentCount}</Text>
           <Progress.Bar
             progress={progressValue}
             width={screenWidth * 0.5}
@@ -62,7 +57,7 @@ export const ProgressBar = ({ progressBarData, isLoading }: Props) => {
             height={10}
             borderRadius={10}
           />
-          <Text className='font-montserrat-medium'>{threshold}</Text>
+          <Text className='font-montserrat-medium'>{data.threshold}</Text>
         </View>
       </View>
     </View>

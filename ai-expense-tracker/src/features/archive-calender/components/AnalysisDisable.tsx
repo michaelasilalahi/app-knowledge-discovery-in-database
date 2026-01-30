@@ -1,25 +1,29 @@
 // components/AnalysisDisabled.tsx
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-
-interface Props {
-  message: string;
-}
+import { useRouter } from 'expo-router';
+import { Props } from '../types/analysisDisableTypes';
 
 export const AnalysisDisabled = ({ message }: Props) => {
+  const router = useRouter();
+  const handleEnableClick = () => {
+    router.push('/setting');
+  };
   return (
     <View className='px-5 py-[50px] items-center'>
-      <View className='w-full bg-gray-100 p-6 rounded-2xl border border-gray-200 items-center gap-y-4'>
-        <Text className='font-montserrat-semibold text-gray-600 text-lg text-center'>
+      <View className='flex gap-y-[15px] py-[15px] px-[15px] items-center rounded-[15px] w-full border-[#AAAAAA] border-[0.5px]'>
+        <Text className='font-montserrat-semibold text-center'>
           Analisis Non-Aktif
         </Text>
-        <Text className='font-montserrat-medium text-gray-500 text-center text-sm'>
-          {message}
+        <Text className='font-montserrat-medium text-center text-[12px] text-[#AAAAAA]'>
+          {message}. Mohon aktifkan analisis pada halaman pengaturan.
         </Text>
 
-        {/* Tombol Simulasi untuk Mengaktifkan (Nanti dihubungkan ke API) */}
-        <TouchableOpacity className='bg-black px-6 py-3 rounded-full mt-2'>
-          <Text className='text-white font-montserrat-semibold text-sm'>
+        <TouchableOpacity
+          onPress={handleEnableClick}
+          className='w-[50%] flex justify-center items-center bg-black py-[10px] rounded-full'
+        >
+          <Text className='text-white font-montserrat-semibold text-[12px]'>
             Aktifkan Sekarang
           </Text>
         </TouchableOpacity>

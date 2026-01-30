@@ -2,13 +2,13 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { Stack } from 'expo-router';
 
-// hooks
-import { useArchiveCalenderScreen } from '../hooks/useArchiveCalenderScreen';
-
 // components
 import { Expenses } from './Expenses';
 import { Visualisasi } from './Visualisasi';
 import { Insight } from './Insight';
+
+// hooks
+import { useArchiveCalenderScreen } from '../hooks/useArchiveCalenderScreen';
 
 export const ArchiveCalenderScreen = () => {
   const { title, activeTab, setActiveTab, tabs } = useArchiveCalenderScreen();
@@ -25,7 +25,6 @@ export const ArchiveCalenderScreen = () => {
         }}
       />
 
-      {/* Switch Tab Bar Expense, Visualisasi, Insight */}
       <View className='flex-row'>
         {tabs.map((tab) => (
           <Pressable
@@ -48,13 +47,10 @@ export const ArchiveCalenderScreen = () => {
         ))}
       </View>
 
-      {/* components */}
       <View className='flex-1'>
         {activeTab === 'Pengeluaran' && <Expenses periodTitle={title} />}
-
-        {activeTab === 'Visualisasi' && <Visualisasi periodTitle={title} />}
-
-        {activeTab === 'Insight' && <Insight periodTitle={title} />}
+        {activeTab === 'Visualisasi' && <Visualisasi />}
+        {activeTab === 'Insight' && <Insight />}
       </View>
     </View>
   );

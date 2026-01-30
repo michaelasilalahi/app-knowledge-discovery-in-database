@@ -16,3 +16,5 @@ export * from './hooks/useExpenseCategory';
 // types
 export * from './types/saveExpenseType';
 export * from './types/saveExpenseArchive';
+export * from './types/expenseLabelType';
+export * from './types/expenseCategoryType';

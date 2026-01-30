@@ -6,7 +6,7 @@ import { ProgressBar } from './ProgressBar';
 import { AnalysisDisabled } from './AnalysisDisable';
 
 // Hooks
-import { useInsightProgressBar } from '../hooks/useInsightProgressBar';
+import { useProgressBarApi } from '../hooks/useProgressBarApi';
 
 interface MiningResult {
   id: string | number;
@@ -17,7 +17,7 @@ export const Insight = () => {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
-  const { progressBarData, isLoading, refreshProgress } = useInsightProgressBar(
+  const { progressBarData, isLoading, refreshProgress } = useProgressBarApi(
     currentMonth,
     currentYear,
   );
@@ -26,12 +26,10 @@ export const Insight = () => {
     if (isLoading && !progressBarData) return null;
     if (!progressBarData) return null;
 
-    // SKENARIO C: Jika Setting Mati
     if (progressBarData.status === 'disabled') {
       return <AnalysisDisabled message={progressBarData.message} />;
     }
 
-    // SKENARIO A & B: Jika Sedang Progress atau Siap Mining
     if (
       progressBarData.status === 'progress' ||
       progressBarData.status === 'ready_to_mine'
@@ -40,13 +38,9 @@ export const Insight = () => {
         <ProgressBar progressBarData={progressBarData} isLoading={isLoading} />
       );
     }
-
-    // Jika 'completed', Header hilang (karena nanti list hasil akan muncul)
     return null;
   };
-  // -----------------------
 
-  // Nanti: Jika status === 'completed', fetch data ke miningResults
   const miningResults: MiningResult[] = [];
 
   return (
@@ -62,12 +56,6 @@ export const Insight = () => {
             </Text>
           </View>
         )}
-        ListEmptyComponent={
-          <ProgressBar
-            progressBarData={progressBarData}
-            isLoading={isLoading}
-          />
-        }
         refreshControl={
           <RefreshControl
             refreshing={isLoading}

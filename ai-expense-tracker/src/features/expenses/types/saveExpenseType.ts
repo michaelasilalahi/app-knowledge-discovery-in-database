@@ -21,21 +21,36 @@ export interface UseExpenseDateInputReturn {
 }
 
 export interface UseExpenseLabelReturn {
-  isModalVisible: boolean; // apakah modal label visible / tidak
-  label: string | null; // label yang dipilih
-  openModal: () => void; // open modal
-  closeModal: () => void; // close modal
-  clearLabel: () => void; // clear label
-  handleSelectLabel: (label: string) => void; // handle pilih label
-  labelOptions: string[]; // daftar label
+  // State UI
+  isModalVisible: boolean;
+  // Data Global
+  label: string | null;
+  // Data option
+  labelOptions: string[];
+  // State Sementara untuk Wheel Picker
+  tempSelected: string;
+  // Action
+  openModal: () => void;
+  closeModal: () => void;
+  clearLabel: () => void;
+
+  // Handlers untuk Wheel Picker
+  handleWheelChange: (value: string) => void;
+  confirmSelection: () => void;
 }
 
 export interface UseExpenseCategoryReturn {
-  isModalVisible: boolean; // apakah modal kategori visible / tidak
-  category: string | null; // kategori yang dipilih
-  openModal: () => void; // open modal
-  closeModal: () => void; // close modal
-  clearCategory: () => void; // clear category
-  handleSelectCategory: (category: string) => void; // handle pilih kategori
-  categoryOptions: string[]; // daftar kategori
+  // State UI
+  isModalVisible: boolean;
+  // Data Global
+  category: string | null;
+  tempCategory: string;
+  categoryOptions: string[];
+  // Action
+  openModal: () => void;
+  closeModal: () => void;
+  clearCategory: () => void;
+  // Handler submit value category
+  handleSelectTempCategory: (item: string) => void;
+  handleSubmitCategory: () => void;
 }

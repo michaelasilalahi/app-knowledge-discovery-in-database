@@ -10,6 +10,7 @@ export const ExpenseName = () => {
         placeholder='Nama Pengeluaran'
         placeholderTextColor={'#AAAAAA'}
         value={expenseName}
+        autoCapitalize='words'
         onChangeText={handleExpenseNameChange}
         keyboardType='default'
         style={{

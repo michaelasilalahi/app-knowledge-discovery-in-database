@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { insightProgressBarApi } from '../api/InsightProgressBarApi';
-import { InsightProgressBar } from '../types/insightProgressBarTypes';
+import { InsightProgressBar } from '../types/progressBarTypes';
 import { useGoogleStore } from '@/auth/google';
 
-export const useInsightProgressBar = (month: number, year: number) => {
+export const useProgressBarApi = (month: number, year: number) => {
   const userId = useGoogleStore((state) => state.user?.id);
   const [progressBarData, setProgressBarData] =
     useState<InsightProgressBar | null>(null);
