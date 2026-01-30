@@ -7,6 +7,7 @@ from auth.router import router as auth_router
 from expenses.router import router as expenses_router
 from analysis_calender.insight.progress_bar.router import router as progress_bar_router
 from setting_analysis.router import router as setting_analysis_router
+from analysis_calender.insight.data_mining.association_rule_learning.router import router as mining_router
 
 
 
@@ -46,3 +47,5 @@ app.include_router(auth_router)
 app.include_router(setting_analysis_router)
 
 app.include_router(progress_bar_router)
+
+app.include_router(mining_router)

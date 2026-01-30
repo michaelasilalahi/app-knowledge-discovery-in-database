@@ -18,6 +18,9 @@ def get_active_context(
     Backend tetap mengembalikan respons (bukan error 404), tapi dengan status khusus, misalnya {"status": "disabled", "message": "Analisis AI pada bulan ini dinonaktifkan"}.
     UI React Native: Jika menerima status disabled, jangan tampilkan bilah progres, melainkan tampilkan kartu berisi pesan tersebut dengan tombol "Aktifkan Sekarang".
     """
+
+    print(f"DEBUG DB: Mencari User: {user_id}, Bulan: {month}, Tahun: {year}")
+
     context = db.query(SettingAnalysis).filter(
         SettingAnalysis.user_id == user_id,
         SettingAnalysis.label_month == month,
@@ -26,6 +29,7 @@ def get_active_context(
 
     # Jika setting ditemukan (Entah itu Aktif atau Mati), kembalikan langsung.
     if context:
+        print(f"DEBUG DB: Ketemu! ID Setting: {context.id}, Aktif: {context.is_active}")
         return context
     
     """

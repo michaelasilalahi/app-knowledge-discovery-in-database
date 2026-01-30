@@ -1,13 +1,15 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import func, distinct
 from expenses.expenses import Expenses
 from setting_analysis.settingAnalysis import SettingAnalysis
 from data_mining_result.dataMiningResult import DataMiningResult
 
-THRESHOLD_LIMIT = 30
+THRESHOLD_LIMIT = 20
 
 def check_mining_eligibility(db: Session, context: SettingAnalysis):
     """
-    Menghitung data berdasarkan start_date dan end_date dari context yang didapat.
+    - Menghitung progress mining dengan logika Transaction Aggregation.
+    - Progress dihitung berdasarkan jumlah HARI UNIK yang memiliki transaksi 'Keinginan'.
     """
 
     # Jika hasil sudah ada, hiraukan apakah setting aktif/mati. Tujuannya agar user tetap bisa lihat hasil masa lalu.
@@ -42,28 +44,34 @@ def check_mining_eligibility(db: Session, context: SettingAnalysis):
     
     # Skenario A: Analisis Aktif (Hanya Bulan Tertentu)
     # Kondisi: Setting Aktif. Kita hitung jumlah datanya.
-    count = db.query(Expenses).filter(
+    """
+    Logika Transaction Aggregation, contoh:
+    - Beli 5 barang di tgl 1 Maret -> Dihitung 1.
+    - Beli 2 barang di tgl 2 Maret -> Dihitung 1.
+    - Beli 3 barang di tgl 3 Maret -> Dihitung 1.
+    - Total = 3 Hari.
+    """
+
+    count = db.query(func.count(distinct(Expenses.date))).filter(
         Expenses.user_id == context.user_id,
         Expenses.category == 'Keinginan',   
         Expenses.date >= context.start_date,
         Expenses.date <= context.end_date
-    ).count()
+    ).scalar()
 
-    # Hitung Matematika Progress Bar
+    # Progress Bar
     is_ready = count >= THRESHOLD_LIMIT
     percentage = min((count / THRESHOLD_LIMIT) * 100, 100)
 
-    # Tentukan Status Akhir untuk Skenario A
+    # Menentukan Status Akhir
     if is_ready:
-        # Jika data >= 30: UI harus menampilkan tombol "Mulai Analisis" / Loading
         status = "ready_to_mine"        
-        message = "Data cukup! Analisis AI siap dijalankan."
+        message = "Data transaksi cukup! Analisis AI siap dijalankan."
     else:
-        # Jika data < 30: UI menampilkan Progress Bar biasa
         status = "progress"             
         remaining = THRESHOLD_LIMIT - count
-        message = f"Butuh {remaining} data 'Kategori Keinginan' agar AI bisa mempelajari kebiasaan pengeluaranmu."
-
+        message = f"AI akan aktif setelah terkumpul {remaining} data transaksi harian lagi. Pastikan mencatat pengeluaran 'Keinginan' di tanggal yang berbeda."
+    
     return {
         "status": status,
         "currentCount": count,
