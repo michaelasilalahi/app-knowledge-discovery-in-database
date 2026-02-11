@@ -1,21 +1,21 @@
 import { Pressable, Text, View } from 'react-native';
 import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGoogleStore } from '@/auth/google/store/useGoogleStore';
-import { useRouter } from 'expo-router';
+import { TodaysExpenses } from '@/features/todays-expenses';
+import { VisualizationOfAllTime } from '@/features/visualization-of-all-time';
+import { Notifications } from '@/features/notifications';
 
 export default function TabHome() {
   const user = useGoogleStore((state) => state.user);
   const router = useRouter();
 
   return (
-    <SafeAreaView className='flex-1 bg-white'>
-      <View className='flex-1 w-[90%] mx-auto'>
-        <Pressable
-          className='flex flex-row items-center gap-x-3'
-          onPress={() => router.push('(setting)/setting')}
-        >
-          <View>
+    <SafeAreaView className='flex-1 bg-[#EEEEEE]'>
+      <View className='flex-row w-[90%] mx-auto justify-between items-center my-[15px]'>
+        <Pressable onPress={() => router.push('(setting)/setting')}>
+          <View className='flex-row items-center gap-x-[5px]'>
             <Image
               source={user?.photo}
               style={{
@@ -25,14 +25,17 @@ export default function TabHome() {
               }}
               contentFit='contain'
             />
-          </View>
-
-          <View>
-            <Text className='font-neue-haas-grotesk-regular text-base'>
-              {user?.name}
-            </Text>
+            <Text className='font-montserrat-semibold'>{user?.name}</Text>
           </View>
         </Pressable>
+
+        <Pressable onPress={() => router.push('(notification)/notification')}>
+          <Notifications />
+        </Pressable>
+      </View>
+      <View className='flex gap-y-[5px]'>
+        <VisualizationOfAllTime />
+        <TodaysExpenses />
       </View>
     </SafeAreaView>
   );

@@ -8,7 +8,6 @@ export enum ExpenseLabelEnum {
   ROKOK = 'Rokok',
   PAKET_INTERNET = 'Paket Internet',
   PENDIDIKAN = 'Pendidikan',
-
   TAGIHAN = 'Tagihan',
   SKINCARE = 'SkinCare',
   BELANJA_FASHION = 'Belanja Fashion',

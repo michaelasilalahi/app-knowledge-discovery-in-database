@@ -9,9 +9,11 @@ export * from './hooks/useProgressBarApi';
 export * from './utils/archiveCalenderScreenTabs';
 export * from './utils/expensesHelpers';
 export * from './utils/progressBarHelpers';
+export * from './utils/miningResultHelpers';
 
 // types
 export * from './types/archiveCalenderScreenTypes';
 export * from './types/expensesTypes';
 export * from './types/progressBarTypes';
 export * from './types/analysisDisableTypes';
+export * from './types/miningResultApiTypes';

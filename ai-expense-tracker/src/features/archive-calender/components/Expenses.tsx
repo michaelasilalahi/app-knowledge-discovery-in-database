@@ -50,7 +50,6 @@ export const Expenses = ({ periodTitle }: ExpensesProps) => {
           contentContainerStyle={{ paddingBottom: 50 }}
           renderItem={({ item }) => (
             <View className='flex-row justify-between items-center py-[10px] border-b-[0.5px] border-b-[#AAAAAA]'>
-              {/* Bagian Kiri */}
               <View className='flex-1 gap-y-[5px]'>
                 <Text className='font-montserrat-semibold'>
                   {item.type_of_expenditure}

@@ -107,6 +107,16 @@ export default function RootLayout() {
             contentStyle: { backgroundColor: 'white' },
           }}
         />
+        <Stack.Screen
+          name='(notification)/notification'
+          options={{
+            headerShown: true,
+            title: 'Notifikasi',
+            headerShadowVisible: false,
+            headerStyle: { backgroundColor: 'white' },
+            contentStyle: { backgroundColor: 'white' },
+          }}
+        />
       </Stack>
     </SafeAreaProvider>
   );

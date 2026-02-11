@@ -1,72 +1,105 @@
-import React from 'react';
-import { View, Text, FlatList, RefreshControl } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ActivityIndicator, Dimensions } from 'react-native';
+import Carousel from 'react-native-reanimated-carousel';
 
 // Components
 import { ProgressBar } from './ProgressBar';
 import { AnalysisDisabled } from './AnalysisDisable';
+import { DataMiningResult } from './DataMiningResult';
 
 // Hooks
-import { useProgressBarApi } from '../hooks/useProgressBarApi';
+import { useInsightMining } from '../hooks/useInsightMining';
 
-interface MiningResult {
-  id: string | number;
-  message: string;
-}
+// Store
+import { useGoogleStore } from '@/auth/google';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export const Insight = () => {
+  const user = useGoogleStore((state) => state.user);
+  const userId = user?.id || '';
+
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
-  const { progressBarData, isLoading, refreshProgress } = useProgressBarApi(
+  // State untuk Indikator Halaman (1 / 10)
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const { loading, status, results, progressData } = useInsightMining(
+    userId,
     currentMonth,
     currentYear,
   );
 
-  const renderHeaderComponent = () => {
-    if (isLoading && !progressBarData) return null;
-    if (!progressBarData) return null;
+  // State Loading/Checking
+  if (status === 'checking' || status === 'mining' || status === 'fetching') {
+    return (
+      <View className='flex-1 justify-center items-center bg-white'>
+        <ActivityIndicator size='large' color='black' />
+        <Text className='mt-4 font-montserrat-medium text-gray-500'>
+          {status === 'mining'
+            ? 'Sedang Menganalisis Pola Belanja...'
+            : 'Memeriksa Data...'}
+        </Text>
+      </View>
+    );
+  }
 
-    if (progressBarData.status === 'disabled') {
-      return <AnalysisDisabled message={progressBarData.message} />;
-    }
+  // State Disabled
+  if (progressData?.status === 'disabled') {
+    return (
+      <View className='flex-1 bg-white px-4'>
+        <AnalysisDisabled message={progressData.message} />
+      </View>
+    );
+  }
 
-    if (
-      progressBarData.status === 'progress' ||
-      progressBarData.status === 'ready_to_mine'
-    ) {
-      return (
-        <ProgressBar progressBarData={progressBarData} isLoading={isLoading} />
-      );
-    }
-    return null;
-  };
+  // State Insufficient Data
+  if (status === 'insufficient' && progressData) {
+    return (
+      <View className='flex-1 bg-white pt-[30px] px-4'>
+        <View className='mb-4'>
+          <ProgressBar progressBarData={progressData} isLoading={loading} />
+        </View>
+      </View>
+    );
+  }
 
-  const miningResults: MiningResult[] = [];
+  // State Carousel
+  if (status === 'completed' && results.length > 0) {
+    return (
+      <View className='flex-1 bg-white'>
+        <View>
+          <Carousel
+            loop={false}
+            width={SCREEN_WIDTH}
+            height={SCREEN_WIDTH * 1.5}
+            autoPlay={false}
+            data={results}
+            scrollAnimationDuration={300}
+            onSnapToItem={(index) => setCurrentIndex(index)}
+            renderItem={({ item }) => (
+              <View>
+                <DataMiningResult {...item} />
+              </View>
+            )}
+          />
+        </View>
 
-  return (
-    <View className='flex-1'>
-      <FlatList
-        data={miningResults}
-        keyExtractor={(_, index) => index.toString()}
-        ListHeaderComponent={renderHeaderComponent()}
-        renderItem={({ item }) => (
-          <View className='p-4 bg-gray-50 mb-3 rounded-xl border border-gray-100'>
-            <Text className='font-montserrat-medium text-gray-800'>
-              {item.message}
+        <View className='items-center'>
+          <View className='bg-[#EAEAEA] px-6 rounded-full'>
+            <Text className='font-montserrat-semibold'>
+              {currentIndex + 1} / {results.length}
             </Text>
           </View>
-        )}
-        refreshControl={
-          <RefreshControl
-            refreshing={isLoading}
-            onRefresh={refreshProgress}
-            colors={['black']}
-            tintColor={'black'}
-          />
-        }
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
-        showsVerticalScrollIndicator={false}
-      />
+        </View>
+      </View>
+    );
+  }
+
+  return (
+    <View className='flex-1 justify-center items-center bg-white'>
+      <Text className='text-gray-500'>Tidak ada pola ditemukan.</Text>
     </View>
   );
 };
