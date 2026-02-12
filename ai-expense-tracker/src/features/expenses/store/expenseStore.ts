@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 import { Alert } from 'react-native';
-import { expenseApi } from '../api/expenseApi';
 import { router } from 'expo-router';
+import { expenseApi } from '../api/expenseApi';
 import { ExpenseState } from '../types/saveExpenseArchive';
 import { useGoogleStore } from '@/auth/google';
+import { syncVisualizationOfAllTimeStore } from '@/features/visualization-of-all-time/middleware/visualizationOfAllTime.persist';
+import { syncTodayExpenseStore } from '@/features/todays-expenses/middleware/todayExpense.persist';
 
 export const useExpenseStore = create<ExpenseState>((set, get) => ({
-  // initial Values
   name: '',
   amount: null,
   date: new Date(),
@@ -15,14 +16,12 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
   isLoading: false,
   expenses: [],
 
-  // setters implementation
   setName: (name) => set({ name }),
   setAmount: (amount) => set({ amount }),
   setDate: (date) => set({ date }),
   setCategory: (category) => set({ category }),
   setLabel: (label) => set({ label }),
 
-  // reset form setelah simpan
   resetForm: () =>
     set({
       name: '',
@@ -34,10 +33,8 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
 
   // Logika Submit ke FastAPI
   submitExpense: async () => {
-    // 1. Ambil data terbaru dari state menggunakan get()
     const { name, amount, date, category, label } = get();
 
-    // 2. Ambil User ID dari Google Store (Zustand)
     const userStore = useGoogleStore.getState();
     const userId = userStore.user?.id;
 
@@ -46,7 +43,6 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
       return;
     }
 
-    // 3. Validasi form
     if (!name || !amount || !category) {
       Alert.alert('Error', 'Mohon lengkapi Nama, Nominal, dan Kategori.');
       return;
@@ -55,19 +51,48 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
     set({ isLoading: true });
 
     try {
-      // kirim ke API
+      // Kemungkinan terjadi bugsss
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const localDateString = `${year}-${month}-${day}`;
+
       await expenseApi.create({
         user_id: userId,
         type_of_expenditure: name,
         amount: Number(amount),
-        date: date.toISOString().split('T')[0],
+        date: localDateString,
         category: category,
         label: label || '-',
       });
 
+      const targetMonth = date.getMonth() + 1;
+      const targetYear = date.getFullYear();
+
+      await syncVisualizationOfAllTimeStore
+        .getState()
+        .syncHistoricalData(userId, targetMonth, targetYear);
+
+      const today = new Date();
+      const isInputToday =
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear();
+
+      if (isInputToday) {
+        await syncTodayExpenseStore.getState().syncTodayExpense(userId);
+        console.log('List pengeluaran hari ini berhasil diperbarui!');
+      }
+
+      console.log(
+        `Grafik bulan ${targetMonth}/${targetYear} berhasil diperbarui!`,
+      );
+
       Alert.alert('Sukses', 'Data berhasil disimpan!');
+
       get().resetForm();
       get().fetchExpenses();
+
       router.back();
     } catch (error) {
       console.error('Submit Error:', error);

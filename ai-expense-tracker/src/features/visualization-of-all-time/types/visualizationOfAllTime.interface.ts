@@ -20,3 +20,14 @@ export interface GiftedLineChartItem {
   textColor?: string;
   originalAmount?: number;
 }
+
+export interface VisualizationState {
+  lineDataNeeds: GiftedLineChartItem[];
+  lineDataWants: GiftedLineChartItem[];
+  syncHistoricalData: (
+    userId: string,
+    month: number,
+    year: number,
+  ) => Promise<void>;
+  resetVisualization: () => void;
+}

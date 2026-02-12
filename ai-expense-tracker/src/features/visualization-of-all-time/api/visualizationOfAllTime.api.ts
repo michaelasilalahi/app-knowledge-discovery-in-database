@@ -1,5 +1,5 @@
 import { apiClient } from '@/config/apiClient';
-import { LineChartResponse } from '@/features/visualization-of-all-time/types/visualizationOfAllTimeType';
+import { LineChartResponse } from '@/features/visualization-of-all-time/types/visualizationOfAllTime.interface';
 
 export const visualizationOfAllTimeApi = {
   getHistoricalData: async (

@@ -2,10 +2,16 @@
 export * from './components/VisualizationOfAllTime';
 
 // api
-export * from './api/visualizationOfAllTimeApi';
+export * from './api/visualizationOfAllTime.api';
+
+// middleware
+// export * from './middleware/visualizationOfAllTime.middleware';
+
+// hooks
+export * from './hooks/visualizationOfAllTime.hooks';
 
 // utils
-export * from './utils/visualizationOfAllTimeHelpers';
+export * from './utils/visualizationOfAllTime.helpers';
 
 // types
-export * from './types/visualizationOfAllTimeType';
+export * from './types/visualizationOfAllTime.interface';

@@ -1,7 +1,7 @@
 import {
   HistoricalDataPoint,
   GiftedLineChartItem,
-} from '@/features/visualization-of-all-time/types/visualizationOfAllTimeType';
+} from '@/features/visualization-of-all-time/types/visualizationOfAllTime.interface';
 
 export const formatCompactCurrency = (value: number): string => {
   if (value >= 1000000) {

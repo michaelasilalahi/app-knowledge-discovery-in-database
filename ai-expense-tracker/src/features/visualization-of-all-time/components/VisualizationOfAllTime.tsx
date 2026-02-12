@@ -1,46 +1,36 @@
-import {
-  View,
-  Text,
-  ActivityIndicator,
-  Dimensions,
-  Pressable,
-} from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
 import { Image } from 'expo-image';
 import { useGoogleStore } from '@/auth/google';
-import { useVisualizationOfAllTime } from '@/features/visualization-of-all-time/hooks/useVisualizationOfAllTime';
-import { formatCurrency } from '../utils/visualizationOfAllTimeHelpers';
-import { GiftedLineChartItem } from '../types/visualizationOfAllTimeType';
+import { useVisualizationOfAllTime } from '@/features/visualization-of-all-time/hooks/visualizationOfAllTime.hooks';
+import { formatCurrency } from '../utils/visualizationOfAllTime.helpers';
+import { GiftedLineChartItem } from '../types/visualizationOfAllTime.interface';
 
 export const VisualizationOfAllTime = () => {
   const user = useGoogleStore((state) => state.user);
   const userId = user?.id || '';
 
   const {
-    loading,
     lineDataNeeds,
     lineDataWants,
     currentDate,
     goToPreviousMonth,
     goToNextMonth,
+    isPrevDisabled,
+    isNextDisabled,
   } = useVisualizationOfAllTime(userId);
 
   const colorNeeds = '#177AD5';
   const colorWants = '#ED6665';
-  const screenWidth = Dimensions.get('window').width;
 
   const formattedDate = currentDate.toLocaleDateString('id-ID', {
     month: 'long',
     year: 'numeric',
   });
 
-  if (loading) {
-    return (
-      <View className='h-[250px] justify-center items-center bg-white'>
-        <ActivityIndicator size='small' color='black' />
-      </View>
-    );
-  }
+  const hasData =
+    lineDataNeeds.some((item) => item.value > 0) ||
+    lineDataWants.some((item) => item.value > 0);
 
   return (
     <View className='bg-white'>
@@ -85,8 +75,8 @@ export const VisualizationOfAllTime = () => {
         </View>
 
         <View className='flex gap-y-[15px]'>
-          <View className='items-center -ml-2 min-h-[250px]'>
-            {lineDataNeeds.length > 0 ? (
+          <View className='items-center justify-center -ml-2 min-h-[250px]'>
+            {hasData ? (
               <LineChart
                 dataSet={[
                   {
@@ -94,32 +84,45 @@ export const VisualizationOfAllTime = () => {
                     color: colorNeeds,
                     dataPointsColor: colorNeeds,
                     textColor: colorNeeds,
+                    startFillColor: colorNeeds,
+                    endFillColor: colorNeeds,
+                    startOpacity: 0.1,
+                    endOpacity: 0.1,
+                    areaChart: true,
                   },
                   {
                     data: lineDataWants,
                     color: colorWants,
                     dataPointsColor: colorWants,
                     textColor: colorWants,
+                    startFillColor: colorWants,
+                    endFillColor: colorWants,
+                    startOpacity: 0.1,
+                    endOpacity: 0.1,
+                    areaChart: true,
                   },
                 ]}
-                width={screenWidth * 0.85}
                 height={200}
                 spacing={50}
-                initialSpacing={20}
-                thickness={2}
+                initialSpacing={12}
+                thickness={1}
                 hideRules
                 hideYAxisText
                 yAxisThickness={0}
                 xAxisColor={'#EAEAEA'}
-                xAxisLabelTextStyle={{ fontSize: 10, width: 30 }}
+                xAxisLabelTextStyle={{
+                  fontSize: 10,
+                  width: 50,
+                  textAlign: 'center',
+                }}
                 pointerConfig={{
-                  pointerStripHeight: 100,
+                  pointerStripHeight: 250,
                   pointerStripColor: 'lightgray',
                   pointerStripWidth: 2,
                   pointerColor: 'lightgray',
                   radius: 5,
                   pointerLabelWidth: 100,
-                  pointerLabelHeight: 90,
+                  pointerLabelHeight: 50,
                   activatePointersOnLongPress: true,
                   autoAdjustPointerLabelPosition: true,
                   pointerLabelComponent: (items: GiftedLineChartItem[]) => {
@@ -150,7 +153,7 @@ export const VisualizationOfAllTime = () => {
                             textAlign: 'center',
                           }}
                         >
-                          Tanggal {itemNeeds.label}
+                          Tanggals {itemNeeds.label}
                         </Text>
                         <Text
                           style={{
@@ -178,33 +181,40 @@ export const VisualizationOfAllTime = () => {
                 }}
               />
             ) : (
-              <Text className='text-sm font-montserrat-medium text-gray-400 py-10 text-center'>
+              <Text className='text-sm font-montserrat-medium text-[#AAAAAA] text-center'>
                 Belum ada data transaksi pada bulan {formattedDate}.
               </Text>
             )}
           </View>
 
           <View className='flex-row justify-between items-center'>
-            <Pressable onPress={goToPreviousMonth}>
-              <Image
-                source={require('../../../../assets/icons/arrow_right.svg')}
-                style={{
-                  width: 15,
-                  height: 15,
-                  transform: [{ rotate: '180deg' }],
-                }}
-                tintColor={'#AAAAAA'}
-                contentFit='contain'
-              />
+            <Pressable onPress={goToPreviousMonth} disabled={isPrevDisabled}>
+              <View style={{ opacity: isPrevDisabled ? 0 : 1 }}>
+                <Image
+                  source={require('../../../../assets/icons/arrow_right.svg')}
+                  style={{
+                    width: 15,
+                    height: 15,
+                    transform: [{ rotate: '180deg' }],
+                  }}
+                  tintColor={'#AAAAAA'}
+                  contentFit='contain'
+                />
+              </View>
             </Pressable>
             <Text className='font-montserrat-medium'>{formattedDate}</Text>
-            <Pressable onPress={goToNextMonth}>
-              <Image
-                source={require('../../../../assets/icons/arrow_right.svg')}
-                style={{ width: 15, height: 15 }}
-                tintColor={'#AAAAAA'}
-                contentFit='contain'
-              />
+            <Pressable onPress={goToNextMonth} disabled={isNextDisabled}>
+              <View style={{ opacity: isNextDisabled ? 0 : 1 }}>
+                <Image
+                  source={require('../../../../assets/icons/arrow_right.svg')}
+                  style={{
+                    width: 15,
+                    height: 15,
+                  }}
+                  tintColor={'#AAAAAA'}
+                  contentFit='contain'
+                />
+              </View>
             </Pressable>
           </View>
         </View>
