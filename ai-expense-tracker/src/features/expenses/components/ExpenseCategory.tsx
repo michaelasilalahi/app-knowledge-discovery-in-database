@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   View,
   Text,
@@ -7,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Image } from 'expo-image';
-import { useExpenseCategory } from '../hooks/useExpenseCategory';
+import { useExpenseCategory } from '../hooks/expenseCategory.hooks';
 
 export const ExpenseCategory = () => {
   const {

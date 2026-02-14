@@ -1,21 +1,17 @@
 import { apiClient } from '@/config/apiClient';
-
-// Types
-import { MiningResultResponse } from '../types/miningResultApiTypes';
+import { API_ENDPOINTS } from '@/constants/endpoints';
+import { MiningResultResponse } from '../types/miningResultApi.interface';
 
 export const insightMiningApi = {
   executeMining: async (userId: string, month: number, year: number) => {
     try {
-      const response = await apiClient.post(
-        `/insight/mining/execute/${userId}`,
-        null,
-        {
-          params: {
-            month: month,
-            year: year,
-          },
+      const url = API_ENDPOINTS.ARCHIVE_CALENDER.DATA_MINING.EXECUTE(userId);
+      const response = await apiClient.post(url, null, {
+        params: {
+          month: month,
+          year: year,
         },
-      );
+      });
       return response.data;
     } catch (error) {
       console.error('API Error (executeMining):', error);
@@ -29,15 +25,13 @@ export const insightMiningApi = {
     year: number,
   ): Promise<MiningResultResponse> => {
     try {
-      const response = await apiClient.get<MiningResultResponse>(
-        `/insight/result/${userId}`,
-        {
-          params: {
-            month: month,
-            year: year,
-          },
+      const url = API_ENDPOINTS.ARCHIVE_CALENDER.DATA_MINING.RESULT(userId);
+      const response = await apiClient.get<MiningResultResponse>(url, {
+        params: {
+          month: month,
+          year: year,
         },
-      );
+      });
       return response.data;
     } catch (error) {
       console.error('API Error (getMiningResults):', error);

@@ -1,10 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { insightProgressBarApi } from '../api/InsightProgressBarApi';
-import { insightMiningApi } from '../api/insightMiningApi';
-
-// Types
-import { MiningResultItem } from '../types/miningResultApiTypes';
-import { InsightProgressBar } from '../types/progressBarTypes';
+import { insightProgressBarApi } from '../api/InsightProgressBar.api';
+import { insightMiningApi } from '../api/insightMining.api';
+import { MiningResultItem } from '../types/miningResultApi.interface';
+import { InsightProgressBar } from '../types/progressBar.interface';
 
 export const useInsightMining = (
   userId: string,

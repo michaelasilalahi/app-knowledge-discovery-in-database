@@ -30,4 +30,6 @@ export interface VisualizationState {
     year: number,
   ) => Promise<void>;
   resetVisualization: () => void;
+  _hasHydrated: boolean;
+  setHasHydrated: (state: boolean) => void;
 }

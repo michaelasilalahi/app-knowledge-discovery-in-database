@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { ArchiveViewMode } from '../types/switchScreenAnalysisPropsType';
+import { ArchiveViewMode } from '../types/archiveViewMode.type';
 
 export const useArchiveView = () => {
   const [viewMode, setViewMode] = useState<ArchiveViewMode>(
     'SCREEN_ARCHIVE_ANALYSIS_CALENDER',
   );
 
-  // fungsi logic untuk menukar screen
   const handleSwitchView = () => {
     setViewMode((prevMode) =>
       prevMode === 'SCREEN_ARCHIVE_ANALYSIS_CALENDER'

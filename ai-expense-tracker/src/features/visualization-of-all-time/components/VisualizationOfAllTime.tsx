@@ -1,7 +1,8 @@
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, ActivityIndicator } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
 import { Image } from 'expo-image';
 import { useGoogleStore } from '@/auth/google';
+import { syncVisualizationOfAllTimeStore } from '@/features/visualization-of-all-time/middleware/visualizationOfAllTime.persist';
 import { useVisualizationOfAllTime } from '@/features/visualization-of-all-time/hooks/visualizationOfAllTime.hooks';
 import { formatCurrency } from '../utils/visualizationOfAllTime.helpers';
 import { GiftedLineChartItem } from '../types/visualizationOfAllTime.interface';
@@ -9,6 +10,10 @@ import { GiftedLineChartItem } from '../types/visualizationOfAllTime.interface';
 export const VisualizationOfAllTime = () => {
   const user = useGoogleStore((state) => state.user);
   const userId = user?.id || '';
+
+  const hasHydrated = syncVisualizationOfAllTimeStore(
+    (state) => state._hasHydrated,
+  );
 
   const {
     lineDataNeeds,
@@ -39,7 +44,7 @@ export const VisualizationOfAllTime = () => {
           <Text className='font-montserrat-semibold'>Line Chart</Text>
           <Text className='font-montserrat-medium text-[#AAAAAA]'>
             Visualisasi ini menampilkan riwayat perbandingan antara kategori
-            Kebutuhan dan Keinginan pada bulan terpilih.
+            Kebutuhan dan Keinginan selama seluruh periode.
           </Text>
         </View>
 
@@ -76,7 +81,18 @@ export const VisualizationOfAllTime = () => {
 
         <View className='flex gap-y-[15px]'>
           <View className='items-center justify-center -ml-2 min-h-[250px]'>
-            {hasData ? (
+            {!hasHydrated ? (
+              <View
+                style={{
+                  height: 200,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+              >
+                <ActivityIndicator size='small' color='#AAAAAA' />
+              </View>
+            ) : hasData ? (
               <LineChart
                 dataSet={[
                   {
@@ -181,9 +197,18 @@ export const VisualizationOfAllTime = () => {
                 }}
               />
             ) : (
-              <Text className='text-sm font-montserrat-medium text-[#AAAAAA] text-center'>
-                Belum ada data transaksi pada bulan {formattedDate}.
-              </Text>
+              <View
+                style={{
+                  height: 200,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+              >
+                <Text className='text-sm font-montserrat-medium text-[#AAAAAA] text-center'>
+                  Belum ada data transaksi pada bulan {formattedDate}.
+                </Text>
+              </View>
             )}
           </View>
 

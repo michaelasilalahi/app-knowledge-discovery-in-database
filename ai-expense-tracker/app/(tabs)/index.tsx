@@ -13,7 +13,10 @@ export default function TabHome() {
 
   return (
     <SafeAreaView className='flex-1 bg-[#EEEEEE]'>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
         <View className='flex-row w-[90%] mx-auto justify-between items-center my-[15px]'>
           <Pressable onPress={() => router.push('(setting)/setting')}>
             <View className='flex-row items-center gap-x-[5px]'>

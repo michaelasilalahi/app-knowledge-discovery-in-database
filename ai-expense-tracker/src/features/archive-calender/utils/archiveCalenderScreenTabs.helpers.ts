@@ -1,4 +1,4 @@
-import { TabType } from '../types/archiveCalenderScreenTypes';
+import { TabType } from '../types/archiveCalenderScreen.interface';
 
 export const ARCHIVE_TABS: TabType[] = [
   'Pengeluaran',

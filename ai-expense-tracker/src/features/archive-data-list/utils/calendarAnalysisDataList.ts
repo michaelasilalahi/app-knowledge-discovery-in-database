@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { useExpenseStore } from '@/features/expenses/store/expenseStore';
-import { CalenderAnalysisItem } from '../types/calenderAnalysisDataListType';
+import { CalenderAnalysisItem } from '../types/calenderAnalysisDataList.interface';
 
 const MONTHS_ID = [
   'Januari',
@@ -17,24 +17,24 @@ const MONTHS_ID = [
   'Desember',
 ];
 
-export const useCalendarAnalysisDataList = (): CalenderAnalysisItem[] => {
-  const { expenses, fetchExpenses } = useExpenseStore();
+export const useCalendarAnalysisDataList = (): {
+  listData: CalenderAnalysisItem[];
+  isLoading: boolean;
+} => {
+  const { expenses, fetchExpenses, isLoading } = useExpenseStore();
 
   useEffect(() => {
     fetchExpenses();
   }, [fetchExpenses]);
 
-  // logic grouping data
   const listData = useMemo(() => {
     const groupedData = expenses.reduce(
       (acc, curr) => {
-        // 1. Validasi
         if (!curr.date) {
           return acc;
         }
 
         try {
-          // 2. Parsing manual (yyy-mmm-dd) -> mencegah invalid date
           const parts = curr.date.split('-');
           if (parts.length !== 3) return acc;
 
@@ -42,7 +42,6 @@ export const useCalendarAnalysisDataList = (): CalenderAnalysisItem[] => {
           const monthIndex = parseInt(parts[1], 10) - 1;
           const monthName = MONTHS_ID[monthIndex];
 
-          // Key grouping: Januari 2026
           const monthYear = `${monthName} ${year}`;
 
           if (!acc[monthYear]) {
@@ -57,12 +56,14 @@ export const useCalendarAnalysisDataList = (): CalenderAnalysisItem[] => {
       {} as Record<string, number>,
     );
 
-    // mapping ke format list
     return Object.keys(groupedData).map((key) => ({
       title: key,
       totalExpense: groupedData[key],
     }));
   }, [expenses]);
 
-  return listData;
+  return {
+    listData,
+    isLoading,
+  };
 };

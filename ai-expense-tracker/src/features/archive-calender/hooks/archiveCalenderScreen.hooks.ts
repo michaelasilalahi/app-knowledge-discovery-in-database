@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
-import { ARCHIVE_TABS } from '../utils/archiveCalenderScreenTabs';
-import { TabType } from '../types/archiveCalenderScreenTypes';
+import { ARCHIVE_TABS } from '../utils/archiveCalenderScreenTabs.helpers';
+import { TabType } from '../types/archiveCalenderScreen.interface';
 
 export const useArchiveCalenderScreen = () => {
-  // tangkap data dari router
   const { title } = useLocalSearchParams<{ title: string }>();
 
   // state untuk mengatur tab mana yang aktif

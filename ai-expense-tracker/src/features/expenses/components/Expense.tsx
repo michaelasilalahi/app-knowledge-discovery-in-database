@@ -1,14 +1,15 @@
+import React from 'react';
 import { View, Text } from 'react-native';
-import { useExpenseInput } from '../hooks/useExpense';
 import CurrencyInput from 'react-native-currency-input';
+import { useExpenseInput } from '../hooks/expense.hooks';
 
 export const Expense = () => {
   const { amount, handleAmountChange } = useExpenseInput();
   return (
     <View className='flex items-center gap-y-[50px]'>
       <View>
-        <Text className='font-montserrat-semibold text-2xl'>
-          Jenis Pengeluaran
+        <Text className='font-montserrat-semibold text-[25px]'>
+          Pengeluaran
         </Text>
       </View>
       <View className='flex-row items-center justify-center w-full'>

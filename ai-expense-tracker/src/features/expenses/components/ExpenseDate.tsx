@@ -1,7 +1,8 @@
-import { Pressable, View, Text } from 'react-native';
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
 import { Image } from 'expo-image';
-import { useExpenseDate } from '../hooks/useExpenseDate';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useExpenseDate } from '../hooks/expenseDate.hooks';
 
 export const ExpenseDate = () => {
   const {

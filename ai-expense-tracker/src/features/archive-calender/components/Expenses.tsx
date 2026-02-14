@@ -1,24 +1,17 @@
 import React from 'react';
 import { View, Text, FlatList, ActivityIndicator } from 'react-native';
-// hooks
-import { useExpensesList } from '../hooks/useExpensesList';
-// utils
-import { formatRupiah, formatDate } from '../utils/expensesHelpers';
-// types
-import { ExpensesProps } from '../types/expensesTypes';
+import { useExpensesList } from '../hooks/expensesList.hooks';
+import { formatRupiah, formatDate } from '../utils/expenses.helpers';
+import { ExpensesProps } from '../types/expenses.interface';
 
 export const Expenses = ({ periodTitle }: ExpensesProps) => {
-  // panggil logic dari hooks
-  const { filteredExpenses, isLoading, totalExpenses } =
+  const { filteredExpenses, totalExpenses, hasHydrated, isLoading } =
     useExpensesList(periodTitle);
 
-  if (isLoading) {
+  if (!hasHydrated) {
     return (
       <View className='flex-1 justify-center items-center mt-10'>
-        <ActivityIndicator size='large' color='black' />
-        <Text className='font-montserrat-medium text-gray-400 mt-2'>
-          Memuat data...
-        </Text>
+        <ActivityIndicator size='small' color='#AAAAAA' />
       </View>
     );
   }
@@ -70,11 +63,23 @@ export const Expenses = ({ periodTitle }: ExpensesProps) => {
               </View>
             </View>
           )}
-          ListEmptyComponent={() => (
-            <Text className='font-montserrat-medium text-gray-400 mt-2'>
-              Belum ada data pengeluaran{'\n'}di bulan {periodTitle}
-            </Text>
-          )}
+          ListEmptyComponent={() => {
+            if (isLoading) {
+              return (
+                <View className='mt-10 items-center'>
+                  <ActivityIndicator size='small' color='#AAAAAA' />
+                  <Text className='text-xs text-[#AAAAAA] mt-2'>
+                    Sedang memuat data...
+                  </Text>
+                </View>
+              );
+            }
+            return (
+              <Text className='font-montserrat-medium text-gray-400 mt-2 text-center'>
+                Belum ada data pengeluaran{'\n'}di bulan {periodTitle}
+              </Text>
+            );
+          }}
         />
       </View>
     </View>

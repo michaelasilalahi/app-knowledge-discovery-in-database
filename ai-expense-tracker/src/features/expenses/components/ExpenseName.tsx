@@ -1,5 +1,6 @@
+import React from 'react';
 import { View, TextInput } from 'react-native';
-import { useExpenseName } from '../hooks/useExpenseName';
+import { useExpenseName } from '../hooks/expenseName.hooks';
 
 export const ExpenseName = () => {
   const { expenseName, handleExpenseNameChange } = useExpenseName();

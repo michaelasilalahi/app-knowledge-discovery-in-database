@@ -1,6 +1,7 @@
 import { apiClient } from '@/config/apiClient';
-import { BarChartResponse } from '@/features/archive-calender/types/barChartCategoryTypes';
-import { PieChartResponse } from '@/features/archive-calender/types/pieChartTypes';
+import { API_ENDPOINTS } from '@/constants/endpoints';
+import { BarChartResponse } from '@/features/archive-calender/types/barChartCategory.interface';
+import { PieChartResponse } from '@/features/archive-calender/types/pieChart.interface';
 
 export const visualizationApi = {
   getBarChartData: async (
@@ -9,15 +10,13 @@ export const visualizationApi = {
     year: number,
   ): Promise<BarChartResponse> => {
     try {
-      const response = await apiClient.get<BarChartResponse>(
-        `/insight/visualisasi/bar-chart/${userId}`,
-        {
-          params: {
-            month,
-            year,
-          },
+      const url = API_ENDPOINTS.ARCHIVE_CALENDER.BAR_CHART(userId);
+      const response = await apiClient.get<BarChartResponse>(url, {
+        params: {
+          month,
+          year,
         },
-      );
+      });
       return response.data;
     } catch (error) {
       console.error('Error fetching category summary:', error);
@@ -30,15 +29,13 @@ export const visualizationApi = {
     year: number,
   ): Promise<PieChartResponse> => {
     try {
-      const response = await apiClient.get<PieChartResponse>(
-        `/insight/visualisasi/pie-chart/${userId}`,
-        {
-          params: {
-            month,
-            year,
-          },
+      const url = API_ENDPOINTS.ARCHIVE_CALENDER.PIE_CHART(userId);
+      const response = await apiClient.get<PieChartResponse>(url, {
+        params: {
+          month,
+          year,
         },
-      );
+      });
       return response.data;
     } catch (error) {
       console.error('Error fetching pie chart data:', error);

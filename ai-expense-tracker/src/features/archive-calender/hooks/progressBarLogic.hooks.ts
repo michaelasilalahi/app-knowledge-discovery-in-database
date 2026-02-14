@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
-import { ProgressBarProps } from '../types/progressBarTypes';
-import { getProgressBarColor } from '../utils/progressBarHelpers';
+import { ProgressBarProps } from '../types/progressBar.interface';
+import { getProgressBarColor } from '../utils/progressBar.helpers';
 
 export const useProgressBarLogic = ({
   progressBarData,

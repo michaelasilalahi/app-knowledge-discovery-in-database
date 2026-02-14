@@ -1,7 +1,8 @@
+import React from 'react';
 import { View, Text, Pressable, Modal, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { Picker } from 'react-native-wheel-pick';
-import { useExpenseLabel } from '../hooks/useExpenseLabel';
+import { useExpenseLabel } from '../hooks/expenseLabel.hooks';
 
 export const ExpenseLabel = () => {
   const {

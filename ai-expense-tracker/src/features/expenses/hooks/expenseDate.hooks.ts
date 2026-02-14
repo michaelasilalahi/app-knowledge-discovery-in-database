@@ -2,30 +2,31 @@ import { useState } from 'react';
 import { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
-import { UseExpenseDateInputReturn } from '../types/saveExpenseType';
+import { useExpenseStore } from '../store/expenseStore';
+import { UseExpenseDateInputReturn } from '../types/saveExpense.interface';
 
 export const useExpenseDate = (): UseExpenseDateInputReturn => {
-  const [date, setDate] = useState<Date | null>(null);
+  const date = useExpenseStore((state) => state.date);
+  const setGlobalDate = useExpenseStore((state) => state.setDate);
+
   const [showPicker, setShowPicker] = useState<boolean>(false);
 
-  // modal react native datetime picker
   const openDatePicker = () => {
     setShowPicker(true);
   };
 
   const handleDateChange = (
-    event: DateTimePickerEvent, // operating system report
+    event: DateTimePickerEvent,
     selectedDate?: Date,
   ) => {
     setShowPicker(false);
     if (selectedDate) {
-      setDate(selectedDate);
+      setGlobalDate(selectedDate);
     }
   };
 
-  // fungsi menghapus tanggal
   const clearDate = () => {
-    setDate(null);
+    setGlobalDate(null);
   };
 
   const formattedDate = date

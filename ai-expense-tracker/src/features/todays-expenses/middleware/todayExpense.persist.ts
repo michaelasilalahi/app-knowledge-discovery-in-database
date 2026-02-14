@@ -8,6 +8,8 @@ export const syncTodayExpenseStore = create<TodaysExpensesState>()(
   persist(
     (set) => ({
       expenses: [],
+      hasHydrated: false,
+      setHasHydrated: (state: boolean) => set({ hasHydrated: state }),
       setExpenses: (expenses) => set({ expenses }),
       syncTodayExpense: async (userId: string) => {
         try {
@@ -22,6 +24,11 @@ export const syncTodayExpenseStore = create<TodaysExpensesState>()(
     {
       name: 'todays-expenses-storage',
       storage: createJSONStorage(() => AsyncStorage),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.setHasHydrated?.(true);
+        }
+      },
     },
   ),
 );

@@ -10,7 +10,8 @@ export const syncVisualizationOfAllTimeStore = create<VisualizationState>()(
     (set) => ({
       lineDataNeeds: [],
       lineDataWants: [],
-
+      _hasHydrated: false,
+      setHasHydrated: (state: boolean) => set({ _hasHydrated: state }),
       syncHistoricalData: async (
         userId: string,
         month: number,
@@ -39,12 +40,16 @@ export const syncVisualizationOfAllTimeStore = create<VisualizationState>()(
           console.error('Sync visualization error:', error);
         }
       },
-
       resetVisualization: () => set({ lineDataNeeds: [], lineDataWants: [] }),
     }),
     {
       name: 'visualization-all-time-storage',
       storage: createJSONStorage(() => AsyncStorage),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.setHasHydrated?.(true);
+        }
+      },
     },
   ),
 );

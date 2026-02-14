@@ -4,11 +4,11 @@ import { Stack } from 'expo-router';
 
 // components
 import { Expenses } from './Expenses';
-import { Visualisasi } from './Visualisasi';
+import { Visualization } from './Visualization';
 import { Insight } from './Insight';
 
 // hooks
-import { useArchiveCalenderScreen } from '../hooks/useArchiveCalenderScreen';
+import { useArchiveCalenderScreen } from '../hooks/archiveCalenderScreen.hooks';
 
 export const ArchiveCalenderScreen = () => {
   const { title, activeTab, setActiveTab, tabs } = useArchiveCalenderScreen();
@@ -49,7 +49,7 @@ export const ArchiveCalenderScreen = () => {
 
       <View className='flex-1'>
         {activeTab === 'Pengeluaran' && <Expenses periodTitle={title} />}
-        {activeTab === 'Visualisasi' && <Visualisasi />}
+        {activeTab === 'Visualisasi' && <Visualization />}
         {activeTab === 'Insight' && <Insight />}
       </View>
     </View>

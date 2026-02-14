@@ -1,18 +1,12 @@
 import React from 'react';
 import { View, Text, ActivityIndicator, ScrollView } from 'react-native';
 import { BarChart, PieChart } from 'react-native-gifted-charts';
-
-// Hooks
-import { useCategoryComparison } from '@/features/archive-calender/hooks/useBarChart';
-import { usePieChart } from '@/features/archive-calender/hooks/usePieChart';
-
-// Utils
-import { formatCurrency } from '@/features/archive-calender/utils/pieChartHelpers';
-
-// Store
+import { useCategoryComparison } from '@/features/archive-calender/hooks/barChart.hooks';
+import { usePieChart } from '@/features/archive-calender/hooks/pieChart.hooks';
+import { formatCurrency } from '@/features/archive-calender/utils/pieChart.helpers';
 import { useGoogleStore } from '@/auth/google';
 
-export const Visualisasi = () => {
+export const Visualization = () => {
   const user = useGoogleStore((state) => state.user);
   const userId = user?.id || '';
 

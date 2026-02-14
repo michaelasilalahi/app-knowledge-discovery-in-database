@@ -10,28 +10,19 @@ export interface ExpenseItem {
 }
 
 export interface ExpenseState {
-  // state Data
   name: string;
   amount: number | null;
-  date: Date;
+  date: Date | null;
   category: string;
   label: string;
   isLoading: boolean;
-
-  // list pengeluaran
   expenses: ExpenseItem[];
-
-  // actions (setter untuk mengubah data)
   setName: (name: string) => void;
   setAmount: (amount: number | null) => void;
-  setDate: (date: Date) => void;
+  setDate: (date: Date | null) => void;
   setCategory: (category: string) => void;
   setLabel: (label: string) => void;
-
-  // action utama (simpan ke server)
   submitExpense: () => Promise<void>;
   resetForm: () => void;
-
-  // fetch data
   fetchExpenses: () => Promise<void>;
 }

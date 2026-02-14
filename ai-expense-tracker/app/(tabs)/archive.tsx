@@ -1,10 +1,10 @@
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   CalendarAnalysisExpenditureList,
   CustomAnalysisExpenditureList,
 } from '@/features/archive-data-list';
-import { useArchiveView } from '@/features/archive-data-list/hooks/useArchiveView';
+import { useArchiveView } from '@/features/archive-data-list/hooks/archiveView.hooks';
 
 export default function TabArchive() {
   const { viewMode, handleSwitchView } = useArchiveView();

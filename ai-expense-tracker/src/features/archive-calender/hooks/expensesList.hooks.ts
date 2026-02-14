@@ -1,18 +1,26 @@
 import { useEffect, useMemo } from 'react';
-import { useExpenseStore } from '@/features/expenses/store/expenseStore';
-import { parsePeriodTitle } from '../utils/expensesHelpers';
-import { ExpenseItem } from '../types/expensesTypes';
+import { useGoogleStore } from '@/auth/google';
+import { useExpenseListPersistStore } from '../middleware/expenseList.persist';
+import { parsePeriodTitle } from '../utils/expenses.helpers';
+import { ExpenseItem } from '../types/expenses.interface';
 
 export const useExpensesList = (periodTitle: string) => {
-  // 1. ambil state dari zustand
-  const { expenses, fetchExpenses, isLoading } = useExpenseStore();
+  // selective subscription
+  const expenses = useExpenseListPersistStore((state) => state.expenses);
+  const fetchExpenses = useExpenseListPersistStore(
+    (state) => state.fetchExpenses,
+  );
+  const hasHydrated = useExpenseListPersistStore((state) => state.hasHydrated);
+  const isLoading = useExpenseListPersistStore((state) => state.isLoading);
 
-  // fetch data pengeluaran saat hook dipanggil
+  const userId = useGoogleStore((state) => state.user?.id);
+
   useEffect(() => {
-    fetchExpenses();
-  }, []);
+    if (userId) {
+      fetchExpenses(userId);
+    }
+  }, [userId, fetchExpenses]);
 
-  // logic filter data berdasarkan bulan dan tahun
   const filteredExpenses = useMemo(() => {
     const period = parsePeriodTitle(periodTitle);
     if (!period) return [];
@@ -20,13 +28,10 @@ export const useExpensesList = (periodTitle: string) => {
     return expenses
       .filter((item: ExpenseItem) => {
         if (!item.date) return false;
-
         const parts = item.date.split('-');
         if (parts.length !== 3) return false;
-
         const itemYear = parseInt(parts[0]);
         const itemMonthIndex = parseInt(parts[1]) - 1;
-
         return itemMonthIndex === period.monthIndex && itemYear === period.year;
       })
       .sort((a, b) => {
@@ -34,7 +39,6 @@ export const useExpensesList = (periodTitle: string) => {
       });
   }, [expenses, periodTitle]);
 
-  // logic total pengeluaran
   const totalExpenses = useMemo(() => {
     return filteredExpenses.reduce((total, item) => {
       const nominal = Number(item.amount) || 0;
@@ -46,5 +50,6 @@ export const useExpensesList = (periodTitle: string) => {
     filteredExpenses,
     totalExpenses,
     isLoading,
+    hasHydrated,
   };
 };

@@ -1,19 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
-
-// Api
-import { visualizationApi } from '@/features/archive-calender/api/visualizationApi';
-
-// Utils
+import { visualizationApi } from '@/features/archive-calender/api/visualization.api';
 import {
   getPieColor,
   calculatePercentage,
-} from '@/features/archive-calender/utils/pieChartHelpers';
-
-// Types
+} from '@/features/archive-calender/utils/pieChart.helpers';
 import {
   PieChartResponse,
   GiftedPieChartData,
-} from '@/features/archive-calender/types/pieChartTypes';
+} from '@/features/archive-calender/types/pieChart.interface';
 
 export const usePieChart = (userId: string, month: number, year: number) => {
   const [loading, setLoading] = useState<boolean>(true);

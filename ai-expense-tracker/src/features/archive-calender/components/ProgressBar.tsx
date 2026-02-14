@@ -3,10 +3,10 @@ import { View, Text } from 'react-native';
 import * as Progress from 'react-native-progress';
 
 // Hooks
-import { useProgressBarLogic } from '../hooks/useProgressBarLogic';
+import { useProgressBarLogic } from '../hooks/progressBarLogic.hooks';
 
 // Types
-import { ProgressBarProps } from '../types/progressBarTypes';
+import { ProgressBarProps } from '../types/progressBar.interface';
 
 export const ProgressBar = (props: ProgressBarProps) => {
   const {

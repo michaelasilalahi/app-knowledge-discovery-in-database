@@ -1,16 +1,17 @@
 import { create } from 'zustand';
 import { Alert } from 'react-native';
 import { router } from 'expo-router';
-import { expenseApi } from '../api/expenseApi';
-import { ExpenseState } from '../types/saveExpenseArchive';
+import { expenseApi } from '../api/expense.api';
 import { useGoogleStore } from '@/auth/google';
 import { syncVisualizationOfAllTimeStore } from '@/features/visualization-of-all-time/middleware/visualizationOfAllTime.persist';
 import { syncTodayExpenseStore } from '@/features/todays-expenses/middleware/todayExpense.persist';
+import { formatDate, isSameDay } from '../utils/formatDate.helpers';
+import { ExpenseState } from '../types/saveExpenseArchive.interface';
 
 export const useExpenseStore = create<ExpenseState>((set, get) => ({
   name: '',
   amount: null,
-  date: new Date(),
+  date: null,
   category: '',
   label: '',
   isLoading: false,
@@ -21,17 +22,15 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
   setDate: (date) => set({ date }),
   setCategory: (category) => set({ category }),
   setLabel: (label) => set({ label }),
-
   resetForm: () =>
     set({
       name: '',
       amount: null,
-      date: new Date(),
+      date: null,
       category: '',
       label: '',
     }),
 
-  // Logika Submit ke FastAPI
   submitExpense: async () => {
     const { name, amount, date, category, label } = get();
 
@@ -43,7 +42,7 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
       return;
     }
 
-    if (!name || !amount || !category) {
+    if (!name || !amount || !category || !date) {
       Alert.alert('Error', 'Mohon lengkapi Nama, Nominal, dan Kategori.');
       return;
     }
@@ -51,11 +50,7 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
     set({ isLoading: true });
 
     try {
-      // Kemungkinan terjadi bugsss
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      const localDateString = `${year}-${month}-${day}`;
+      const localDateString = formatDate(date);
 
       await expenseApi.create({
         user_id: userId,
@@ -69,26 +64,23 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
       const targetMonth = date.getMonth() + 1;
       const targetYear = date.getFullYear();
 
-      await syncVisualizationOfAllTimeStore
-        .getState()
-        .syncHistoricalData(userId, targetMonth, targetYear);
+      const syncTasks = [
+        syncVisualizationOfAllTimeStore
+          .getState()
+          .syncHistoricalData(userId, targetMonth, targetYear),
+      ];
 
-      const today = new Date();
-      const isInputToday =
-        date.getDate() === today.getDate() &&
-        date.getMonth() === today.getMonth() &&
-        date.getFullYear() === today.getFullYear();
-
-      if (isInputToday) {
-        await syncTodayExpenseStore.getState().syncTodayExpense(userId);
-        console.log('List pengeluaran hari ini berhasil diperbarui!');
+      if (isSameDay(date, new Date())) {
+        syncTasks.push(
+          syncTodayExpenseStore.getState().syncTodayExpense(userId),
+        );
       }
+
+      await Promise.all(syncTasks);
 
       console.log(
         `Grafik bulan ${targetMonth}/${targetYear} berhasil diperbarui!`,
       );
-
-      Alert.alert('Sukses', 'Data berhasil disimpan!');
 
       get().resetForm();
       get().fetchExpenses();
@@ -96,7 +88,6 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
       router.back();
     } catch (error) {
       console.error('Submit Error:', error);
-      Alert.alert('Error', 'Gagal menyimpan data ke server.');
     } finally {
       set({ isLoading: false });
     }
@@ -108,11 +99,15 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
 
     if (!userId) return;
 
+    set({ isLoading: true });
+
     try {
       const response = await expenseApi.getAll(userId);
       set({ expenses: response });
     } catch (error) {
       console.log('Fetch error', error);
+    } finally {
+      set({ isLoading: false });
     }
   },
 }));

@@ -1,18 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useExpenseStore } from '../store/expenseStore';
-import { ExpenseCategoryEnum } from '../types/expenseCategoryType';
+import { ExpenseCategoryEnum } from '../types/expenseCategory.enum';
 
 const CATEGORY_OPTIONS = Object.values(ExpenseCategoryEnum);
 
 export const useExpenseCategory = () => {
-  // Global State
   const category = useExpenseStore((state) => state.category);
   const setCategory = useExpenseStore((state) => state.setCategory);
 
-  // Local State UI
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
-  // Tempory State
   const [tempCategory, setTempCategory] = useState<string>(category);
 
   useEffect(() => {
@@ -27,24 +24,20 @@ export const useExpenseCategory = () => {
 
   const clearCategory = () => setCategory('');
 
-  // Handle Selected Category
   const handleSelectTempCategory = (item: string) => {
     setTempCategory(item);
   };
 
-  // Handle Submit
   const handleSubmitCategory = () => {
     setCategory(tempCategory);
     closeModal();
   };
 
   return {
-    // Data
     isModalVisible,
     category,
     tempCategory,
     categoryOptions: CATEGORY_OPTIONS,
-    // Actions
     openModal,
     closeModal,
     clearCategory,

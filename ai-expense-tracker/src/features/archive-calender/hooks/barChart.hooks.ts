@@ -1,13 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-
-// Api
-import { visualizationApi } from '@/features/archive-calender/api/visualizationApi';
-
-// Utils
-import { formatCurrency } from '@/features/archive-calender/utils/barChartCategoryHelpers';
-
-// Types
-import { CategoryChartData } from '@/features/archive-calender/types/barChartCategoryTypes';
+import { visualizationApi } from '@/features/archive-calender/api/visualization.api';
+import { formatCurrency } from '@/features/archive-calender/utils/barChartCategory.helpers';
+import { CategoryChartData } from '@/features/archive-calender/types/barChartCategory.interface';
 
 export const useCategoryComparison = (
   userId: string,

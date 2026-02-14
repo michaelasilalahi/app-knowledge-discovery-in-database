@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Props } from '../types/analysisDisableTypes';
+import { Props } from '../types/analysisDisable.interface';
 
 export const AnalysisDisabled = ({ message }: Props) => {
   const router = useRouter();

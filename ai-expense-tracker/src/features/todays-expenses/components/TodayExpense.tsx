@@ -1,11 +1,13 @@
 import React from 'react';
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import { syncTodayExpenseStore } from '../middleware/todayExpense.persist';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTodaysExpenses } from '../hooks/todayExpense.hooks';
 import { formatRupiah, formatDate } from '../utils/todayExpense.helpers';
 
 export const TodaysExpenses = () => {
   const { expenses, refetch } = useTodaysExpenses();
+  const hasHydrated = syncTodayExpenseStore((state) => state.hasHydrated);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -24,7 +26,11 @@ export const TodaysExpenses = () => {
         </View>
 
         <View>
-          {expenses.length > 0 ? (
+          {!hasHydrated ? (
+            <View className='items-center justify-center py-10 min-h-[100px]'>
+              <ActivityIndicator size='small' color='#AAAAAA' />
+            </View>
+          ) : expenses.length > 0 ? (
             <FlatList
               data={expenses}
               keyExtractor={(item) => item.id.toString()}
@@ -51,7 +57,7 @@ export const TodaysExpenses = () => {
               )}
             />
           ) : (
-            <View className='items-center justify-center py-10 opacity-60'>
+            <View className='items-center justify-center py-10 opacity-60 min-h-[100px]'>
               <Text className='font-montserrat-medium text-gray-400 text-center'>
                 Belum ada pengeluaran hari ini.
               </Text>

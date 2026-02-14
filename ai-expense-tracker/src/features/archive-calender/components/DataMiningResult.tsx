@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { MiningResultItem } from '../types/miningResultApiTypes';
+import { MiningResultItem } from '../types/miningResultApi.interface';
 
 // utils
 import {
   formatRuleTitle,
   formatMetricValue,
   metricLabels,
-} from '../utils/miningResultHelpers';
+} from '../utils/miningResult.helpers';
 
 const TableRow = ({
   label,

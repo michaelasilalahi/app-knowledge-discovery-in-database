@@ -8,7 +8,7 @@ import { AnalysisDisabled } from './AnalysisDisable';
 import { DataMiningResult } from './DataMiningResult';
 
 // Hooks
-import { useInsightMining } from '../hooks/useInsightMining';
+import { useInsightMining } from '../hooks/insightMining.hooks';
 
 // Store
 import { useGoogleStore } from '@/auth/google';

@@ -1,3 +1,4 @@
+import React from 'react';
 import { View, Pressable, Text, ActivityIndicator } from 'react-native';
 import { settingAnalysisStore } from '@/features/setting-analysis';
 import { useExpenseStore } from '../store/expenseStore';
@@ -7,7 +8,6 @@ export const SaveExpense = () => {
     state.isAnyAnalysisActive(),
   );
 
-  // ambil fungsi submit dan status loading
   const submitExpense = useExpenseStore((state) => state.submitExpense);
   const isLoading = useExpenseStore((state) => state.isLoading);
 

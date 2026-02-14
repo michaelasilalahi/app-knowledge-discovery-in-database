@@ -4,7 +4,7 @@ import { settingAnalysisStore } from '@/features/setting-analysis';
 
 export const useCustomAnalysisDataList = () => {
   // ambil data pengeluaran
-  const { expenses, fetchExpenses } = useExpenseStore();
+  const { expenses, fetchExpenses, isLoading } = useExpenseStore();
 
   // ambil konfigurasi tanggal mulai dari setting store
   const customConfig = settingAnalysisStore(
@@ -22,7 +22,7 @@ export const useCustomAnalysisDataList = () => {
   // logic grouping: siklus kustom
   const groupedData = expenses.reduce(
     (acc, curr) => {
-      const date = new Date(curr.tanggal);
+      const date = new Date(curr.date);
       const day = date.getDate();
       const month = date.getMonth();
       const year = date.getFullYear();
@@ -68,7 +68,7 @@ export const useCustomAnalysisDataList = () => {
       if (!acc[label]) {
         acc[label] = 0;
       }
-      acc[label] += curr.nominal;
+      acc[label] += curr.amount;
       return acc;
     },
     {} as Record<string, number>,
@@ -84,5 +84,6 @@ export const useCustomAnalysisDataList = () => {
   return {
     listData,
     startDay,
+    isLoading,
   };
 };

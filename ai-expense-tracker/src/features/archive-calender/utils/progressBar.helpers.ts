@@ -1,4 +1,4 @@
-import { ProgressStatus } from '../types/progressBarTypes';
+import { ProgressStatus } from '../types/progressBar.interface';
 
 export const getProgressBarColor = (
   isReady: boolean,

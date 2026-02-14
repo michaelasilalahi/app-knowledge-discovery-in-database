@@ -15,4 +15,6 @@ export interface TodaysExpensesState {
   setExpenses: (expenses: Expense[]) => void;
   syncTodayExpense: (userId: string) => Promise<void>;
   clearStorage: () => void;
+  hasHydrated: boolean;
+  setHasHydrated: (state: boolean) => void;
 }
