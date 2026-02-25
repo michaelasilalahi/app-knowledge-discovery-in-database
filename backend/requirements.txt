@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pandas
+pydantic
+requests
+python-multipart
+mlxtend
+Faker
+Pytest
