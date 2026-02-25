@@ -1,0 +1,96 @@
+{
+  "expo": {
+    "name": "Xpensa",
+    "slug": "xpensa",
+    "scheme": "xpensa",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icons/Xpensa.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "hermesEnabled": true,
+    "splash": {
+      "image": "./assets/icons/Xpensa.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.kdd.xpensa",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icons/Xpensa.png",
+        "backgroundColor": "#000000"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "newArchEnabled": true,
+            "abiFilters": [
+              "arm64-v8a",
+              "x86_64"
+            ]
+          }
+        }
+      ],
+      "@react-native-google-signin/google-signin",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/new_astro/new_astro_light.otf",
+            "./assets/fonts/new_astro/new_astro_medium.otf",
+            "./assets/fonts/new_astro/new_astro_bold.otf",
+            "./assets/fonts/montserrat/montserrat_thin.ttf",
+            "./assets/fonts/montserrat/montserrat_semibold.ttf",
+            "./assets/fonts/montserrat/montserrat_regular.ttf",
+            "./assets/fonts/montserrat/montserrat_medium.ttf",
+            "./assets/fonts/montserrat/montserrat_light.ttf",
+            "./assets/fonts/montserrat/montserrat_extralight.ttf",
+            "./assets/fonts/montserrat/montserrat_extrabold.ttf",
+            "./assets/fonts/montserrat/montserrat_bold.ttf",
+            "./assets/fonts/montserrat/montserrat_black.ttf"
+          ]
+        }
+      ],
+      [
+        "expo-asset",
+        {
+          "assets": [
+            "./assets/icons/google.svg",
+            "./assets/icons/house.svg",
+            "./assets/icons/plus.svg",
+            "./assets/icons/archive.svg",
+            "./assets/icons/house_fill.svg",
+            "./assets/icons/archive_fill.svg",
+            "./assets/icons/notification.svg",
+            "./assets/icons/close.svg",
+            "./assets/icons/switch_analysis.svg",
+            "./assets/icons/chevron_right.svg",
+            "./assets/icons/chevron_left.svg",
+            "./assets/icons/arrow_right.svg",
+            "./assets/icons/book_open.svg"
+          ]
+        }
+      ],
+      "expo-router",
+      "@react-native-community/datetimepicker"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "b10ec231-d76b-4e18-a642-d76537455ee9"
+      }
+    },
+    "owner": "michaelasilalahi"
+  }
+}
