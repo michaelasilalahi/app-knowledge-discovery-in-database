@@ -1,6 +1,6 @@
 // components
 export * from './components/ArchiveCustomScreen';
-export * from './components/Expenses';
+export * from './components/Expenditure';
 export * from './components/Visualisasi';
 export * from './components/Insight';
 

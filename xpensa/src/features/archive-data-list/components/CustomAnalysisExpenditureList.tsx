@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import { useCustomAnalysisDataList } from '../utils/customAnalysisDataList';
+import { useCustomAnalysisDataList } from '../utils/customAnalysisDataList.helpers';
 
 export const CustomAnalysisExpenditureList = () => {
   const { listData, isLoading } = useCustomAnalysisDataList();
@@ -38,6 +38,8 @@ export const CustomAnalysisExpenditureList = () => {
                     pathname: '/(archive-custom)/archiveCustom',
                     params: {
                       title: item.title,
+                      startDate: item.startDate,
+                      endDate: item.endDate,
                     },
                   });
                 }}

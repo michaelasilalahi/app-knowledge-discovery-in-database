@@ -1,21 +1,22 @@
-import React from 'react';
-import { View, Text, FlatList, ActivityIndicator } from 'react-native';
-import { useExpensesList } from '../hooks/expensesList.hooks';
-import { formatRupiah } from '../utils/formatRupiah.helpers';
-import { formatDate } from '../utils/formatDate.helpers';
-import { ExpensesProps } from '../types/expenses.interface';
+import React, { useMemo } from 'react';
+import { View, Text, ActivityIndicator, FlatList } from 'react-native';
+import { useCustomExpenditure } from '../hooks/expenditure.hooks';
+import { formatDate, formatRupiah } from '@/features/archive-calender';
+import { ExpenditureProps } from '../types/expenditureProps.type';
 
-export const Expenses = ({ periodTitle }: ExpensesProps) => {
-  const { filteredExpenses, totalExpenses, hasHydrated, isLoading } =
-    useExpensesList(periodTitle);
+export const Expenses = ({
+  periodTitle,
+  startDate,
+  endDate,
+}: ExpenditureProps) => {
+  const { expenses, isLoading, error } = useCustomExpenditure(
+    startDate,
+    endDate,
+  );
 
-  if (!hasHydrated) {
-    return (
-      <View className='flex-1 justify-center items-center mt-10'>
-        <ActivityIndicator size='small' color='#AAAAAA' />
-      </View>
-    );
-  }
+  const totalExpenses = useMemo(() => {
+    return expenses.reduce((acc, curr) => acc + Number(curr.amount), 0);
+  }, [expenses]);
 
   return (
     <View className='flex-1 w-[90%] mx-auto mt-[30px]'>
@@ -23,9 +24,7 @@ export const Expenses = ({ periodTitle }: ExpensesProps) => {
         <View className='flex gap-y-[10px]'>
           <View className='flex-row justify-between items-center'>
             <Text className='font-montserrat-semibold'>Pengeluaran</Text>
-            <Text className='font-montserrat-medium'>
-              {filteredExpenses.length}
-            </Text>
+            <Text className='font-montserrat-medium'>{expenses.length}</Text>
           </View>
           <View className='flex-row justify-between items-center'>
             <Text className='font-montserrat-semibold'>Total Pengeluaran</Text>
@@ -36,7 +35,7 @@ export const Expenses = ({ periodTitle }: ExpensesProps) => {
         </View>
 
         <FlatList
-          data={filteredExpenses}
+          data={expenses}
           keyExtractor={(item, index) =>
             item.id?.toString() || index.toString()
           }
@@ -52,7 +51,7 @@ export const Expenses = ({ periodTitle }: ExpensesProps) => {
                     {item.label} • {item.category}
                   </Text>
                   <Text className='font-montserrat-medium text-[13px] text-[#AAAAAA]'>
-                    {formatDate(item.date)}
+                    {formatDate(item.date.toString())}
                   </Text>
                 </View>
               </View>
@@ -68,15 +67,15 @@ export const Expenses = ({ periodTitle }: ExpensesProps) => {
               return (
                 <View className='mt-10 items-center'>
                   <ActivityIndicator size='small' color='#AAAAAA' />
-                  <Text className='text-xs text-[#AAAAAA] mt-2'>
+                  <Text className='font-montserrat-medium text-xs text-[#AAAAAA] mt-2'>
                     Sedang memuat data...
                   </Text>
                 </View>
               );
             }
             return (
-              <Text className='font-montserrat-medium text-gray-400 mt-2 text-center'>
-                Belum ada data pengeluaran{'\n'}di bulan {periodTitle}
+              <Text className='font-montserrat-medium text-[#AAAAAA] mt-2 text-center'>
+                Belum ada data pengeluaran{'\n'}pada siklus {periodTitle}
               </Text>
             );
           }}

@@ -16,7 +16,7 @@ export const ExpenseDate = () => {
 
   return (
     <View>
-      <View className='flex-row items-center justify-between border-b-[0.7px] border-b-[#AAAAAA]'>
+      <View className='flex-row items-center justify-between border-b-[0.5px] border-b-[#AAAAAA]'>
         <Pressable className='flex-1' onPress={openDatePicker}>
           <Text
             className={`font-montserrat-medium text-base py-[10px] ${date ? 'text-black' : 'text-[#AAAAAA]'}`}

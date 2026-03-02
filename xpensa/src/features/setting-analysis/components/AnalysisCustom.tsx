@@ -1,8 +1,9 @@
 import { View, Text, Modal, TouchableOpacity } from 'react-native';
 import ToggleSwitch from 'toggle-switch-react-native';
 import { useAnalysisCustom } from '../hooks/useAnalysisCustom';
-import { daysArray } from '../utils/analysisConfirmationStatus';
+import { daysArray } from '../utils/analysisConfirmationStatus.helpers';
 import { Picker } from 'react-native-wheel-pick';
+import { Month } from '../types/month.enum';
 
 export const AnalysisCustom = () => {
   const {
@@ -10,8 +11,8 @@ export const AnalysisCustom = () => {
     isModalVisible,
     selectedDay,
     setSelectedDay,
-    selectedMonthIndex,
-    setSelectedMonthIndex,
+    selectedMonthValue,
+    handleSelectedMonth,
     isRecurring,
     setIsRecurring,
     toggleSwitch,
@@ -22,7 +23,7 @@ export const AnalysisCustom = () => {
   } = useAnalysisCustom();
 
   return (
-    <View className='pb-[15px] border-b-[0.7px] border-b-[#AAAAAA]'>
+    <View className='pb-[15px] border-b-[0.5px] border-b-[#AAAAAA]'>
       <View className='flex'>
         <View className='flex flex-row justify-between items-center'>
           <Text className='font-montserrat-medium'>Analisis Kustom</Text>
@@ -85,10 +86,9 @@ export const AnalysisCustom = () => {
                   selectLineColor='black'
                   selectLineSize={3}
                   pickerData={months}
-                  selectedValue={months[selectedMonthIndex]}
+                  selectedValue={selectedMonthValue}
                   onValueChange={(value: string) => {
-                    const index = months.indexOf(value);
-                    setSelectedMonthIndex(index);
+                    handleSelectedMonth(value as Month);
                   }}
                   style={{
                     backgroundColor: 'white',

@@ -1,13 +1,9 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { Stack } from 'expo-router';
-
-// components
 import { Expenses } from './Expenses';
 import { Visualization } from './Visualization';
 import { Insight } from './Insight';
-
-// hooks
 import { useArchiveCalenderScreen } from '../hooks/archiveCalenderScreen.hooks';
 
 export const ArchiveCalenderScreen = () => {

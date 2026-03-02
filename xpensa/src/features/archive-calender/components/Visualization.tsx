@@ -85,7 +85,7 @@ export const Visualization = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <View className='flex-1 gap-y-[5px] bg-[#EAEAEA]'>
+      <View className='flex-1 gap-y-[50px]'>
         <View className='bg-white'>
           <View className='w-[90%] mx-auto mt-[15px]'>
             <View className='flex gap-y-[5px]'>

@@ -6,7 +6,7 @@ export const Profil = () => {
   const { user } = useGoogleStore();
 
   return (
-    <View className='flex items-center gap-y-[15px] top-16'>
+    <View className='flex items-center gap-y-[15px] top-5'>
       <Image
         source={user?.photo}
         style={{ width: 50, height: 50, borderRadius: 50 }}

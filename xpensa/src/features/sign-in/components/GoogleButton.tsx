@@ -5,7 +5,7 @@ import { Props } from '../types';
 export const GoogleButton = ({ onPress, isLoading }: Props) => {
   return (
     <Pressable
-      className='w-full py-4 border border-gray-300 rounded-full flex-row justify-center items-center gap-x-3 active:bg-gray-300'
+      className='w-full py-4 border-[0.3px] border-[#AAAAAA] rounded-full flex-row justify-center items-center gap-x-3 active:bg-gray-300'
       onPress={onPress}
       disabled={isLoading}
     >

@@ -2,13 +2,13 @@ import React, { useMemo } from 'react';
 import { View, Text, Pressable, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
 import { MiningResultItem } from '../types/dataMiningResult.interface';
+import { formatMetricValue } from '../utils/formatMetricValue.helpers';
+import { formatRupiah } from '../utils/formatRupiah.helpers';
+import { formatDate } from '../utils/formatDate.helpers';
+import { formatItemToMultiline } from '../utils/formatItemToMultiLine.helpers';
 import {
-  formatMetricValue,
   metricLabels,
   parseInsightString,
-  formatItemToMultiline,
-  formatRupiah,
-  formatDate,
 } from '../utils/dataMiningResult.helpers';
 
 const TableRow = ({

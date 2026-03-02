@@ -5,14 +5,14 @@
     "scheme": "xpensa",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icons/Xpensa.png",
+    "icon": "./assets/icons/xpensa.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "hermesEnabled": true,
     "splash": {
-      "image": "./assets/icons/Xpensa.png",
+      "image": "./assets/icons/xpensa.png",
       "resizeMode": "contain",
-      "backgroundColor": "#000000"
+      "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true
@@ -20,8 +20,8 @@
     "android": {
       "package": "com.kdd.xpensa",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icons/Xpensa.png",
-        "backgroundColor": "#000000"
+        "foregroundImage": "./assets/icons/xpensa.png",
+        "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false

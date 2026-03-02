@@ -11,7 +11,7 @@ import {
 export default function Setting() {
   return (
     <SafeAreaView className='flex-1'>
-      <View className='flex-1 gap-y-[130px]'>
+      <View className='flex-1 gap-y-[100px]'>
         <View>
           <Profil />
         </View>

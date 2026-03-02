@@ -8,6 +8,7 @@ import {
 import ToggleSwitch from 'toggle-switch-react-native';
 import { Picker } from 'react-native-wheel-pick';
 import { useAnalysisCalender } from '../hooks/useAnalysisCalender';
+import { Month } from '../types/month.enum';
 
 export const AnalysisCalender = () => {
   const {
@@ -15,21 +16,19 @@ export const AnalysisCalender = () => {
     isModalVisible,
     toggleSwitch,
     handleCancel,
-    // Props Modal
     isRecurring,
     setIsRecurring,
     months,
-    selectedMonthIndex,
+    selectedMonthValue,
     handleSelectedMonth,
     handleSubmit,
-    // Props Tampilan Utama
     isAnalysisActive,
     feedbackText,
     isLoading,
   } = useAnalysisCalender();
 
   return (
-    <View className='pb-[15px] border-b-[0.7px] border-b-[#AAAAAA]'>
+    <View className='pb-[15px] border-b-[0.5px] border-b-[#AAAAAA]'>
       <View className='flex'>
         <View className='flex flex-row justify-between items-center'>
           <Text className='font-montserrat-medium'>Analisis Kalender</Text>
@@ -78,10 +77,9 @@ export const AnalysisCalender = () => {
                 selectLineColor='black'
                 selectLineSize={3}
                 pickerData={months}
-                selectedValue={months[selectedMonthIndex]}
+                selectedValue={selectedMonthValue}
                 onValueChange={(value: string) => {
-                  const index = months.indexOf(value);
-                  handleSelectedMonth(index);
+                  handleSelectedMonth(value as Month);
                 }}
                 style={{
                   backgroundColor: 'white',

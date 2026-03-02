@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
-import { months, getCurrentMonthIndex } from '../utils/selectedMonth';
-import { analysisConfirmationStatus } from '../utils/analysisConfirmationStatus';
-import { settingAnalysisStore } from '../store/settingAnalysisStore';
 import { useGoogleStore } from '@/auth/google';
+import { settingAnalysisStore } from '../store/settingAnalysisStore';
 import { settingAnalysisApi } from '../api/settingAnalysisApi';
+import { analysisConfirmationStatus } from '../utils/analysisConfirmationStatus.helpers';
+import { selectedMonth, monthList } from '../utils/selectedMonth.helpers';
+import { Month } from '../types/month.enum';
 
 export const useAnalysisCalender = () => {
   const setCalendarConfig = settingAnalysisStore(
@@ -23,12 +24,10 @@ export const useAnalysisCalender = () => {
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
-  const [selectedMonthIndex, setSelectedMonthIndex] = useState<number>(
-    getCurrentMonthIndex(),
-  );
+  const [selectedMonthValue, setSelectedMonthValue] =
+    useState<Month>(selectedMonth());
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // menggabungkan index bulan dan status rutin ke dalam satu objek config
   useEffect(() => {
     setIsEnabled(isAnalysisActive);
   }, [isAnalysisActive]);
@@ -37,7 +36,7 @@ export const useAnalysisCalender = () => {
     if (isOn) {
       setIsEnabled(true);
       setIsModalVisible(true);
-      setSelectedMonthIndex(getCurrentMonthIndex());
+      setSelectedMonthValue(selectedMonth());
       setIsRecurring(false);
     } else {
       if (!userId || !activeConfig) return;
@@ -45,8 +44,8 @@ export const useAnalysisCalender = () => {
       try {
         await settingAnalysisApi.save({
           user_id: userId,
-          month_index: activeConfig.monthIndex,
-          year: new Date().getFullYear(),
+          label_month: activeConfig.label_month,
+          label_year: new Date().getFullYear(),
           is_active: false,
           is_recurring: false,
           analysis_type: 'non_active',
@@ -68,15 +67,15 @@ export const useAnalysisCalender = () => {
     try {
       await settingAnalysisApi.save({
         user_id: userId,
-        month_index: selectedMonthIndex,
-        year: new Date().getFullYear(),
+        label_month: selectedMonthValue,
+        label_year: new Date().getFullYear(),
         is_active: true,
         is_recurring: isRecurring,
         analysis_type: 'calendar',
       });
       setCustomConfig(null);
       setCalendarConfig({
-        monthIndex: selectedMonthIndex,
+        label_month: selectedMonthValue,
         recurring: isRecurring,
       });
       setIsModalVisible(false);
@@ -94,9 +93,8 @@ export const useAnalysisCalender = () => {
 
   const feedbackText = analysisConfirmationStatus(
     isAnalysisActive,
-    activeConfig?.monthIndex ?? null,
+    activeConfig?.label_month ?? null,
     activeConfig?.recurring ?? false,
-    months,
   );
 
   return {
@@ -106,9 +104,9 @@ export const useAnalysisCalender = () => {
     handleCancel,
     isRecurring,
     setIsRecurring,
-    months: months,
-    selectedMonthIndex,
-    handleSelectedMonth: setSelectedMonthIndex,
+    months: monthList,
+    selectedMonthValue,
+    handleSelectedMonth: setSelectedMonthValue,
     handleSubmit,
     isAnalysisActive,
     feedbackText,

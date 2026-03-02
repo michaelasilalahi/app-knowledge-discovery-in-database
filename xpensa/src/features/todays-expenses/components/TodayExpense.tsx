@@ -16,8 +16,8 @@ export const TodaysExpenses = () => {
   );
 
   return (
-    <View className='bg-white h-full'>
-      <View className='flex gap-y-[30px] w-[90%] mx-auto mt-[15px]'>
+    <View className='h-full bg-white'>
+      <View className='flex gap-y-[30px] w-[90%] mx-auto'>
         <View className='flex-row gap-x-[5px]'>
           <Text className='font-montserrat-semibold'>Pengeluaran</Text>
           <Text className='font-montserrat-semibold text-[#AAAAAA]'>
@@ -36,7 +36,7 @@ export const TodaysExpenses = () => {
               keyExtractor={(item) => item.id.toString()}
               scrollEnabled={false}
               renderItem={({ item }) => (
-                <View className='flex-row justify-between items-center py-[10px] border-b-[0.5px] border-b-[#AAAAAA]'>
+                <View className='flex-row justify-between items-center py-[10px] border-b-[0.3px] border-b-[#AAAAAA]'>
                   <View className='flex-1 gap-y-[5px]'>
                     <Text className='font-montserrat-semibold'>
                       {item.type_of_expenditure}

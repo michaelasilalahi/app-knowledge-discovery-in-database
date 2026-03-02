@@ -1,19 +1,17 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { Stack } from 'expo-router';
-
-// hooks
-import { useArchiveCustomScreen } from '../hooks/archiveCustomScreen.hooks';
-// components
-import { Expenses } from './Expenses';
+import { Expenses } from './Expenditure';
 import { Visualisasi } from './Visualisasi';
 import { Insight } from './Insight';
+import { useArchiveCustomScreen } from '../hooks/archiveCustomScreen.hooks';
 
 export const ArchiveCustomScreen = () => {
-  const { title, activeTab, setActiveTab, tabs } = useArchiveCustomScreen();
+  const { title, startDate, endDate, activeTab, setActiveTab, tabs } =
+    useArchiveCustomScreen();
 
   return (
-    <View>
+    <View className='flex-1'>
       <Stack.Screen
         options={{
           headerShown: true,
@@ -24,7 +22,6 @@ export const ArchiveCustomScreen = () => {
         }}
       />
 
-      {/* Switch Tab Bar Expense, Visualisasi, Insight */}
       <View className='flex-row'>
         {tabs.map((tab) => (
           <Pressable
@@ -47,12 +44,15 @@ export const ArchiveCustomScreen = () => {
         ))}
       </View>
 
-      {/* components */}
       <View className='flex-1'>
-        {activeTab === 'Pengeluaran' && <Expenses periodTitle={title} />}
-
+        {activeTab === 'Pengeluaran' && (
+          <Expenses
+            periodTitle={title}
+            startDate={startDate as string}
+            endDate={endDate as string}
+          />
+        )}
         {activeTab === 'Visualisasi' && <Visualisasi periodTitle={title} />}
-
         {activeTab === 'Insight' && <Insight periodTitle={title} />}
       </View>
     </View>

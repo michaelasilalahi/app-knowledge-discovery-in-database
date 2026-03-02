@@ -25,7 +25,7 @@ export const ExpenseCategory = () => {
 
   return (
     <View>
-      <View className='flex-row items-center justify-between border-b-[0.7px] border-b-[#AAAAAA]'>
+      <View className='flex-row items-center justify-between border-b-[0.5px] border-b-[#AAAAAA]'>
         <Pressable onPress={openModal}>
           <Text
             className={`font-montserrat-medium text-base py-[10px] ${category ? 'text-black' : 'text-[#AAAAAA]'}`}

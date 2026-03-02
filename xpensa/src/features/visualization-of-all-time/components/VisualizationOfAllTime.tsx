@@ -40,14 +40,6 @@ export const VisualizationOfAllTime = () => {
   return (
     <View className='bg-white'>
       <View className='w-[90%] mx-auto mt-[15px] mb-[15px]'>
-        <View className='flex gap-y-[5px] mb-4'>
-          <Text className='font-montserrat-semibold'>Line Chart</Text>
-          <Text className='font-montserrat-medium text-[#AAAAAA]'>
-            Visualisasi ini menampilkan riwayat perbandingan antara kategori
-            Kebutuhan dan Keinginan selama seluruh periode.
-          </Text>
-        </View>
-
         <View className='flex-row gap-x-[5px] justify-center items-center'>
           <View className='flex-row items-center'>
             <View

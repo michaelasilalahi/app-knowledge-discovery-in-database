@@ -21,13 +21,13 @@ module.exports = defineConfig([
         // Memaksa variabel biasa pakai camelCase
         {
           selector: 'variable',
-          format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
+          format: ['camelCase', 'UPPER_CASE', 'PascalCase', 'snake_case'],
         },
 
         // memaksa fungsi pakai camelCase
         {
           selector: 'function',
-          format: ['camelCase', 'PascalCase'],
+          format: ['camelCase', 'PascalCase', 'snake_case'],
         },
       ],
 

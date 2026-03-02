@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Alert } from 'react-native';
-import { months, getCurrentMonthIndex } from '../utils/selectedMonth';
-import { generateCustomAnalysisFeedback } from '../utils/analysisConfirmationStatus';
+import { useGoogleStore } from '@/auth/google';
 import { settingAnalysisStore } from '../store/settingAnalysisStore';
 import { settingAnalysisApi } from '../api/settingAnalysisApi';
-import { useGoogleStore } from '@/auth/google';
+import { generateCustomAnalysisFeedback } from '../utils/analysisConfirmationStatus.helpers';
+import { selectedMonth, monthList } from '../utils/selectedMonth.helpers';
+import { Month } from '../types/month.enum';
 
 export const useAnalysisCustom = () => {
   const setCustomConfig = settingAnalysisStore(
@@ -24,9 +25,8 @@ export const useAnalysisCustom = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
   const [selectedDay, setSelectedDay] = useState<string>('1');
-  const [selectedMonthIndex, setSelectedMonthIndex] = useState<number>(
-    getCurrentMonthIndex(),
-  );
+  const [selectedMonthValue, setSelectedMonthValue] =
+    useState<Month>(selectedMonth());
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -38,17 +38,15 @@ export const useAnalysisCustom = () => {
       setIsEnabled(true);
       setIsModalVisible(true);
       setSelectedDay('1');
-      setSelectedMonthIndex(getCurrentMonthIndex());
+      setSelectedMonthValue(selectedMonth());
     } else {
       if (!userId || !activeConfig) return;
       setIsLoading(true);
       try {
-        let safeMonthIndex = months.indexOf(activeConfig.month);
-        if (safeMonthIndex === -1) safeMonthIndex = 0;
         await settingAnalysisApi.save({
           user_id: userId,
-          month_index: safeMonthIndex,
-          year: new Date().getFullYear(),
+          label_month: activeConfig.label_month,
+          label_year: new Date().getFullYear(),
           is_active: false,
           is_recurring: false,
           analysis_type: 'non_active',
@@ -70,8 +68,9 @@ export const useAnalysisCustom = () => {
     try {
       await settingAnalysisApi.save({
         user_id: userId,
-        month_index: selectedMonthIndex,
-        year: new Date().getFullYear(),
+        label_day: selectedDay,
+        label_month: selectedMonthValue,
+        label_year: new Date().getFullYear(),
         is_active: true,
         is_recurring: isRecurring,
         analysis_type: 'custom',
@@ -79,7 +78,7 @@ export const useAnalysisCustom = () => {
       setCalendarConfig(null);
       setCustomConfig({
         day: selectedDay,
-        month: months[selectedMonthIndex],
+        label_month: selectedMonthValue,
         recurring: isRecurring,
       });
       setIsModalVisible(false);
@@ -102,14 +101,14 @@ export const useAnalysisCustom = () => {
     isModalVisible,
     selectedDay,
     setSelectedDay,
-    selectedMonthIndex,
-    setSelectedMonthIndex,
+    selectedMonthValue,
+    handleSelectedMonth: setSelectedMonthValue,
     isRecurring,
     setIsRecurring,
     toggleSwitch,
     handleSubmit,
     handleCancel,
-    months,
+    months: monthList,
     isAnalysisActive,
     feedbackText,
     isLoading,

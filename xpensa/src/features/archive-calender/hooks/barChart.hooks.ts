@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { visualizationApi } from '@/features/archive-calender/api/visualization.api';
-import { formatCurrency } from '@/features/archive-calender/utils/barChart.helpers';
+import { formatRupiah } from '../utils/formatRupiah.helpers';
 import { BarChartData } from '@/features/archive-calender/types/visualization.interface';
 
 export const useBarChart = (userId: string, month: number, year: number) => {
@@ -22,14 +22,14 @@ export const useBarChart = (userId: string, month: number, year: number) => {
           label: 'Kebutuhan',
           frontColor: '#22C55E',
           totalAmount: data.amount_needs,
-          formattedAmount: formatCurrency(data.amount_needs),
+          formattedAmount: formatRupiah(data.amount_needs),
         },
         {
           value: data.count_wants,
           label: 'Keinginan',
           frontColor: '#DC2626',
           totalAmount: data.amount_wants,
-          formattedAmount: formatCurrency(data.amount_wants),
+          formattedAmount: formatRupiah(data.amount_wants),
         },
       ];
 

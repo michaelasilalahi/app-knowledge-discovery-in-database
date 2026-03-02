@@ -5,7 +5,11 @@ import { TabType } from '../types/archiveCustomScreen.type';
 
 export const useArchiveCustomScreen = () => {
   // tangkap data dari router
-  const { title } = useLocalSearchParams<{ title: string }>();
+  const { title, startDate, endDate } = useLocalSearchParams<{
+    title: string;
+    startDate: string;
+    endDate: string;
+  }>();
 
   // state untuk mengatur tab mana yang aktif
   const [activeTab, setActiveTab] = useState<TabType>('Pengeluaran');
@@ -17,6 +21,8 @@ export const useArchiveCustomScreen = () => {
 
   return {
     title,
+    startDate,
+    endDate,
     activeTab,
     setActiveTab: handleTabChange,
     tabs: ARCHIVE_TABS,
