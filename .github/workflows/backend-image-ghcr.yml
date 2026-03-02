@@ -1,12 +1,6 @@
 name: Publish Backend Image to GHCR
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - backend/**
-      - .github/workflows/backend-image-ghcr.yml
   workflow_dispatch:
 
 permissions:
