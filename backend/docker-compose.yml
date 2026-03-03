@@ -7,3 +7,10 @@ services:
       - "${API_PORT:-8000}:8000"
     environment:
       DATABASE_URL: ${DATABASE_URL:?DATABASE_URL is required}
+    networks:
+      - shared
+
+networks:
+  shared:
+    external: true
+    name: infrastructure-shared-development
