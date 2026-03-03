@@ -103,6 +103,25 @@ If GHCR package visibility is private, add GHCR registry credentials in Dokploy:
 - Username: GitHub username or bot account
 - Password: GitHub PAT with `read:packages`
 
+## 8) Health Check
+
+Health endpoint:
+
+- `GET /health`
+
+Example response:
+
+```json
+{
+  "status": "ok",
+  "commit_hash": "sha-abc123..."
+}
+```
+
+Notes:
+
+- When deployed from GHCR `latest`, the backend still reports the real commit hash because CI bakes `github.sha` into the image as `GIT_COMMIT_HASH`.
+
 ## Optional: Seed Sample Data
 
 After the API is running, you can seed sample expenditure data:

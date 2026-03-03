@@ -11,6 +11,7 @@ from app.modules.data_mining.router import router as result_router
 from app.modules.data_mining.analysis_calender.visualization.bar_chart.router import router as visualisasi_router
 from app.modules.data_mining.analysis_calender.visualization.pie_chart.router import router as pie_chart_router
 from app.modules.visualization_off_all_time.router import router as line_chart_router
+from app.modules.health.router import router as health_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -55,3 +56,5 @@ app.include_router(visualisasi_router)
 app.include_router(pie_chart_router)
 
 app.include_router(line_chart_router)
+
+app.include_router(health_router)
