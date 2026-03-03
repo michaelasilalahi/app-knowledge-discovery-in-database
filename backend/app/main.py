@@ -4,6 +4,7 @@ from app.core.database import engine, SessionLocal, Base
 
 from app.modules.authentication.router import router as auth_router
 from app.modules.expenditure.calender_cycle_expenditure.router import router as expenses_router
+from app.modules.expenditure.custom_cycle_expenditure.router import router as custom_expenses_router
 from app.modules.data_mining.analysis_calender.progress_bar.router import router as progress_bar_router
 from app.modules.analysis_setting.router import router as setting_analysis_router
 from app.modules.data_mining.analysis_calender.association_rule_learning.router import router as mining_router
@@ -39,6 +40,8 @@ def get_db():
 
 
 app.include_router(expenses_router)
+
+app.include_router(custom_expenses_router)
 
 app.include_router(auth_router)
 

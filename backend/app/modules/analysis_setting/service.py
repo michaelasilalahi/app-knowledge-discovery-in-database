@@ -27,8 +27,8 @@ def create_or_update_setting(db: Session, setting_analysis: schemas.AnalysisSett
         save_created_at = datetime.now()
     
     # satu user satu setting analysis
-    existing_setting = db.query(models).filter(
-        models.user_id == setting_analysis.user_id
+    existing_setting = db.query(models.AnalysisSetting).filter(
+        models.AnalysisSetting.user_id == setting_analysis.user_id
     ).first()
 
     # jika ada di database sudah ada, update datanya
@@ -51,7 +51,7 @@ def create_or_update_setting(db: Session, setting_analysis: schemas.AnalysisSett
     # jika user ini belum pernah bikin setting sama sekali, buat baru
     else:
 
-        new_setting = models(
+        new_setting = models.AnalysisSetting(
             user_id=setting_analysis.user_id,
             label_month=save_month,
             label_year=save_year,
@@ -72,7 +72,7 @@ def create_or_update_setting(db: Session, setting_analysis: schemas.AnalysisSett
 # ambil setting aktif user (buat load data pas buka aplikasi)
 def get_active_settings(db: Session, user_id: str):
 
-    return db.query(models).filter(
-        models.user_id == user_id,
-        models.is_active == True
-    ).order_by(models.created_at.desc()).first()
+    return db.query(models.AnalysisSetting).filter(
+        models.AnalysisSetting.user_id == user_id,
+        models.AnalysisSetting.is_active == True
+    ).order_by(models.AnalysisSetting.created_at.desc()).first()

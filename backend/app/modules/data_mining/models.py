@@ -22,4 +22,4 @@ class DataMiningCreate(Base):
     insight_enrichment = Column(Text, nullable=False)
     related_transactions = Column(JSON, nullable=False, default=[])
 
-    setting = relationship("SettingAnalysis", backref="mining_results")
+    setting = relationship("AnalysisSetting", backref="mining_results")

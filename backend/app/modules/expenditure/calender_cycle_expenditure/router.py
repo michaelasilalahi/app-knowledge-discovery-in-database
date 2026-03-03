@@ -14,7 +14,7 @@ router = APIRouter(
 @router.post("/", response_model=schemas.ExpenditureResponse)
 def calender_cycle_expenditure_endpoint(expense: schemas.ExpenditureCreate, db: Session = Depends(get_db)):
 
-    return service.calender_cycle_expenses(db=db, expense_data=expense)
+    return service.calender_cycle_expenditure(db=db, expenditure_data=expense)
 
 # GET: data pengeluaran
 @router.get("/{user_id}", response_model=List[schemas.ExpenditureResponse])

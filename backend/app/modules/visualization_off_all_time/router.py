@@ -5,7 +5,7 @@ from datetime import date
 from . import service, schemas
 
 router = APIRouter(
-    prefix="/insight/visualization_off_all_time",
+    prefix="/visualization_off_all_time",
     tags=["Visualization Off All Time"]
 )
 
