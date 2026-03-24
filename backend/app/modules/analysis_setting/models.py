@@ -7,8 +7,8 @@ class AnalysisSetting(Base):
     __tablename__ = "analysis_setting"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(String, ForeignKey("users.google_id", ondelete="CASCADE"), nullable=False)
-    label_month = Column(Integer, nullable=True)
+    user_id = Column(String, ForeignKey("users.google_id", ondelete="CASCADE"),unique=True, nullable=False)
+    label_month = Column(String, nullable=True)
     label_year = Column(Integer, nullable=True)
     is_active = Column(Boolean, nullable=True, default=True)
     is_recurring = Column(Boolean, nullable=True, default=False)

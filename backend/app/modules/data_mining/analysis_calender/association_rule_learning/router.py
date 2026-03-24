@@ -2,11 +2,18 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.modules.data_mining.analysis_calender.analysis_context.service import analysis_context
-from . import wishlist_filter, data_preprocessing, metadata_extraction, transaction_aggregation, oneHot_encoding, frequent_pattern_mining, creating_association_rules, insight_enrichment
+from .wishlist_filter import wishlist_filter
+from .data_preprocessing import data_preprocessing
+from .metadata_extraction import metadata_extraction
+from .transaction_aggregation import transaction_aggregation
+from .oneHot_encoding import oneHot_encoding
+from .frequent_pattern_mining import frequent_pattern_mining
+from .creating_association_rules import creating_association_rules
+from .insight_enrichment import insight_enrichment
 from app.modules.data_mining.service import save_data_mining_analysis_calender
 
 router = APIRouter(
-    prefix="/insight/mining",
+    prefix="/data_mining/analysis_calender",
     tags=["Data Mining Execution"]
 )
 
@@ -19,8 +26,6 @@ def execute_mining(
 ):
     MIN_SUPPORT = 0.2 
     MIN_CONFIDENCE = 0.5
-
-    context = analysis_context(db, user_id, month, year)
 
     try:
         context = analysis_context(db, user_id, month, year)

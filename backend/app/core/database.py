@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # databasse address
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:michaelasilalahi@localhost:5432/postgres"
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:michaelasilalahi@localhost:5432/xpensa_db"
 
 # engine untuk mengantar bolak-balik antara databse
 engine = create_engine(SQLALCHEMY_DATABASE_URL)

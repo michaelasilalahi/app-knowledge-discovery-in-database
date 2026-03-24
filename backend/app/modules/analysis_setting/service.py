@@ -3,6 +3,14 @@ from datetime import date, datetime
 import calendar
 from . import schemas, models
 
+def get_month_number(month_name: str) -> int:
+    month_dict = {
+        "Januari": 1, "Februari": 2, "Maret": 3, "April": 4,
+        "Mei": 5, "Juni": 6, "Juli": 7, "Agustus": 8,
+        "September": 9, "Oktober": 10, "November": 11, "Desember": 12
+    }
+    return month_dict.get(month_name, datetime.now().month)
+
 def create_or_update_setting(db: Session, setting_analysis: schemas.AnalysisSettingCreate):
 
     # jika analysis setting mati maka set menjadi null
@@ -17,14 +25,30 @@ def create_or_update_setting(db: Session, setting_analysis: schemas.AnalysisSett
 
     else:
 
-        py_month = setting_analysis.month_index + 1
-        save_month = setting_analysis.month_index
-        save_year = setting_analysis.year
+        save_month = setting_analysis.label_month
+        save_year = setting_analysis.label_year
         save_type = setting_analysis.analysis_type
-        start_date = date(save_year, py_month, 1)
-        last_day = calendar.monthrange(save_year, py_month)[1]
-        end_date = date(save_year, py_month, last_day)
         save_created_at = datetime.now()
+        py_month = get_month_number(setting_analysis.label_month)
+        start_day = int(setting_analysis.label_day) if setting_analysis.label_day else 1
+        max_days_current = calendar.monthrange(save_year, py_month)[1]
+        actual_start_day = min(start_day, max_days_current)
+        start_date = date(save_year, py_month, actual_start_day)
+        
+        if actual_start_day == 1:
+            # Jika mulai tgl 1, end_date adalah hari terakhir di bulan yang sama (contoh: 1 Jan s/d 31 Jan)
+            end_date = date(save_year, py_month, max_days_current)
+        else:
+            # Jika mulai bukan tgl 1, lompat ke bulan depannya (contoh: 5 Jan s/d 5 Feb)
+            next_month = py_month + 1
+            next_year = save_year
+            if next_month > 12:
+                next_month = 1
+                next_year += 1
+                
+            max_days_next = calendar.monthrange(next_year, next_month)[1]
+            actual_end_day = min(start_day, max_days_next)
+            end_date = date(next_year, next_month, actual_end_day)
     
     # satu user satu setting analysis
     existing_setting = db.query(models.AnalysisSetting).filter(

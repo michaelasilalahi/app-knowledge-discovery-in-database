@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from mlxtend.frequent_patterns import association_rules
 
-def create_association_rules(
+def creating_association_rules(
     df_freq_itemsets: pd.DataFrame, 
     min_confidence: float = 0.5, 
     metric_type: str = "confidence"

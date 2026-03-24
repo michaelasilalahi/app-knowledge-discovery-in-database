@@ -4,7 +4,7 @@ from app.core.database import get_db
 from . import service, schemas
 
 router = APIRouter(
-    prefix="/visualization/bar_chart",
+    prefix="/visualization",
     tags=["Visualisasi Bar Chart"]
 )
 

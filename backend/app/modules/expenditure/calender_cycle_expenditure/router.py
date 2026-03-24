@@ -23,7 +23,7 @@ def read_expenses_endpoint(user_id: str, db: Session = Depends(get_db)):
     return service.get_expenditure_by_user(db=db, user_id=user_id)
 
 # GET: data pengeluaran hari ini
-@router.get("/today/{user_id}", response_model=List[schemas.ExpenditureResponse])
+@router.get("/today_expenditure/{user_id}", response_model=List[schemas.ExpenditureResponse])
 def read_today_expenses(user_id: str, db: Session = Depends(get_db)):
 
     return service.get_todays_expenditure(db=db, user_id=user_id)

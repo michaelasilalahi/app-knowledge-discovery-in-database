@@ -4,18 +4,28 @@ from datetime import date
 import calendar
 from app.modules.analysis_setting.models import AnalysisSetting
 
+def get_month_name(month_number: int) -> str:
+    month_dict = {
+        1: "Januari", 2: "Februari", 3: "Maret", 4: "April",
+        5: "Mei", 6: "Juni", 7: "Juli", 8: "Agustus",
+        9: "September", 10: "Oktober", 11: "November", 12: "Desember"
+    }
+    return month_dict.get(month_number, "Januari")
+
 def analysis_context(
         db: Session, 
         user_id: str, 
         month: int, 
         year: int 
 ) -> AnalysisSetting:
+    
+    str_month = get_month_name(month)
 
     print(f"DEBUG DB: Analysis Context: {user_id}, Bulan: {month}, Tahun: {year}")
 
     context = db.query(AnalysisSetting).filter(
         AnalysisSetting.user_id == user_id,
-        AnalysisSetting.label_month == month,
+        AnalysisSetting.label_month == str_month,
         AnalysisSetting.label_year == year,
     ).first()
 
@@ -34,9 +44,10 @@ def analysis_context(
         prev_year = year - 1
 
     # Cari setting bulan lalu
+    str_prev_month = get_month_name(prev_month)
     prev_setting = db.query(AnalysisSetting).filter(
         AnalysisSetting.user_id == user_id,
-        AnalysisSetting.label_month == prev_month,
+        AnalysisSetting.label_month == str_prev_month,
         AnalysisSetting.label_year == prev_year,
         AnalysisSetting.is_recurring == True, 
         AnalysisSetting.is_active == True 
@@ -51,25 +62,15 @@ def analysis_context(
         new_start_date = date(year, month, 1)
         new_end_date = date(year, month, last_day)
 
-        # Buat object baru
-        new_recurring_setting = AnalysisSetting(
-            user_id=user_id,
-            label_month=month,
-            label_year=year,
-            is_active=True,        
-            is_recurring=True,      
-            analysis_type=prev_setting.analysis_type, 
-            start_date=new_start_date,
-            end_date=new_end_date
-        )
-        
-        # Simpan ke Database
-        db.add(new_recurring_setting)
+        prev_setting.label_month = str_month
+        prev_setting.label_year = year
+        prev_setting.start_date = new_start_date
+        prev_setting.end_date = new_end_date
+
         db.commit()
-        db.refresh(new_recurring_setting)
+        db.refresh(prev_setting)
         
-        # Kembalikan setting baru ini
-        return new_recurring_setting
+        return prev_setting
 
     # Jika benar-benar tidak ada data (Bukan Rutin, Belum dibuat) Baru kita lempar 404.
     raise HTTPException(
