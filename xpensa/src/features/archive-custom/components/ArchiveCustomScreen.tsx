@@ -52,7 +52,13 @@ export const ArchiveCustomScreen = () => {
             endDate={endDate as string}
           />
         )}
-        {activeTab === 'Visualisasi' && <Visualisasi periodTitle={title} />}
+        {activeTab === 'Visualisasi' && (
+          <Visualisasi
+            periodTitle={title}
+            startDate={startDate as string}
+            endDate={endDate as string}
+          />
+        )}
         {activeTab === 'Insight' && <Insight periodTitle={title} />}
       </View>
     </View>

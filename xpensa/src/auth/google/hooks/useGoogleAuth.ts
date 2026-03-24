@@ -34,7 +34,7 @@ export const useGoogleAuth = () => {
           console.log('Mengirim data ke backend...', backendPayload);
           // Panggil endpoint yang sudah kita buat di auth/router.py
           const response = await apiClient.post(
-            '/auth/google-login',
+            '/authentication/google-login',
             backendPayload,
           );
           console.log('Sukses tersimpan di DB:', response.data);

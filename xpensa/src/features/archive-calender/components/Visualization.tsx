@@ -117,7 +117,7 @@ export const Visualization = () => {
                   />
                 </View>
               ) : (
-                <Text className='text-sm font-montserrat-medium'>
+                <Text className='text-sm font-montserrat-medium text-[#AAAAAA] py-10'>
                   Belum ada data pengeluaran.
                 </Text>
               )}

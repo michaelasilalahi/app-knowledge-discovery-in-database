@@ -11,12 +11,12 @@ export default function TabHome() {
   const router = useRouter();
 
   return (
-    <SafeAreaView className='bg-white'>
+    <SafeAreaView className='flex-1 bg-white'>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ flexGrow: 1 }}
       >
-        <View className='flex gap-y-[50px] h-full'>
+        <View className='flex-1 gap-y-[50px]'>
           <Pressable onPress={() => router.push('(setting)/setting')}>
             <View className='flex-row items-center gap-x-[10px] pt-[15px] w-[90%] mx-auto'>
               <Image

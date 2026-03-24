@@ -17,7 +17,7 @@ export const Insight = () => {
   const user = useGoogleStore((state) => state.user);
   const userId = user?.id || '';
 
-  const currentMonth = new Date().getMonth();
+  const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
 
   const { loading, status, results, progressData } = useInsightMining(

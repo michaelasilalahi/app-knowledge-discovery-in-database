@@ -5,7 +5,21 @@ export const API_ENDPOINTS = {
   },
 
   TODAY_EXPENSE: {
-    GET: (userId: string) => `/calender_cycle_expenditure/today/${userId}`,
+    GET: (userId: string) =>
+      `/calender_cycle_expenditure/today_expenditure/${userId}`,
+  },
+
+  ANALYSIS_SETTING: {
+    SAVE: '/analysis_setting/',
+    GET_ACTIVE: (userId: string) => `/analysis_setting/${userId}/active`,
+  },
+
+  CUSTOM_CYCLE_EXPENDITURE: {
+    GET: (userId: string) => `/custom_cycle_expenditure/${userId}`,
+  },
+
+  CALENDER_CYCLE_EXPENDITURE: {
+    GET: (userId: string) => `/calender_cycle_expenditure/${userId}`,
   },
 
   EXPENSE: {
@@ -22,6 +36,17 @@ export const API_ENDPOINTS = {
       EXECUTE: (userId: string) =>
         `/data_mining/analysis_calender/execute/${userId}`,
       RESULT: (userId: string) => `/data_mining_analysis_calender/${userId}`,
+    },
+  },
+
+  ARCHIVE_CUSTOM: {
+    BAR_CHART: (userId: string) => `/custom_visualization/bar_chart/${userId}`,
+    PIE_CHART: (userId: string) => `/custom_visualization/pie_chart/${userId}`,
+    PROGRESS_BAR: (userId: string) => `/progress_bar/analysis_custom/${userId}`,
+    DATA_MINING: {
+      EXECUTE: (userId: string) =>
+        `/data_mining/analysis_custom/execute/${userId}`,
+      RESULT: (userId: string) => `/data_mining_analysis_custom/${userId}`,
     },
   },
 };

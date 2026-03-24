@@ -16,8 +16,8 @@ export const TodaysExpenses = () => {
   );
 
   return (
-    <View className='h-full bg-white'>
-      <View className='flex gap-y-[30px] w-[90%] mx-auto'>
+    <View className='flex-1 bg-white'>
+      <View className='flex-1 gap-y-[30px] w-[90%] mx-auto'>
         <View className='flex-row gap-x-[5px]'>
           <Text className='font-montserrat-semibold'>Pengeluaran</Text>
           <Text className='font-montserrat-semibold text-[#AAAAAA]'>
@@ -25,9 +25,9 @@ export const TodaysExpenses = () => {
           </Text>
         </View>
 
-        <View>
+        <View className='flex-1'>
           {!hasHydrated ? (
-            <View className='items-center justify-center py-10 min-h-[100px]'>
+            <View className='flex-1items-center justify-center py-10 min-h-[100px]'>
               <ActivityIndicator size='small' color='#AAAAAA' />
             </View>
           ) : expenses.length > 0 ? (
@@ -57,8 +57,8 @@ export const TodaysExpenses = () => {
               )}
             />
           ) : (
-            <View className='items-center justify-center py-10 opacity-60 min-h-[100px]'>
-              <Text className='font-montserrat-medium text-gray-400 text-center'>
+            <View className='flex-1 justify-center items-center opacity-60'>
+              <Text className='font-montserrat-medium text-[#AAAAAA] text-center'>
                 Belum ada pengeluaran hari ini.
               </Text>
             </View>
