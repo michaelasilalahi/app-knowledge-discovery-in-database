@@ -1,7 +1,7 @@
 // api
 export * from './api/visualization.api';
-export * from './api/InsightProgressBar.api';
-export * from './api/dataMiningResult.api';
+export * from './api/progressBar.api';
+export * from './api/dataMining.api';
 
 export * from './components/ArchiveCalenderScreen';
 export * from './components/AnalysisDisable';
@@ -13,7 +13,7 @@ export * from './components/Visualization';
 
 // hooks
 export * from './hooks/archiveCalenderScreen.hooks';
-export * from './hooks/expensesList.hooks';
+export * from './hooks/expenditure.hooks';
 export * from './hooks/progressBarApi.hooks';
 
 // utils

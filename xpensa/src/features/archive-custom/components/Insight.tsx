@@ -6,20 +6,28 @@ import {
   FlatList,
 } from 'react-native';
 import { useGoogleStore } from '@/auth/google';
-import { ProgressBar, AnalysisDisabled } from '@/features/archive-calender';
+import {
+  ProgressBar,
+  AnalysisDisabled,
+  DataMiningResult,
+} from '@/features/archive-calender';
 import { useInsightStatus } from '../hooks/insightStatus.hooks';
 
-export const Insight = () => {
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
+interface InsightProps {
+  month: number;
+  year: number;
+}
+
+export const Insight = ({ month, year }: InsightProps) => {
   const user = useGoogleStore((state) => state.user);
   const userId = user?.id || '';
 
-  const currentMonth = new Date().getMonth() + 1;
-  const currentYear = new Date().getFullYear();
-
-  const { loading, status, progressData } = useInsightStatus(
+  const { loading, status, results, progressData } = useInsightStatus(
     userId,
-    currentMonth,
-    currentYear,
+    month,
+    year,
   );
 
   // tampilan loading untuk saat cek status database
@@ -54,19 +62,27 @@ export const Insight = () => {
     );
   }
 
-  if (status === 'mining' || status === 'fetching' || status === 'completed') {
+  if (status === 'completed' && results.length > 0) {
     return (
-      <View className='flex-1 justify-center items-center bg-white px-5'>
-        <Text className='font-montserrat-semibold text-center text-green-600 mb-2'>
-          Progress Bar Penuh! 🎉
-        </Text>
-        <Text className='font-montserrat-medium text-gray-500 text-center'>
-          Data transaksi siklus kustom Anda sudah cukup. Kita siap masuk ke
-          tahap Data Mining (Association Rule Learning).
-        </Text>
+      <View className='flex-1 bg-white'>
+        <View style={{ flex: 1 }}>
+          <FlatList
+            data={results}
+            keyExtractor={(_, index) => index.toString()}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <View style={{ width: SCREEN_WIDTH, flex: 1 }}>
+                <DataMiningResult {...item} />
+              </View>
+            )}
+          />
+        </View>
       </View>
     );
   }
+
   return (
     <View className='flex-1 justify-center items-center bg-white'>
       <Text className='text-gray-500 font-montserrat-medium'>

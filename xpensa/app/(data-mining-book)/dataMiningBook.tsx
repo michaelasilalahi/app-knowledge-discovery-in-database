@@ -1,13 +1,11 @@
-import { View, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Guidebook } from '@/features/archive-calender/components/Guidebook';
 
 export default function DataMiningBook() {
   return (
-    <SafeAreaView className='flex-1 bg-[#EEEEEE]'>
-      <View className='flex-1 w-[90%] mx-auto'>
-        <Text>NotificationScreen</Text>
-      </View>
+    <SafeAreaView className='flex-1 bg-white' edges={['bottom']}>
+      <Guidebook />
       <StatusBar style='dark' />
     </SafeAreaView>
   );

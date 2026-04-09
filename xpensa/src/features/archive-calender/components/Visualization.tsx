@@ -6,24 +6,22 @@ import { useBarChart } from '@/features/archive-calender/hooks/barChart.hooks';
 import { usePieChart } from '@/features/archive-calender/hooks/pieChart.hooks';
 import { formatCurrency } from '@/features/archive-calender/utils/pieChart.helpers';
 
-export const Visualization = () => {
+interface VisualizationProps {
+  month: number;
+  year: number;
+}
+
+export const Visualization = ({ month, year }: VisualizationProps) => {
   const user = useGoogleStore((state) => state.user);
   const userId = user?.id || '';
 
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-
-  const { loading, chartData, totalExpense } = useBarChart(
-    userId,
-    currentMonth,
-    currentYear,
-  );
+  const { loading, chartData, totalExpense } = useBarChart(userId, month, year);
 
   const {
     loading: loadingPie,
     pieData,
     totalCount: totalPieCount,
-  } = usePieChart(userId, currentMonth, currentYear);
+  } = usePieChart(userId, month, year);
 
   const uiChartData = chartData.map((item) => {
     return {

@@ -1,29 +1,36 @@
 import { useState, useEffect, useCallback } from 'react';
-import { insightProgressBarApi } from '../api/InsightProgressBar.api';
-import { insightMiningApi } from '../api/dataMiningResult.api';
+import { insightProgressBarApi } from '../api/progressBar.api';
+import { insightMiningApi } from '../api/dataMining.api';
 import { MiningResultItem } from '../types/miningResultApi.interface';
 import { InsightProgressBar } from '../types/progressBar.interface';
 
-export const useInsightMining = (
+export type InsightStatus =
+  | 'checking'
+  | 'mining'
+  | 'fetching'
+  | 'completed'
+  | 'insufficient'
+  | 'disabled';
+
+export const useInsightStatus = (
   userId: string,
   month: number,
   year: number,
 ) => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [status, setStatus] = useState<
-    'checking' | 'mining' | 'fetching' | 'completed' | 'insufficient'
-  >('checking');
+  const [status, setStatus] = useState<InsightStatus>('checking');
   const [results, setResults] = useState<MiningResultItem[]>([]);
   const [progressData, setProgressData] = useState<InsightProgressBar | null>(
     null,
   );
 
   const runAutoAnalysis = useCallback(async () => {
+    if (!userId) return;
+
     setLoading(true);
     setStatus('checking');
 
     try {
-      // cek status data apakah sudah memenuhi threshold
       const progress = await insightProgressBarApi.getProgress(
         userId,
         month,
@@ -31,15 +38,18 @@ export const useInsightMining = (
       );
       setProgressData(progress);
 
-      // data cukup tapi belum mining (backend status: ready_to_mine)
-      if (progress.status === 'ready_to_mine') {
+      // jika pengaturan mati/diluar siklus
+      if (progress.status === 'disabled') {
+        setStatus('disabled');
+      }
+
+      // jika data sudah memenuhi threshold
+      else if (progress.status === 'ready_to_mine') {
         console.log('🚀 Data cukup! Memulai Auto-Mining...');
         setStatus('mining');
 
-        // eksekusi mining
         await insightMiningApi.executeMining(userId, month, year);
 
-        // setelah selesai mining, langsung ambil hasilnya
         setStatus('fetching');
         const miningRes = await insightMiningApi.getMiningResults(
           userId,
@@ -50,7 +60,7 @@ export const useInsightMining = (
         setStatus('completed');
       }
 
-      // data sudah pernah dimining sebelumnya (backend status: completed)
+      // jika sudah pernah di mine (tinggal tarik aja datanya)
       else if (progress.status === 'completed') {
         console.log('✅ Analisis sudah ada. Mengambil data...');
         setStatus('fetching');
@@ -63,13 +73,23 @@ export const useInsightMining = (
         setStatus('completed');
       }
 
-      // data belum cukup
+      // jika threshold <= 20
       else {
         console.log('⏳ Data belum cukup.');
         setStatus('insufficient');
       }
     } catch (error) {
-      console.error('Error in Auto-Mining logic:', error);
+      console.error('error in calender auto mining logic:', error);
+      setStatus('disabled');
+      setProgressData({
+        percentage: 0,
+        isReady: false,
+        message: 'siklus kustom tidak aktif untuk bulan ini',
+        currentCount: 0,
+        threshold: 20,
+        status: 'disabled',
+        result_id: null,
+      });
     } finally {
       setLoading(false);
     }

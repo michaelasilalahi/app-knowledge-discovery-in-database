@@ -2,12 +2,6 @@ import { apiClient } from '@/config/apiClient';
 import { API_ENDPOINTS } from '@/constants/endpoints';
 
 export const expenditureApi = {
-  /**
-   * mengambil data pengeluaran berdasarkan rentang tanggal kustom
-   * @param userId ID Google User
-   * @param startDate tanggal mulai dengan format YYYY-MM-DD (contoh: '2026-01-03')
-   * @param endDate tanggal akhir dengan format YYYY-MM-DD (contoh: '2026-02-02')
-   */
   getCustomCycleExpenses: async (
     userId: string,
     startDate: string,

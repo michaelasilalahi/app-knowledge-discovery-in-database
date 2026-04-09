@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { View, Text, Pressable, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
+import { router } from 'expo-router';
 import { MiningResultItem } from '../types/dataMiningResult.interface';
 import { formatMetricValue } from '../utils/formatMetricValue.helpers';
 import { formatRupiah } from '../utils/formatRupiah.helpers';
@@ -65,7 +66,7 @@ export const DataMiningResult = (dataMiningResult: MiningResultItem) => {
         <View className='bg-white'>
           <View className='flex-row justify-between items-center w-[90%] mx-auto mt-[15px] mb-[15px]'>
             <Text className='font-montserrat-medium'>Buku Panduan</Text>
-            <Pressable>
+            <Pressable onPress={() => router.push('/dataMiningBook')}>
               <Image
                 source={require('../../../../assets/icons/book_open.svg')}
                 style={{

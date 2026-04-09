@@ -10,6 +10,13 @@ export const ArchiveCustomScreen = () => {
   const { title, startDate, endDate, activeTab, setActiveTab, tabs } =
     useArchiveCustomScreen();
 
+  const startMonth = startDate
+    ? new Date(startDate as string).getMonth() + 1
+    : 1;
+  const startYear = startDate
+    ? new Date(startDate as string).getFullYear()
+    : 2026;
+
   return (
     <View className='flex-1'>
       <Stack.Screen
@@ -59,7 +66,9 @@ export const ArchiveCustomScreen = () => {
             endDate={endDate as string}
           />
         )}
-        {activeTab === 'Insight' && <Insight periodTitle={title} />}
+        {activeTab === 'Insight' && (
+          <Insight month={startMonth} year={startYear} />
+        )}
       </View>
     </View>
   );

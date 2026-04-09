@@ -6,7 +6,7 @@ import { Expense } from '../types/expenseApi.interface';
 export const expenseApi = {
   getAll: async (userId: string): Promise<Expense[]> => {
     try {
-      const url = API_ENDPOINTS.EXPENSE.GET(userId);
+      const url = API_ENDPOINTS.EXPENSE.GET_CALENDER_CYCLE(userId);
       const response = await apiClient.get<Expense[]>(url);
       return response.data;
     } catch (error) {

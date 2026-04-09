@@ -35,6 +35,7 @@
         {
           "android": {
             "newArchEnabled": true,
+            "allowBackup": false,
             "abiFilters": [
               "arm64-v8a",
               "x86_64"
@@ -83,7 +84,8 @@
         }
       ],
       "expo-router",
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      "./withNotificationService.js"
     ],
     "extra": {
       "router": {},

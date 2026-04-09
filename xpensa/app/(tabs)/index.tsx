@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGoogleStore } from '@/auth/google/store/useGoogleStore';
 import { TodaysExpenses } from '@/features/todays-expenses';
 import { VisualizationOfAllTime } from '@/features/visualization-of-all-time';
+import { NotificationListener } from '@/features/notification-listener/components/NotificationListener';
 
 export default function TabHome() {
   const user = useGoogleStore((state) => state.user);
@@ -33,6 +34,7 @@ export default function TabHome() {
           </Pressable>
           <VisualizationOfAllTime />
           <TodaysExpenses />
+          <NotificationListener />
         </View>
       </ScrollView>
     </SafeAreaView>

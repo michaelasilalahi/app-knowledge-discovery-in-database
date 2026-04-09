@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useGoogleStore } from '@/auth/google';
-import { insightProgressBarApi } from '../api/InsightProgressBar.api';
+import { insightProgressBarApi } from '../api/progressBar.api';
 import { InsightProgressBar } from '../types/progressBar.interface';
 
 export const useProgressBarApi = (month: number, year: number) => {

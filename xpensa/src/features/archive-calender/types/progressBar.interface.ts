@@ -4,6 +4,14 @@ export type ProgressStatus =
   | 'disabled'
   | 'ready_to_mine';
 
+export type InsightStatus =
+  | 'checking'
+  | 'mining'
+  | 'fetching'
+  | 'completed'
+  | 'insufficient'
+  | 'disabled';
+
 export interface InsightProgressBar {
   percentage: number;
   isReady: boolean;

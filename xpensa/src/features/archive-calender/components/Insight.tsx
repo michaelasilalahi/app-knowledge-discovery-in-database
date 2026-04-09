@@ -9,21 +9,23 @@ import { useGoogleStore } from '@/auth/google';
 import { ProgressBar } from './ProgressBar';
 import { AnalysisDisabled } from './AnalysisDisable';
 import { DataMiningResult } from './DataMiningResult';
-import { useInsightMining } from '../hooks/insightMining.hooks';
+import { useInsightStatus } from '../hooks/insightStatus.hooks';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-export const Insight = () => {
+interface InsightProps {
+  month: number;
+  year: number;
+}
+
+export const Insight = ({ month, year }: InsightProps) => {
   const user = useGoogleStore((state) => state.user);
   const userId = user?.id || '';
 
-  const currentMonth = new Date().getMonth() + 1;
-  const currentYear = new Date().getFullYear();
-
-  const { loading, status, results, progressData } = useInsightMining(
+  const { loading, status, results, progressData } = useInsightStatus(
     userId,
-    currentMonth,
-    currentYear,
+    month,
+    year,
   );
 
   // State Loading/Checking

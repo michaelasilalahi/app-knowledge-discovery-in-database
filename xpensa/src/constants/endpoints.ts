@@ -5,8 +5,7 @@ export const API_ENDPOINTS = {
   },
 
   TODAY_EXPENSE: {
-    GET: (userId: string) =>
-      `/calender_cycle_expenditure/today_expenditure/${userId}`,
+    GET: (userId: string) => `/todays_expenditure/${userId}`,
   },
 
   ANALYSIS_SETTING: {
@@ -23,19 +22,23 @@ export const API_ENDPOINTS = {
   },
 
   EXPENSE: {
-    GET: (userId: string) => `/calender_cycle_expenditure/${userId}`,
-    CREATE: '/calender_cycle_expenditure/',
+    GET_CALENDER_CYCLE: (userId: string) =>
+      `/calender_cycle_expenditure/${userId}`,
+    CREATE: '/expenditure/',
     GET_CUSTOM_CYCLE: (userId: string) => `/custom_cycle_expenditure/${userId}`,
   },
 
   ARCHIVE_CALENDER: {
-    BAR_CHART: (userId: string) => `/visualization/bar-chart/${userId}`,
-    PIE_CHART: (userId: string) => `/visualization/pie-chart/${userId}`,
-    PROGRESS_BAR: (userId: string) => `/progress_bar/progress/${userId}`,
+    BAR_CHART: (userId: string) =>
+      `/visualization/bar-chart/calender-cycle/${userId}`,
+    PIE_CHART: (userId: string) =>
+      `/visualization/pie-chart/calender-cycle/${userId}`,
+    PROGRESS_BAR: (userId: string) =>
+      `/progress_bar/analysis_calender/${userId}`,
     DATA_MINING: {
       EXECUTE: (userId: string) =>
         `/data_mining/analysis_calender/execute/${userId}`,
-      RESULT: (userId: string) => `/data_mining_analysis_calender/${userId}`,
+      RESULT: (userId: string) => `/data_mining/analysis_calender/${userId}`,
     },
   },
 
@@ -46,7 +49,7 @@ export const API_ENDPOINTS = {
     DATA_MINING: {
       EXECUTE: (userId: string) =>
         `/data_mining/analysis_custom/execute/${userId}`,
-      RESULT: (userId: string) => `/data_mining_analysis_custom/${userId}`,
+      RESULT: (userId: string) => `/data_mining/analysis_custom/${userId}`,
     },
   },
 };

@@ -1,25 +1,39 @@
-import { useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useGoogleStore } from '@/auth/google';
-import { useExpenseListPersistStore } from '../middleware/expenseList.persist';
+import { calendarCycleExpenditureApi } from '../api/expenditure.api';
 import { parsePeriodTitle } from '../utils/expenses.helpers';
 import { ExpenseItem } from '../types/expenses.interface';
 
 export const useExpensesList = (periodTitle: string) => {
-  // selective subscription
-  const expenses = useExpenseListPersistStore((state) => state.expenses);
-  const fetchExpenses = useExpenseListPersistStore(
-    (state) => state.fetchExpenses,
-  );
-  const hasHydrated = useExpenseListPersistStore((state) => state.hasHydrated);
-  const isLoading = useExpenseListPersistStore((state) => state.isLoading);
-
   const userId = useGoogleStore((state) => state.user?.id);
 
-  useEffect(() => {
-    if (userId) {
-      fetchExpenses(userId);
+  const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchExpenses = useCallback(async () => {
+    if (!userId) return;
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const data =
+        await calendarCycleExpenditureApi.getCalenderCycleExpenditureApi(
+          userId,
+        );
+      setExpenses(data);
+    } catch (err) {
+      console.error('Gagal mengambil data riwayat pengeluaran:', err);
+      setError('Gagal memuat data pengeluaran.');
+    } finally {
+      setIsLoading(false);
     }
-  }, [userId, fetchExpenses]);
+  }, [userId]);
+
+  useEffect(() => {
+    fetchExpenses();
+  }, [fetchExpenses]);
 
   const filteredExpenses = useMemo(() => {
     const period = parsePeriodTitle(periodTitle);
@@ -28,10 +42,14 @@ export const useExpensesList = (periodTitle: string) => {
     return expenses
       .filter((item: ExpenseItem) => {
         if (!item.date) return false;
+
         const parts = item.date.split('-');
+
         if (parts.length !== 3) return false;
+
         const itemYear = parseInt(parts[0]);
         const itemMonthIndex = parseInt(parts[1]) - 1;
+
         return itemMonthIndex === period.monthIndex && itemYear === period.year;
       })
       .sort((a, b) => {
@@ -50,6 +68,6 @@ export const useExpensesList = (periodTitle: string) => {
     filteredExpenses,
     totalExpenses,
     isLoading,
-    hasHydrated,
+    refreshExpenses: fetchExpenses,
   };
 };

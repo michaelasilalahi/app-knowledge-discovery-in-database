@@ -1,15 +1,15 @@
 import React from 'react';
 import { View, Text, FlatList, ActivityIndicator } from 'react-native';
-import { useExpensesList } from '../hooks/expensesList.hooks';
+import { useExpensesList } from '../hooks/expenditure.hooks';
 import { formatRupiah } from '../utils/formatRupiah.helpers';
 import { formatDate } from '../utils/formatDate.helpers';
 import { ExpensesProps } from '../types/expenses.interface';
 
 export const Expenses = ({ periodTitle }: ExpensesProps) => {
-  const { filteredExpenses, totalExpenses, hasHydrated, isLoading } =
+  const { filteredExpenses, totalExpenses, isLoading } =
     useExpensesList(periodTitle);
 
-  if (!hasHydrated) {
+  if (isLoading && filteredExpenses.length === 0) {
     return (
       <View className='flex-1 justify-center items-center mt-10'>
         <ActivityIndicator size='small' color='#AAAAAA' />

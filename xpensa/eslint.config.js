@@ -32,11 +32,11 @@ module.exports = defineConfig([
       ],
 
       '@typescript-eslint/no-explicit-any': 'error', // mencegah penggunaan tipe any
-      'no-shadow': 'error', // mencegah shadowing variabel
+      '@typescript-eslint/no-shadow': 'error',
     },
   },
   expoConfig,
   {
-    ignores: ['dist/*'],
+    ignores: ['dist/*', 'node_modules/*', '.expo/*'],
   },
 ]);

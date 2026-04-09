@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useGoogleStore } from '@/auth/google';
-// import { settingAnalysisStore } from '@/features/setting-analysis';
 import { expenditureApi } from '../api/expenditure.api';
 import { Expenditure } from '../types/expenditure.interface';
 
