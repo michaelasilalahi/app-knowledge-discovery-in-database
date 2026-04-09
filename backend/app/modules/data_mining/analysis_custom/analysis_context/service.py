@@ -4,14 +4,6 @@ from datetime import date
 import calendar
 from app.modules.analysis_setting.models import AnalysisSetting
 
-def get_month_name(month_number: int) -> str:
-    month_dict = {
-        1: "Januari", 2: "Februari", 3: "Maret", 4: "April",
-        5: "Mei", 6: "Juni", 7: "Juli", 8: "Agustus",
-        9: "September", 10: "Oktober", 11: "November", 12: "Desember"
-    }
-    return month_dict.get(month_number, "Januari")
-
 def analysis_context_custom(
         db: Session, 
         user_id: str, 
@@ -19,55 +11,52 @@ def analysis_context_custom(
         year: int 
 ) -> AnalysisSetting:
 
-    print(f"DEBUG DB: Analysis Context Custom: {user_id}, Bulan: {month}, Tahun: {year}")
+    print(f"DEBUG DB: Analysis Context Custom: {user_id}, Permintaan Frontend -> Bulan: {month}, Tahun: {year}")
 
-    str_month = get_month_name(month)
-
-    context = db.query(AnalysisSetting).filter(
+    setting = db.query(AnalysisSetting).filter(
         AnalysisSetting.user_id == user_id,
-        AnalysisSetting.label_month == str_month,
-        AnalysisSetting.label_year == year,
-        AnalysisSetting.analysis_type == 'custom'
-    ).first()
-
-    # Jika setting ditemukan di bulan yang dicari, kembalikan langsung.
-    if context:
-        print(f"DEBUG DB: Ketemu! ID Setting: {context.id}, Aktif: {context.is_active}")
-        return context
-    
-    # Hitung mundur satu bulan kebelakang untuk mengecek status is_recurring
-    prev_month = month - 1
-    prev_year = year
-
-    if prev_month == 0: 
-        prev_month = 12
-        prev_year = year - 1
-
-    str_prev_month = get_month_name(prev_month)
-
-    # Cari setting bulan lalu
-    prev_setting = db.query(AnalysisSetting).filter(
-        AnalysisSetting.user_id == user_id,
-        AnalysisSetting.label_month == str_prev_month,
-        AnalysisSetting.label_year == prev_year,
         AnalysisSetting.analysis_type == 'custom',
-        AnalysisSetting.is_recurring == True, 
-        AnalysisSetting.is_active == True 
+        AnalysisSetting.is_active == True
     ).first()
 
-    # Jika bulan lalu Rutin & Aktif -> Otomatis UPDATE untuk bulan ini
-    if prev_setting:
-        print(f"DEBUG: Auto-update setting rutin KUSTOM untuk {str_month}/{year}")
+    # jika tidak ada setting sama sekali atau status aktif = false
+    if not setting:
+        raise HTTPException(
+            status_code=404, 
+            detail="Setting analisis kustom tidak ditemukan atau sudah dinonaktifkan."
+        )
+
+    if not setting.is_recurring:
+        # jika is_recurring == false (hanya berlaku 1 siklus)
+        # bandingkan permintaan frontend langsung dengan properti start_date di database
+        if setting.start_date.month == month and setting.start_date.year == year:
+            return setting
+        else:
+            raise HTTPException(
+                status_code=404, 
+                detail="Siklus kustom ini tidak berulang (recurring = false) dan hanya aktif di bulan pembuatannya."
+            )  
+    else:
+        # jika is_recurring == true (perulangan aktif)
+        # memastikan frontend tidak meminta bulan sebelum siklus dimulai
+        requested_approx_date = date(year, month, 1)
+        original_approx_date = date(setting.start_date.year, setting.start_date.month, 1)
         
-        # Ambil tanggal langganan user (misal: user selalu analisis dari tanggal 5)
-        start_day = prev_setting.start_date.day if prev_setting.start_date else 1
+        if requested_approx_date < original_approx_date:
+            raise HTTPException(
+                status_code=404, 
+                detail="Siklus kustom belum dimulai pada periode ini."
+            )
+
+        # lakukan pergeseran tanggal otomatis
+        start_day = setting.start_date.day
         
-        # Tentukan start_date bulan ini (misal: 5 Maret)
+        # buat start_date baru
         max_days_current = calendar.monthrange(year, month)[1]
         actual_start_day = min(start_day, max_days_current)
         new_start_date = date(year, month, actual_start_day)
         
-        # Tentukan end_date di bulan depannya (misal: 5 April)
+        # buat end_date baru di bulan depannya
         next_month = month + 1
         next_year = year
         if next_month > 12:
@@ -78,18 +67,7 @@ def analysis_context_custom(
         actual_end_day = min(start_day, max_days_next)
         new_end_date = date(next_year, next_month, actual_end_day)
 
-        prev_setting.label_month = str_month
-        prev_setting.label_year = year
-        prev_setting.start_date = new_start_date
-        prev_setting.end_date = new_end_date
+        setting.start_date = new_start_date
+        setting.end_date = new_end_date
         
-        db.commit()
-        db.refresh(prev_setting)
-        
-        return prev_setting
-
-    # Jika benar-benar tidak ada data (Bukan Rutin, atau belum pernah dibuat)
-    raise HTTPException(
-        status_code=404, 
-        detail="Setting analisis kustom belum diaktifkan untuk periode ini."
-    )
+        return setting

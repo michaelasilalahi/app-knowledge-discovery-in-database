@@ -7,8 +7,21 @@ from app.modules.data_mining.models import DataMiningCreate
 THRESHOLD_LIMIT = 20
 
 def threshold_check_custom(db: Session, context: AnalysisSetting):
+    if not context.is_active or context.analysis_type != 'custom':
+        return {
+            "status": "disabled",       
+            "message": "Analisis Kustom dinonaktifkan.",
+            "isReady": False,
+            "result_id": None,
+            "currentCount": 0, 
+            "threshold": THRESHOLD_LIMIT,
+            "percentage": 0
+        }
+    
     existing_result = db.query(DataMiningCreate).filter(
-        DataMiningCreate.setting_id == context.id
+        DataMiningCreate.setting_id == context.id,
+        DataMiningCreate.start_date == context.start_date,
+        DataMiningCreate.end_date == context.end_date
     ).first()
 
     if existing_result:
@@ -21,19 +34,7 @@ def threshold_check_custom(db: Session, context: AnalysisSetting):
             "threshold": THRESHOLD_LIMIT,
             "percentage": 100
         }
-
-    if not context.is_active or context.analysis_type != 'custom':
-        return {
-            "status": "disabled",       
-            "message": "Analisis Kustom dinonaktifkan.",
-            "isReady": False,
-            "result_id": None,
-            "currentCount": 0, 
-            "threshold": THRESHOLD_LIMIT,
-            "percentage": 0
-        }
     
-    # Hitung jumlah hari unik transaksi keinginan
     count = db.query(func.count(distinct(Expenditure.date))).filter(
         Expenditure.user_id == context.user_id,
         Expenditure.category == 'Keinginan',   

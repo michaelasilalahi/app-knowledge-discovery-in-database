@@ -5,8 +5,12 @@ from app.core.database import engine, SessionLocal, Base
 # authentication
 from app.modules.authentication.router import router as auth_router
 
-# analysis calender
+# expenditure
+from app.modules.expenditure.router import router as core_expenditure_router
 from app.modules.expenditure.calender_cycle_expenditure.router import router as expenses_router
+from app.modules.expenditure.todays_expenditure.router import router as todays_expenses_router
+
+# analysis calender
 from app.modules.data_mining.analysis_calender.progress_bar.router import router as progress_bar_router
 from app.modules.data_mining.analysis_calender.association_rule_learning.router import router as mining_router
 from app.modules.data_mining.analysis_calender.visualization.bar_chart.router import router as visualisasi_router
@@ -17,6 +21,7 @@ from app.modules.data_mining.analysis_custom.progress_bar.router import router a
 from app.modules.expenditure.custom_cycle_expenditure.router import router as custom_expenses_router
 from app.modules.data_mining.analysis_custom.visualization.pie_chart.router import router as custom_pie_chart_router
 from app.modules.data_mining.analysis_custom.visualization.bar_chart.router import router as custom_visualisasi_router
+from app.modules.data_mining.analysis_custom.association_rule_learning.router import router as custom_mining_router
 
 # setting analysis
 from app.modules.analysis_setting.router import router as setting_analysis_router
@@ -52,17 +57,28 @@ def get_db():
     finally:
         db.close()
 
+# authentication
+app.include_router(auth_router)
+
+# setting analysis
+app.include_router(setting_analysis_router)
+
+# expenditure
+app.include_router(core_expenditure_router)
+app.include_router(expenses_router)
+app.include_router(todays_expenses_router)
 
 # analysis custom
 app.include_router(custom_progress_bar_router)
 
-app.include_router(expenses_router)
 
 app.include_router(custom_expenses_router)
 
-app.include_router(auth_router)
+app.include_router(custom_mining_router)
 
-app.include_router(setting_analysis_router)
+app.include_router(custom_visualisasi_router)
+
+app.include_router(custom_pie_chart_router)
 
 app.include_router(progress_bar_router)
 
@@ -74,8 +90,5 @@ app.include_router(visualisasi_router)
 
 app.include_router(pie_chart_router)
 
-app.include_router(custom_visualisasi_router)
-
-app.include_router(custom_pie_chart_router)
 
 app.include_router(line_chart_router)

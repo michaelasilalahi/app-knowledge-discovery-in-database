@@ -10,7 +10,7 @@ from .oneHot_encoding import oneHot_encoding
 from .frequent_pattern_mining import frequent_pattern_mining
 from .creating_association_rules import creating_association_rules
 from .insight_enrichment import insight_enrichment
-from app.modules.data_mining.service import save_data_mining_analysis_calender
+from app.modules.data_mining.service import save_data_mining
 
 router = APIRouter(
     prefix="/data_mining/analysis_calender",
@@ -50,27 +50,22 @@ def execute_mining(
     association_rules_json = []
 
     if not df.empty:
-        # preprocessing
         df = data_preprocessing(df)
 
-        # metada extraction
         metadata_df = metadata_extraction(df)
 
-        # aggregation & mining
         algo_input_list, grouped_df = transaction_aggregation(df)
 
         if not grouped_df.empty:
             binary_matrix_df = oneHot_encoding(algo_input_list, grouped_df)
 
             if not binary_matrix_df.empty:
-                # frequent Pattern Mining
                 fp_growth_df = frequent_pattern_mining(
                     binary_matrix_df, 
                     min_support=MIN_SUPPORT
                 )
 
                 if not fp_growth_df.empty:
-                    # creating Association Rules
                     rules_df = creating_association_rules(
                         fp_growth_df, 
                         min_confidence=MIN_CONFIDENCE
@@ -79,7 +74,13 @@ def execute_mining(
                     if not rules_df.empty:
                         enriched_df = insight_enrichment(rules_df, metadata_df, df)
                         association_rules_json = enriched_df.to_dict(orient="records")
-                        save_data_mining_analysis_calender(db, context.id, association_rules_json)
+                        save_data_mining(
+                            db=db,
+                            setting_id=context.id,
+                            start_date=context.start_date,
+                            end_date=context.end_date,
+                            rules_data=association_rules_json
+                        )
 
     else:
         print("DEBUG ROUTER: Data kosong, melewati preprocessing.")

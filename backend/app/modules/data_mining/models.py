@@ -1,14 +1,16 @@
-from sqlalchemy import Column, Integer, Numeric, ForeignKey, Text
+from sqlalchemy import Column, Integer, Numeric, ForeignKey, Text, Date
 from sqlalchemy.types import JSON
 from sqlalchemy.orm import relationship
 from app.core.database import Base
 
 class DataMiningCreate(Base):
 
-    __tablename__ = "data_mining_result"
+    __tablename__ = "data_mining"
 
     id = Column(Integer, primary_key=True, index=True)
     setting_id = Column(Integer, ForeignKey("analysis_setting.id", ondelete="CASCADE"), nullable=False)
+    start_date = Column(Date, nullable=True) 
+    end_date = Column(Date, nullable=True)
     antecedents = Column(Text, nullable=False)
     consequents = Column(Text, nullable=False)
     antecedent_support = Column(Numeric, nullable=False) 
@@ -21,5 +23,4 @@ class DataMiningCreate(Base):
     rule_name = Column(Text, nullable=False)
     insight_enrichment = Column(Text, nullable=False)
     related_transactions = Column(JSON, nullable=False, default=[])
-
     setting = relationship("AnalysisSetting", backref="mining_results")

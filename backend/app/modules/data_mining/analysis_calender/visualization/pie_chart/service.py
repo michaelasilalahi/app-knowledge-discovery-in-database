@@ -3,11 +3,6 @@ from sqlalchemy import func, extract
 from app.modules.expenditure.models import Expenditure
 
 def get_label_distribution_summary(db: Session, user_id: str, month: int, year: int):
-    """
-        Membuat ringkasan distribusi label pengeluaran berdasarkan total pengeluaran dan frekuensi.
-    """
-
-    target_month = month + 1
 
     results = db.query(
         Expenditure.label,
@@ -15,7 +10,7 @@ def get_label_distribution_summary(db: Session, user_id: str, month: int, year: 
         func.count(Expenditure.id)
     ).filter(
         Expenditure.user_id == user_id,
-        extract('month', Expenditure.date) == target_month,
+        extract('month', Expenditure.date) == month,
         extract('year', Expenditure.date) == year
     ).group_by(Expenditure.label).all()
 

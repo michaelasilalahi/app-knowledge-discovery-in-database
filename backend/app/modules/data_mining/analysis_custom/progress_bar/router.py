@@ -11,11 +11,10 @@ router = APIRouter(
 @router.get("/{user_id}", response_model=schemas.ProgressBarResponse)
 def get_progress_bar(
     user_id: str, 
-    month: int,
-    year: int,
+    month: int = None,
+    year: int = None,
     db: Session = Depends(get_db)
 ):
-    
     try:
         return service.get_data_mining_progress(
             db=db, 

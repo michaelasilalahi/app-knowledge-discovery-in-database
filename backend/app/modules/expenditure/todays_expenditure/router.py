@@ -6,10 +6,10 @@ from . import service
 from app.modules.expenditure import schemas
 
 router = APIRouter(
-    prefix="/calender_cycle_expenditure",
-    tags=["Calender Cycle Expenditure"]
+    prefix="/todays_expenditure",
+    tags=["Today's Expenditure"]
 )
 
 @router.get("/{user_id}", response_model=List[schemas.ExpenditureResponse])
-def get_cycle_expenses_endpoint(user_id: str, db: Session = Depends(get_db)):
-    return service.get_all_expenditure_by_user(db=db, user_id=user_id)
+def get_todays_expenditure_endpoint(user_id: str, db: Session = Depends(get_db)):
+    return service.get_todays_expenditure(db=db, user_id=user_id)

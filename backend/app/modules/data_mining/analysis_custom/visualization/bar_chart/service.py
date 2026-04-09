@@ -4,7 +4,7 @@ from datetime import date
 from app.modules.expenditure.models import Expenditure
 
 def get_custom_needs_wants_summary(db: Session, user_id: str, start_date: date, end_date: date):
-    # query menggunakan filter start_date dan end_date
+
     results = db.query(
         Expenditure.category,
         func.sum(Expenditure.amount),

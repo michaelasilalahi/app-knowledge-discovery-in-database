@@ -4,14 +4,6 @@ from datetime import date
 import calendar
 from app.modules.analysis_setting.models import AnalysisSetting
 
-def get_month_name(month_number: int) -> str:
-    month_dict = {
-        1: "Januari", 2: "Februari", 3: "Maret", 4: "April",
-        5: "Mei", 6: "Juni", 7: "Juli", 8: "Agustus",
-        9: "September", 10: "Oktober", 11: "November", 12: "Desember"
-    }
-    return month_dict.get(month_number, "Januari")
-
 def analysis_context(
         db: Session, 
         user_id: str, 
@@ -19,61 +11,58 @@ def analysis_context(
         year: int 
 ) -> AnalysisSetting:
     
-    str_month = get_month_name(month)
+    print(f"DEBUG DB: Analysis Context Kalender: {user_id}, Permintaan Frontend -> Bulan: {month}, Tahun: {year}")
 
-    print(f"DEBUG DB: Analysis Context: {user_id}, Bulan: {month}, Tahun: {year}")
-
-    context = db.query(AnalysisSetting).filter(
+    setting = db.query(AnalysisSetting).filter(
         AnalysisSetting.user_id == user_id,
-        AnalysisSetting.label_month == str_month,
-        AnalysisSetting.label_year == year,
+        AnalysisSetting.analysis_type == 'calendar',
+        AnalysisSetting.is_active == True
     ).first()
 
-    # Jika setting ditemukan (Entah itu Aktif atau Mati), kembalikan langsung.
-    if context:
-        print(f"DEBUG DB: Ketemu! ID Setting: {context.id}, Aktif: {context.is_active}")
-        return context
+    # jika tidak ada setting sama sekali atau status aktif = false
+    if not setting:
+        raise HTTPException(
+            status_code=404, 
+            detail="Setting analisis kalender tidak ditemukan atau sudah dinonaktifkan."
+        )
     
-    # Hitung mundur satu bulan kebelakang
-    prev_month = month - 1
-    prev_year = year
-
-    # Handle pergantian tahun (Januari -> Desember tahun lalu)
-    if prev_month == 0: 
-        prev_month = 12
-        prev_year = year - 1
-
-    # Cari setting bulan lalu
-    str_prev_month = get_month_name(prev_month)
-    prev_setting = db.query(AnalysisSetting).filter(
-        AnalysisSetting.user_id == user_id,
-        AnalysisSetting.label_month == str_prev_month,
-        AnalysisSetting.label_year == prev_year,
-        AnalysisSetting.is_recurring == True, 
-        AnalysisSetting.is_active == True 
-    ).first()
-
-    # Jika bulan lalu Rutin & Aktif -> Otomatis buatkan untuk bulan ini
-    if prev_setting:
-        print(f"DEBUG: Auto-create setting rutin untuk {month}/{year}")
+    if not setting.is_recurring:
+        # jika is_recurring == false (hanya berlaku 1 siklus)
+        # bandingkan permintaan frontend langsung dengan properti start_date di database
+        if setting.start_date and setting.start_date.month == month and setting.start_date.year == year:
+            
+            last_day = calendar.monthrange(year, month)[1]
+            setting.start_date = date(year, month, 1)
+            setting.end_date = date(year, month, last_day)
+            
+            return setting
+        else:
+            raise HTTPException(
+                status_code=404, 
+                detail="Siklus kalender ini tidak berulang (recurring = false) dan hanya aktif di bulan pembuatannya."
+            )  
+    else:
+        if not setting.start_date:
+            raise HTTPException(
+                status_code=404, 
+                detail="Data tanggal mulai tidak valid. Silakan simpan ulang pengaturan Anda."
+            )
+        # jika is_recurring == true (perulangan aktif)
+        # memastikan frontend tidak meminta bulan sebelum siklus dimulai
+        requested_approx_date = date(year, month, 1)
+        original_approx_date = date(setting.start_date.year, setting.start_date.month, 1)
         
-        # Hitung tanggal awal (tgl 1) dan akhir (tgl 28/30/31) bulan ini
+        if requested_approx_date < original_approx_date:
+            raise HTTPException(
+                status_code=404, 
+                detail="Siklus kalender belum dimulai pada periode ini."
+            )
+
         last_day = calendar.monthrange(year, month)[1]
         new_start_date = date(year, month, 1)
         new_end_date = date(year, month, last_day)
-
-        prev_setting.label_month = str_month
-        prev_setting.label_year = year
-        prev_setting.start_date = new_start_date
-        prev_setting.end_date = new_end_date
-
-        db.commit()
-        db.refresh(prev_setting)
         
-        return prev_setting
-
-    # Jika benar-benar tidak ada data (Bukan Rutin, Belum dibuat) Baru kita lempar 404.
-    raise HTTPException(
-        status_code=404, 
-        detail="Setting analisis belum diaktifkan untuk periode ini."
-    )
+        setting.start_date = new_start_date
+        setting.end_date = new_end_date
+        
+        return setting

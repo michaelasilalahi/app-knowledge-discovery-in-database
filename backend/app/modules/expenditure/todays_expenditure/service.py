@@ -2,10 +2,10 @@ from sqlalchemy.orm import Session
 from datetime import date
 from app.modules.expenditure.models import Expenditure
 
-def service(db: Session, user_id: str, start_date: date, end_date: date):
-
+def get_todays_expenditure(db: Session, user_id: str):
+    today = date.today()
+    
     return db.query(Expenditure).filter(
         Expenditure.user_id == user_id,
-        Expenditure.date >= start_date,
-        Expenditure.date <= end_date
-    ).order_by(Expenditure.date.desc()).all()
+        Expenditure.date == today
+    ).order_by(Expenditure.id.desc()).all()
