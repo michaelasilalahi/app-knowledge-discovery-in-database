@@ -7,7 +7,7 @@ import {
   AnalysisCalender,
   AnalysisCustom,
 } from '@/features/setting-analysis';
-import { SettingNotificationListener } from '@/features/notification-listener/components/SettingNotificationListener';
+import { NotificationSettings } from '@/features/notification-listener/components/NotificationSettings';
 
 export default function Setting() {
   return (
@@ -23,7 +23,7 @@ export default function Setting() {
             <AnalysisCalender />
             <AnalysisCustom />
           </View>
-          <SettingNotificationListener />
+          <NotificationSettings />
         </View>
       </View>
       <View className='w-[90%] mx-auto mb-[30px]'>

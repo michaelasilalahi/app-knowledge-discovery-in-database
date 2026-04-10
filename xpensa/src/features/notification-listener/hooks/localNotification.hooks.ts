@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { AppState, AppStateStatus, Linking } from 'react-native';
 import * as Notifications from 'expo-notifications';
+import {
+  setupDailyReminders,
+  cancelAllReminders,
+} from '../utils/notificationScheduleReminder.helpers';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -18,7 +22,14 @@ export const useLocalNotification = () => {
 
   const checkPopupPermission = async () => {
     const { status } = await Notifications.getPermissionsAsync();
-    setIsPopupEnabled(status === 'granted');
+    const isGranted = status === 'granted';
+    setIsPopupEnabled(isGranted);
+
+    if (isGranted) {
+      setupDailyReminders();
+    } else {
+      cancelAllReminders();
+    }
   };
 
   useEffect(() => {
@@ -45,7 +56,10 @@ export const useLocalNotification = () => {
           const { status: newStatus } =
             await Notifications.requestPermissionsAsync();
           setIsPopupEnabled(newStatus === 'granted');
-          if (newStatus !== 'granted') {
+
+          if (newStatus === 'granted') {
+            setupDailyReminders();
+          } else {
             setIsPopupModalVisible(true);
           }
         } else {

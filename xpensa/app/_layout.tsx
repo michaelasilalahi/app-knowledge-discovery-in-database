@@ -6,12 +6,9 @@ import { useAssets } from 'expo-asset';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useGoogleStore } from '@/auth/google/store/useGoogleStore';
-import { registerNotificationTask } from '@/features/notification-listener/services/listenerTask.services';
 import * as SplashScreen from 'expo-splash-screen';
 // @ts-expect-error global.css is handled by the bundler; no types needed
 import '../global.css';
-
-registerNotificationTask();
 
 SplashScreen.preventAutoHideAsync();
 
