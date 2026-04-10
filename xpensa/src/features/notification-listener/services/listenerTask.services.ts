@@ -5,6 +5,13 @@ import { NotificationPayload } from '@/features/notification-listener/types/noti
 
 // fungsi yang akan dipanggil oleh Android setiap kali ada notifikasi masuk
 const notificationListenerTask = async (notification: NotificationPayload) => {
+  console.log(
+    '🚨 CEK SEMUA NOTIF:',
+    notification.app,
+    ' | Teks:',
+    notification.text,
+  );
+
   // cek apakah notifikasi berasal dari aplikasi keuangan yg telah diizinkan
   if (!ALLOWED_FINANCE_APPS.includes(notification.app)) {
     return;

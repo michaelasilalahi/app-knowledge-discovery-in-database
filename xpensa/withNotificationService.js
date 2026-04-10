@@ -38,6 +38,19 @@ const withNotificationService = (config) => {
       });
     }
 
+    const receiverName = 'com.lesimoes.androidnotificationlistener.BootUpReceiver';
+    const hasReceiver = mainApplication.receiver?.some(r => r.$['android:name'] === receiverName);
+
+    if (!hasReceiver) {
+      if (!mainApplication.receiver) mainApplication.receiver = [];
+      mainApplication.receiver.push({
+        $: {
+          'android:name': receiverName,
+          'tools:node': 'remove' 
+        }
+      });
+    }
+
     return manifestConfig;
   });
 };

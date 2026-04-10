@@ -9,4 +9,8 @@ export const ALLOWED_FINANCE_APPS = [
   'id.bmri.livin',
   'com.btpn.jenius',
   'id.co.bri.brimo',
+
+  // fake notification
+  'zopsoft.com.zerofall',
+  'com.argonremote.notificationgenerator',
 ];
