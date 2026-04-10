@@ -1,3 +1,0 @@
-export type ArchiveViewMode =
-  | 'SCREEN_ARCHIVE_ANALYSIS_CALENDER'
-  | 'SCREEN_ARCHIVE_ANALYSIS_CUSTOM';
