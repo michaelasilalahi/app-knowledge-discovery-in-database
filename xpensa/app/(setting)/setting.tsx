@@ -7,6 +7,7 @@ import {
   AnalysisCalender,
   AnalysisCustom,
 } from '@/features/setting-analysis';
+import { SettingNotificationListener } from '@/features/notification-listener/components/SettingNotificationListener';
 
 export default function Setting() {
   return (
@@ -16,15 +17,17 @@ export default function Setting() {
           <Profil />
         </View>
 
-        <View className='flex-1 w-[90%] mx-auto gap-y-[15px]'>
-          <AnalysisHeader />
-          <AnalysisCalender />
-          <AnalysisCustom />
+        <View className='w-[90%] mx-auto gap-y-[50px]'>
+          <View className='gap-y-[15px]'>
+            <AnalysisHeader />
+            <AnalysisCalender />
+            <AnalysisCustom />
+          </View>
+          <SettingNotificationListener />
         </View>
-
-        <View className='w-[90%] mx-auto mb-[30px]'>
-          <Logout />
-        </View>
+      </View>
+      <View className='w-[90%] mx-auto mb-[30px]'>
+        <Logout />
       </View>
     </SafeAreaView>
   );

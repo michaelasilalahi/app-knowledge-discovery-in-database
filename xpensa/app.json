@@ -85,7 +85,8 @@
       ],
       "expo-router",
       "@react-native-community/datetimepicker",
-      "./withNotificationService.js"
+      "./withNotificationService.js",
+      "expo-notifications"
     ],
     "extra": {
       "router": {},

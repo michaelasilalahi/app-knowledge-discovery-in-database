@@ -20,7 +20,7 @@ const withNotificationService = (config) => {
       mainApplication.$['tools:replace'] = 'android:allowBackup';
     }
 
-    const serviceName = 'rn.bridge.rnandroidnotificationlistener.RNAndroidNotificationListener';
+    const serviceName = 'com.lesimoes.androidnotificationlistener.RNAndroidNotificationListener';
     const hasService = mainApplication.service?.some(s => s.$['android:name'] === serviceName);
 
     if (!hasService) {
