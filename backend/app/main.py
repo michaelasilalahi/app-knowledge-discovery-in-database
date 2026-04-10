@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import engine, SessionLocal, Base
 
+from app.modules.health.router import router as health_router
+
 # authentication
 from app.modules.authentication.router import router as auth_router
 
@@ -56,6 +58,9 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+app.include_router(health_router)
 
 # authentication
 app.include_router(auth_router)
