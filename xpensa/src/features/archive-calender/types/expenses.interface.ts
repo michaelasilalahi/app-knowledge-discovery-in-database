@@ -12,6 +12,14 @@ export interface ExpenseItem {
   date: string;
 }
 
+export interface ExpenseItemRow {
+  item: ExpenseItem;
+  isSelected: boolean;
+  isSelectionMode: boolean;
+  onPress: (id: number) => void;
+  onLongPress: (id: number) => void;
+}
+
 export interface ExpenseListPersistState {
   expenses: ExpenseItem[];
   isLoading: boolean;

@@ -1,22 +1,47 @@
-import React, { useMemo } from 'react';
-import { View, Text, ActivityIndicator, FlatList } from 'react-native';
+import React, { memo, useMemo } from 'react';
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
+import { ExpenditureItemRow } from '@/features/archive-calender/components/ExpenditureItemRow';
 import { useCustomExpenditure } from '../hooks/expenditure.hooks';
-import { formatDate, formatRupiah } from '@/features/archive-calender';
+import { formatRupiah } from '@/features/archive-calender';
 import { ExpenditureProps } from '../types/expenditureProps.type';
+
+const ExpenditureItem = memo(ExpenditureItemRow);
+ExpenditureItem.displayName = 'ExpenditureItem';
 
 export const Expenses = ({
   periodTitle,
   startDate,
   endDate,
 }: ExpenditureProps) => {
-  const { expenses, isLoading, error } = useCustomExpenditure(
-    startDate,
-    endDate,
-  );
+  const {
+    expenses,
+    isLoading,
+    isDeleting,
+    isSelectionMode,
+    selectedIds,
+    handleLongPress,
+    handlePress,
+    cancelSelection,
+    executeDelete,
+  } = useCustomExpenditure(startDate, endDate);
 
   const totalExpenses = useMemo(() => {
     return expenses.reduce((acc, curr) => acc + Number(curr.amount), 0);
   }, [expenses]);
+
+  if (isLoading && expenses.length === 0) {
+    return (
+      <View className='flex-1 justify-center items-center mt-10'>
+        <ActivityIndicator size='small' color='#AAAAAA' />
+      </View>
+    );
+  }
 
   return (
     <View className='flex-1 w-[90%] mx-auto mt-[30px]'>
@@ -40,28 +65,19 @@ export const Expenses = ({
             item.id?.toString() || index.toString()
           }
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <View className='flex-row justify-between items-center py-[10px] border-b-[0.5px] border-b-[#AAAAAA]'>
-              <View className='flex-1 gap-y-[5px]'>
-                <Text className='font-montserrat-semibold'>
-                  {item.type_of_expenditure}
-                </Text>
-                <View className='flex gap-y-[5px]'>
-                  <Text className='font-montserrat-medium text-[13px] text-[#AAAAAA]'>
-                    {item.label} • {item.category}
-                  </Text>
-                  <Text className='font-montserrat-medium text-[13px] text-[#AAAAAA]'>
-                    {formatDate(item.date.toString())}
-                  </Text>
-                </View>
-              </View>
-              <View>
-                <Text className='font-montserrat-medium'>
-                  {formatRupiah(Number(item.amount))}
-                </Text>
-              </View>
-            </View>
-          )}
+          extraData={{ selectedIds, isSelectionMode }}
+          renderItem={({ item }) => {
+            const isSelected = selectedIds.includes(item.id!);
+            return (
+              <ExpenditureItem
+                item={item}
+                isSelected={isSelected}
+                isSelectionMode={isSelectionMode}
+                onPress={handlePress}
+                onLongPress={handleLongPress}
+              />
+            );
+          }}
           ListEmptyComponent={() => {
             if (isLoading) {
               return (
@@ -81,6 +97,38 @@ export const Expenses = ({
           }}
         />
       </View>
+
+      {isSelectionMode && (
+        <View className='absolute bottom-5 w-full bg-white rounded-2xl shadow-xl flex-row justify-between items-center p-4 border border-gray-100'>
+          <Text className='font-montserrat-semibold'>
+            Hapus {selectedIds.length} item ?
+          </Text>
+
+          <View className='flex-row gap-x-[15px] items-center'>
+            <TouchableOpacity onPress={cancelSelection}>
+              <Text className='font-montserrat-medium text-[#AAAAAA]'>
+                Batal
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={executeDelete}
+              disabled={isDeleting || selectedIds.length === 0}
+              className={`px-4 py-2 rounded-lg ${
+                selectedIds.length > 0 ? 'bg-red-500' : 'bg-gray-300'
+              }`}
+            >
+              {isDeleting ? (
+                <ActivityIndicator size='small' color='white' />
+              ) : (
+                <Text className='font-montserrat-semibold text-white'>
+                  Hapus
+                </Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
     </View>
   );
 };

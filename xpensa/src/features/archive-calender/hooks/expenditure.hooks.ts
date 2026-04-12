@@ -10,6 +10,9 @@ export const useExpensesList = (periodTitle: string) => {
   const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
   const fetchExpenses = useCallback(async () => {
     if (!userId) return;
@@ -30,6 +33,64 @@ export const useExpensesList = (periodTitle: string) => {
       setIsLoading(false);
     }
   }, [userId]);
+
+  const handleLongPress = useCallback((id: number) => {
+    setIsSelectionMode((prevMode) => {
+      if (!prevMode) {
+        setSelectedIds([id]);
+        return true;
+      }
+      return prevMode;
+    });
+  }, []);
+
+  const handlePress = useCallback((id: number) => {
+    setIsSelectionMode((currentMode) => {
+      if (currentMode) {
+        setSelectedIds((prevIds) => {
+          if (prevIds.includes(id)) {
+            const newSelected = prevIds.filter(
+              (selectedId) => selectedId !== id,
+            );
+            return newSelected;
+          } else {
+            return [...prevIds, id];
+          }
+        });
+      }
+      return currentMode;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (isSelectionMode && selectedIds.length === 0) {
+      setIsSelectionMode(false);
+    }
+  }, [selectedIds.length, isSelectionMode]);
+
+  const cancelSelection = useCallback(() => {
+    setIsSelectionMode(false);
+    setSelectedIds([]);
+  }, []);
+
+  const executeDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await Promise.all(
+        selectedIds.map((id) =>
+          calendarCycleExpenditureApi.deleteExpenditureApi(id),
+        ),
+      );
+      setIsSelectionMode(false);
+      setSelectedIds([]);
+      await fetchExpenses();
+    } catch (err) {
+      console.error('Gagal menghapus pengeluaran:', err);
+      setError('Gagal menghapus data pengeluaran.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   useEffect(() => {
     fetchExpenses();
@@ -69,5 +130,12 @@ export const useExpensesList = (periodTitle: string) => {
     totalExpenses,
     isLoading,
     refreshExpenses: fetchExpenses,
+    isDeleting,
+    isSelectionMode,
+    selectedIds,
+    handleLongPress,
+    handlePress,
+    cancelSelection,
+    executeDelete,
   };
 };

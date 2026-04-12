@@ -15,4 +15,13 @@ export const calendarCycleExpenditureApi = {
       throw error;
     }
   },
+  deleteExpenditureApi: async (expenseId: number): Promise<void> => {
+    try {
+      const url = API_ENDPOINTS.EXPENSE.DELETE(expenseId);
+      await apiClient.delete(url);
+    } catch (error) {
+      console.error('Error deleting expenditure:', error);
+      throw error;
+    }
+  },
 };

@@ -25,4 +25,13 @@ export const expenditureApi = {
       throw error;
     }
   },
+  deleteExpenditure: async (expenseId: number): Promise<void> => {
+    try {
+      const url = API_ENDPOINTS.EXPENSE.DELETE(expenseId);
+      await apiClient.delete(url);
+    } catch (error) {
+      console.error('Error deleting custom cycle expenditure:', error);
+      throw error;
+    }
+  },
 };

@@ -26,6 +26,7 @@ export const API_ENDPOINTS = {
       `/calender_cycle_expenditure/${userId}`,
     CREATE: '/expenditure/',
     GET_CUSTOM_CYCLE: (userId: string) => `/custom_cycle_expenditure/${userId}`,
+    DELETE: (expenseId: number) => `/expenditure/${expenseId}`,
   },
 
   ARCHIVE_CALENDER: {

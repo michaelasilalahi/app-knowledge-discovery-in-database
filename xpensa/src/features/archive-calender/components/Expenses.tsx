@@ -1,13 +1,32 @@
-import React from 'react';
-import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import React, { memo } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
 import { useExpensesList } from '../hooks/expenditure.hooks';
 import { formatRupiah } from '../utils/formatRupiah.helpers';
-import { formatDate } from '../utils/formatDate.helpers';
 import { ExpensesProps } from '../types/expenses.interface';
+import { ExpenditureItemRow } from './ExpenditureItemRow';
+
+const ExpenditureItem = memo(ExpenditureItemRow);
+ExpenditureItem.displayName = 'ExpenditureItem';
 
 export const Expenses = ({ periodTitle }: ExpensesProps) => {
-  const { filteredExpenses, totalExpenses, isLoading } =
-    useExpensesList(periodTitle);
+  const {
+    filteredExpenses,
+    totalExpenses,
+    isLoading,
+    isDeleting,
+    isSelectionMode,
+    selectedIds,
+    handleLongPress,
+    handlePress,
+    cancelSelection,
+    executeDelete,
+  } = useExpensesList(periodTitle);
 
   if (isLoading && filteredExpenses.length === 0) {
     return (
@@ -41,28 +60,19 @@ export const Expenses = ({ periodTitle }: ExpensesProps) => {
             item.id?.toString() || index.toString()
           }
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <View className='flex-row justify-between items-center py-[10px] border-b-[0.5px] border-b-[#AAAAAA]'>
-              <View className='flex-1 gap-y-[5px]'>
-                <Text className='font-montserrat-semibold'>
-                  {item.type_of_expenditure}
-                </Text>
-                <View className='flex gap-y-[5px]'>
-                  <Text className='font-montserrat-medium text-[13px] text-[#AAAAAA]'>
-                    {item.label} • {item.category}
-                  </Text>
-                  <Text className='font-montserrat-medium text-[13px] text-[#AAAAAA]'>
-                    {formatDate(item.date)}
-                  </Text>
-                </View>
-              </View>
-              <View>
-                <Text className='font-montserrat-medium'>
-                  {formatRupiah(Number(item.amount))}
-                </Text>
-              </View>
-            </View>
-          )}
+          extraData={{ selectedIds, isSelectionMode }}
+          renderItem={({ item }) => {
+            const isSelected = selectedIds.includes(item.id!);
+            return (
+              <ExpenditureItem
+                item={item}
+                isSelected={isSelected}
+                isSelectionMode={isSelectionMode}
+                onPress={handlePress}
+                onLongPress={handleLongPress}
+              />
+            );
+          }}
           ListEmptyComponent={() => {
             if (isLoading) {
               return (
@@ -82,6 +92,36 @@ export const Expenses = ({ periodTitle }: ExpensesProps) => {
           }}
         />
       </View>
+
+      {isSelectionMode && (
+        <View className='absolute bottom-5 w-full bg-white rounded-2xl shadow-xl flex-row justify-between items-center p-4 border border-gray-100'>
+          <Text className='font-montserrat-semibold'>
+            Hapus {selectedIds.length} item ?
+          </Text>
+
+          <View className='flex-row gap-x-[15px] items-center'>
+            <TouchableOpacity onPress={cancelSelection}>
+              <Text className='font-montserrat-medium text-[#AAAAAA]'>
+                Batal
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={executeDelete}
+              disabled={isDeleting || selectedIds.length === 0}
+              className={`px-4 py-2 rounded-lg ${selectedIds.length > 0 ? 'bg-red-500' : 'bg-gray-300'}`}
+            >
+              {isDeleting ? (
+                <ActivityIndicator size='small' color='white' />
+              ) : (
+                <Text className='font-montserrat-semibold text-white'>
+                  Hapus
+                </Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
