@@ -17,3 +17,11 @@ def create_expenditure(db: Session, expenditure_data: schemas.ExpenditureCreate)
     db.refresh(db_expenditure)
 
     return db_expenditure
+
+def delete_expenditure(db: Session, expenditure_id: int):
+    db_expenditure = db.query(Expenditure).filter(Expenditure.id == expenditure_id).first()
+    if db_expenditure:
+        db.delete(db_expenditure)
+        db.commit()
+        return True
+    return False
