@@ -5,14 +5,20 @@ import { useFonts } from 'expo-font';
 import { useAssets } from 'expo-asset';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { useNetInfo } from '@react-native-community/netinfo';
 import { useGoogleStore } from '@/auth/google/store/useGoogleStore';
 import * as SplashScreen from 'expo-splash-screen';
 // @ts-expect-error global.css is handled by the bundler; no types needed
 import '../global.css';
+import { OfflineScreen } from '@/features/offline-screen/components/OfflineScreen';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  // check internet connection
+  const netInfo = useNetInfo();
+  const isOffline = netInfo.isConnected === false;
+
   // load font assets
   const [fontLoaded, fontError] = useFonts({
     new_astro_light: require('../assets/fonts/new_astro/new_astro_light.otf'),
@@ -122,6 +128,7 @@ export default function RootLayout() {
           }}
         />
       </Stack>
+      <OfflineScreen isVisible={isOffline} />
     </SafeAreaProvider>
   );
 }
