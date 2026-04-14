@@ -1,5 +1,7 @@
 # Abaikan folder dependensi raksasa
 node_modules/
+.git/
+.expo/
 
 # Abaikan folder cache lokal
 .expo/
@@ -10,7 +12,3 @@ web-build/
 npm-debug.*
 *.log
 .DS_Store
-
-# Jika folder backend Python Anda kebetulan ada di dalam sini, abaikan juga:
-.venv/
-__pycache__/

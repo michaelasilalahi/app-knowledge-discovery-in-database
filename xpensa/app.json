@@ -8,7 +8,6 @@
     "icon": "./assets/icons/xpensa.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "hermesEnabled": true,
     "splash": {
       "image": "./assets/icons/xpensa.png",
       "resizeMode": "contain",
@@ -18,7 +17,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.kdd.xpensa",
+      "package": "com.luxdryft.xpensa",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icons/xpensa.png",
         "backgroundColor": "#ffffff"
