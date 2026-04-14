@@ -1,11 +1,9 @@
 import React from 'react';
-import { View, Text, Modal, SafeAreaView } from 'react-native';
+import { View, Text, Modal } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { OfflineModal } from '../types/offlineScreen.interface';
 
-interface OfflineModalProps {
-  isVisible: boolean;
-}
-
-export const OfflineScreen = ({ isVisible }: OfflineModalProps) => {
+export const OfflineScreen = ({ isVisible }: OfflineModal) => {
   return (
     <Modal
       visible={isVisible}
