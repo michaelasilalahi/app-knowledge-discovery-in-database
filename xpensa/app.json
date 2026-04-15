@@ -8,6 +8,7 @@
     "icon": "./assets/icons/xpensa.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "hermesEnabled": true,
     "splash": {
       "image": "./assets/icons/xpensa.png",
       "resizeMode": "contain",
@@ -26,7 +27,7 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icons/xpensa.png"
     },
     "plugins": [
       [
