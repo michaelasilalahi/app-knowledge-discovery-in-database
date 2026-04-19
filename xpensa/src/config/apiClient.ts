@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://192.168.18.16:8000';
+const BASE_URL = 'https://xpensaapi.luxdryft.com';
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,
