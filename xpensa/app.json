@@ -19,6 +19,9 @@
     },
     "android": {
       "package": "com.luxdryft.xpensa",
+       "permissions": [
+        "android.permission.READ_PHONE_STATE=remove"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/icons/xpensa.png",
         "backgroundColor": "#ffffff"
